@@ -1,0 +1,11 @@
+{
+  "baseUrl": "./src",
+  "compilerOptions": {
+    // Path: jsconfig.json
+
+    // Path: jsconfig.json
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
