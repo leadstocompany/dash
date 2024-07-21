@@ -7,6 +7,7 @@ import {
 import SignIn from "./pages/auth/signin";
 import UpdateProfile from "./pages/auth/update-problem";
 import GenerateCoupons from "./pages/coupons/generate-coupon";
+import GeneratePlans from "./pages/subscription/generate-plans";
 import ViewAllCoupons from "./pages/coupons/view-all-coupons";
 import Dashboard from "./pages/dashboard";
 import { AllDrivers, CreateDriver, DriverPayments } from "./pages/drivers";
@@ -26,6 +27,7 @@ import {
   CompletedTrips,
   RouteMap,
 } from "./pages/trips";
+import {Plans, DriverSubscriptionList} from "./pages/subscription"
 import {
   CreateVehicle,
   CreateVehicleClass,
@@ -68,6 +70,11 @@ function Root() {
           <Route path="booked" element={<BookedTrips />} />
           <Route path="completed" element={<CompletedTrips />} />
           <Route path="route-map" element={<RouteMap />} />
+        </Route>
+        <Route path="subscription">
+<Route index path="active" element={<Plans />}></Route>
+<Route path="driver_subscription_list" element={<DriverSubscriptionList/>}></Route>
+<Route path="generate" element={<GeneratePlans />}></Route>
         </Route>
         <Route path="drivers">
           <Route path="view">

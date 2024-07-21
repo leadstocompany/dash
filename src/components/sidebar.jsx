@@ -13,6 +13,7 @@ import {
   User,
   User2,
   UserCheck,
+  CalendarClock
 } from "lucide-react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
@@ -34,6 +35,7 @@ const SideBar = () => {
     coupons: true,
     fareManagement: true,
     support: true,
+    subscription:true
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -142,6 +144,9 @@ const SideBar = () => {
             Booked Trips
           </Link>
         </CollapseableLink>
+
+       
+
         <Link
           to="drivers/all"
           className="px-2 py-3 rounded-md border border-transparent hover:border-slate-100 hover:bg-white text-black flex items-center gap-2"
@@ -203,6 +208,27 @@ const SideBar = () => {
           <CircleDollarSign size={18} />{" "}
           <span className="text-sm">Fare Management</span>
         </Link>
+        <CollapseableLink
+          buttonIcon={<CalendarClock size={18} />}
+          buttonContent={"Subscription"}
+          state={sideBarStates.subscription}
+        >
+          <Link
+            to="/subscription/active"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Plans
+          </Link>
+          <Link
+            to="/subscription/driver_subscription_list"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Driver Subscription Plans
+          </Link>
+         
+        </CollapseableLink>
+
+
         <CollapseableLink
           buttonIcon={<UserCheck size={18} />}
           buttonContent={"Support"}
