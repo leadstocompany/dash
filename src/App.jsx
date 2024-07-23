@@ -28,6 +28,7 @@ import {
   RouteMap,
 } from "./pages/trips";
 import {Plans, DriverSubscriptionList} from "./pages/subscription"
+import {DriverFeedback, UserFeedback} from './pages/feedback'
 import {
   CreateVehicle,
   CreateVehicleClass,
@@ -46,6 +47,8 @@ import EditManufacturer from "./pages/vehicles/edit-manufacturer";
 import EditModel from "./pages/vehicles/edit-model";
 import EditVehicle from "./pages/vehicles/edit-vehicle";
 import EditVehicleType from "./pages/vehicles/edit-vehicle-type";
+import GenerateFeedback from "./pages/feedback/generate-feedback";
+import GenerateFeedbackDriver from "./pages/feedback/generate-feedback-driver";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -72,9 +75,15 @@ function Root() {
           <Route path="route-map" element={<RouteMap />} />
         </Route>
         <Route path="subscription">
-<Route index path="active" element={<Plans />}></Route>
+<Route index path="plans" element={<Plans />}></Route>
 <Route path="driver_subscription_list" element={<DriverSubscriptionList/>}></Route>
 <Route path="generate" element={<GeneratePlans />}></Route>
+        </Route>
+        <Route path="feedback">
+<Route index path="user" element={<UserFeedback />}></Route>
+<Route path="driver" element={<DriverFeedback/>}></Route>
+<Route path="generate_user_feedback" element={<GenerateFeedback />}></Route>
+<Route path="generate_driver_feedback" element={<GenerateFeedbackDriver />}></Route>
         </Route>
         <Route path="drivers">
           <Route path="view">

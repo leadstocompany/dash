@@ -275,19 +275,18 @@ import PropTypes from "prop-types";
 //   },
 // ];
 
-const plan =[
-    {
-        id: 1,
-        driverName:'Driver',
-        mobileNumber:'8627834356',
-            planName: "Gold plan",
-            date:'11July,2024',
-            time:'10:25 am'
+// const plan =[
+//     {
+//         id: 1,
+//             planName: "Gold plan",
+//             rideNumbers:100,
+//             price:2500,
+//             Discount:'25',
           
-    }
-]
+//     }
+// ]
 
-const driversubslist = () => {
+const UserFeedback = () => {
   const { user } = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -318,22 +317,22 @@ const driversubslist = () => {
 
   useEffect(() => {
     if (user) {
-      fetchCoupons();
+      //fetchCoupons();
     }
   }, [user]);
   return (
     <Container>
       <div className="flex justify-between items-center">
-        <Heading>Drivers Subscription list</Heading>
-        {/* <Button className="rounded-3xl h-auto active:scale-95 duration-100">
+        <Heading>Feedback for User</Heading>
+        <Button className="rounded-3xl h-auto active:scale-95 duration-100">
           <Link
-            to="/subscription/generate"
+            to="/feedback/generate_user_feedback"
             className="flex items-center justify-center active:scale-95 duration-100"
           >
             <Plus className="w-3.5 h-3.5 mr-1 stroke-[3px]" />
-            Create new Plan
+            Create new Feedback page 
           </Link>
-        </Button> */}
+        </Button>
       </div>
 
       <div className="border rounded-md">
@@ -341,40 +340,28 @@ const driversubslist = () => {
           <TableHeader>
             <TableRow>
               <TableHead >S.No</TableHead>
-              <TableHead>Driver Name</TableHead>
-              <TableHead>Mobile numbers</TableHead>
-              <TableHead>Plan Name</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Time</TableHead>
-              {/* <TableHead className="text-right">Action</TableHead> */}
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {couponsData &&
-              plan.map((_, i) => {
+            {couponsData.map((_, i) => {
                 return (
                   <TableRow key={i + "-all-coupons"}>
                     <TableCell center className="font-medium">{_.id}</TableCell>
                     <TableCell>
-                    {_?.driverName}
+                    {_?.planName}
                     </TableCell>
-                    <TableCell >{_?.mobileNumber}</TableCell>
-                    <TableCell>
-                      {_?.planName}
-                    </TableCell>
-                    <TableCell>{_.date}</TableCell>
-                    <TableCell>{_.time}</TableCell>
-                    {/* <TableActionItem
+                    <TableCell >{_?.rideNumbers}</TableCell>             
+                  <TableActionItem
                       data={_}
-                      fetchData={fetchCoupons}
-                     edit={true}
-                    /> */}
-
-                    {/* <TableActionItem
-                      data={_}
+                      edit={true}
                       fetchData={fetchCoupons}
                       deleteUrl="/cab-booking-admin-api/coupon-code-setting/"
-                    /> */}
+                    />
+                  
+                   
                   </TableRow>
                 );
               })}
@@ -440,4 +427,4 @@ const driversubslist = () => {
 //   fetchCoupons: PropTypes.func,
 // };
 
-export default driversubslist;
+export default UserFeedback;

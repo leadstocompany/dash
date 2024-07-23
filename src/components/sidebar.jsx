@@ -13,8 +13,10 @@ import {
   User,
   User2,
   UserCheck,
-  CalendarClock
+  CalendarClock,
+
 } from "lucide-react";
+import { GiNotebook } from "react-icons/gi";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,7 +37,8 @@ const SideBar = () => {
     coupons: true,
     fareManagement: true,
     support: true,
-    subscription:true
+    subscription:true,
+    feedback:true
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -208,13 +211,14 @@ const SideBar = () => {
           <CircleDollarSign size={18} />{" "}
           <span className="text-sm">Fare Management</span>
         </Link>
+        
         <CollapseableLink
           buttonIcon={<CalendarClock size={18} />}
           buttonContent={"Subscription"}
           state={sideBarStates.subscription}
         >
           <Link
-            to="/subscription/active"
+            to="/subscription/plans"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
             Plans
@@ -225,7 +229,25 @@ const SideBar = () => {
           >
             Driver Subscription Plans
           </Link>
-         
+        </CollapseableLink>
+
+        <CollapseableLink
+          buttonIcon={<GiNotebook size={18} />}
+          buttonContent={"Feedback"}
+          state={sideBarStates.feedback}
+        >
+          <Link
+            to="/feedback/user"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+           User
+          </Link>
+          <Link
+            to="/feedback/driver"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Driver
+          </Link>
         </CollapseableLink>
 
 
