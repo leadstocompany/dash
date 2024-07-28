@@ -58,7 +58,7 @@ const CreateVehicleClass = () => {
           },
         });
         const resData = await res.data;
-        setVehicleType(resData.data);
+        setVehicleType(resData);
         console.log(resData);
       } catch (error) {
         console.log(error);

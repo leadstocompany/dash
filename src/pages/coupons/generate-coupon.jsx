@@ -36,15 +36,21 @@ import { useSelector } from "react-redux";
 import { z } from "zod";
 
 const schema = z.object({
-  coupon_code: z.string().min(3, {
-    message: "Coupon code should be atleast 3 characters long",
+  name: z.string().min(3, {
+    message: "Name should be atleast 3 characters long",
+  }),
+  title: z.string().min(3, {
+    message: "Title should be atleast 3 characters long",
+  }),
+  terms: z.string().min(3, {
+    message: "Terms and Condition should be atleast 3 characters long",
   }),
   //set amount or percentage value based on coupon type
-  coupon_discount: z.string().min(1, {
+  discount: z.string().min(1, {
     message: "Coupon discount should not be empty",
   }),
   //set expiry date but it can be null
-  expire_date: z.date().nullable(),
+  valid_to: z.date().nullable(),
   //set minimum amount
 });
 
@@ -55,32 +61,42 @@ const GenerateCoupons = () => {
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
+
+  console.log(new Date().toISOString())
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      coupon_code: "",
-      coupon_discount: "",
-      expire_date: null,
+      name: "",
+      title:"",
+      terms:"",
+      discount: "",
+      valid_to: null,
     },
   });
 
   const onSubmit = async (data) => {
     console.log({
       ...data,
-      image,
+      
     });
 
     const submitData = {
-      coupon_code: data.coupon_code,
-      coupon_discount: parseInt(data.coupon_discount) || 0,
-      expire_date: data.expire_date,
-      image,
+      name: data.name,
+      title:data.title,
+      terms:data.terms,
+      discount: parseInt(data.discount) || 0,
+      valid_from:new Date().toISOString(),
+      valid_to: new Date(data.valid_to).toISOString(),
+      active:true
     };
+
+    console.log(submitData)
 
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/couponcode/admin/coupons`,
+        `${SERVER_URL}/couponcode/admin/coupons/`,
         submitData,
         {
           headers: {
@@ -142,16 +158,43 @@ const GenerateCoupons = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid grid-cols-2 gap-2.5"
           >
-            <div className="grid gap-2.5">
+            {/* <div className="grid gap-2.5">
               <Label>Coupon Image</Label>
               <Input type="file" onChange={handleUpload} />
-            </div>
+            </div> */}
             <FormField
               control={form.control}
-              name="coupon_code"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Coupon Code</FormLabel>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            ></FormField>
+             <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            ></FormField>
+
+<FormField
+              control={form.control}
+              name="terms"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Terms and Conditions</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -162,7 +205,7 @@ const GenerateCoupons = () => {
 
             <FormField
               control={form.control}
-              name="coupon_discount"
+              name="discount"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>Coupon Discount Percentage</FormLabel>
@@ -175,7 +218,7 @@ const GenerateCoupons = () => {
             ></FormField>
             <FormField
               control={form.control}
-              name="expire_date"
+              name="valid_to"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Expiry Date</FormLabel>
@@ -199,10 +242,11 @@ const GenerateCoupons = () => {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
+                      <Calendar 
                         mode="single"
                         selected={field.value}
-                        onSelect={field.onChange}
+                        
+                         onSelect={field.onChange}
                         initialFocus
                         // disabled={(date) => date < new Date()}
                       />

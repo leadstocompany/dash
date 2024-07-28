@@ -366,7 +366,7 @@ const ViewAllCoupons = () => {
                     <TableActionItem
                       data={_}
                       fetchData={fetchCoupons}
-                      deleteUrl="/cab-booking-admin-api/coupon-code-setting/"
+                      deleteUrl={`/couponcode/admin/coupons/${_?.code}/`}
                     />
                   </TableRow>
                 );
