@@ -16,6 +16,8 @@ const EditPassenger = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -31,7 +33,7 @@ const EditPassenger = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

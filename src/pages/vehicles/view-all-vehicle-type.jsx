@@ -25,7 +25,7 @@ const ViewAllVehicletype = () => {
   const [ViewAllVehicletype, setVehicleType] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
   const fetchVehicleType = async () => {
@@ -34,11 +34,12 @@ const ViewAllVehicletype = () => {
       const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-type`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `token ${user.token}`,
+          Authorization: `token ${token}`,
         },
       });
       const resData = await res.data;
-      setVehicleType(resData.data);
+      console.log(resData)
+      setVehicleType(resData);
     } catch (error) {
       console.log(error);
     } finally {
@@ -69,7 +70,7 @@ const ViewAllVehicletype = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -116,7 +117,7 @@ const ViewAllVehicletype = () => {
           </TableHeader>
           <TableBody>
             {ViewAllVehicletype &&
-              ViewAllVehicletype.map((_, i) => {
+              ViewAllVehicletype?.map((_, i) => {
                 return (
                   <TableRow key={i + "-all-fares"}>
                     <TableCell className="font-medium">{i + 1}</TableCell>

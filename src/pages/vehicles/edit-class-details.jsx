@@ -24,7 +24,7 @@ const EditCLassDetails = () => {
   const [fileUploads, setFileUploads] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [serchParams, setSearchParams] = useSearchParams();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -34,7 +34,7 @@ const EditCLassDetails = () => {
         const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-type`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         });
         const resData = await res.data;
@@ -76,7 +76,7 @@ const EditCLassDetails = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -108,7 +108,7 @@ const EditCLassDetails = () => {
       const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `token ${user.token}`,
+          Authorization: `token ${token}`,
         },
       });
       const resData = await res.data;
@@ -156,7 +156,7 @@ const EditCLassDetails = () => {
                 <SelectValue placeholder="Select Vehicle Type" />
               </SelectTrigger>
               <SelectContent>
-                {vehicleType.map((type) => (
+                {vehicleType?.map((type) => (
                   <SelectItem
                     key={type.id.toString()}
                     value={type.id.toString()}

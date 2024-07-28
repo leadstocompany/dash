@@ -426,6 +426,8 @@ const AllPassengers = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+
   const fetchPassengers = async () => {
     setIsLoading(true);
     try {
@@ -433,7 +435,7 @@ const AllPassengers = () => {
         `${SERVER_URL}/cab-booking-admin-api/passengers/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -504,7 +506,7 @@ const AllPassengers = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -547,7 +549,7 @@ const AllPassengers = () => {
           </TableHeader>
           <TableBody>
             {passengers &&
-              passengers.map((_, i) => {
+              passengers?.map((_, i) => {
                 const name = _.first_name + " " + _.last_name;
                 return (
                   <TableRow key={i}>

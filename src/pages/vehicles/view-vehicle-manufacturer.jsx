@@ -26,6 +26,7 @@ const ViewVehicleManufacturer = () => {
   const [vehicleManufacturer, setVehicleManufacturer] = useState([]); //[{id, price, model, model_name, platformCharge}
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
 
   const { toast } = useToast();
 
@@ -35,12 +36,12 @@ const ViewVehicleManufacturer = () => {
       const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-maker`, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `token ${user.token}`,
+          Authorization: `token ${token}`,
         },
       });
       const resData = await res.data;
       console.log(resData);
-      setVehicleManufacturer(resData.data);
+      setVehicleManufacturer(resData);
     } catch (error) {
       console.log(error);
     } finally {
@@ -70,7 +71,7 @@ const ViewVehicleManufacturer = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

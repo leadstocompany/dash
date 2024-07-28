@@ -49,7 +49,7 @@ const EditCLass = () => {
       vehicleClass: data.vehicleClass,
     },
   });
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
   useEffect(() => {
     const fetchVehicleType = async () => {
@@ -57,7 +57,7 @@ const EditCLass = () => {
         const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-type`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         });
         const resData = await res.data;
@@ -102,7 +102,7 @@ const EditCLass = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -133,7 +133,7 @@ const EditCLass = () => {
       const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `token ${user.token}`,
+          Authorization: `token ${token}`,
         },
       });
       const resData = await res.data;
@@ -193,7 +193,7 @@ const EditCLass = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {vehicleType.map((vehicleModel) => (
+                      {vehicleType?.map((vehicleModel) => (
                         <SelectItem
                           key={vehicleModel.id}
                           value={vehicleModel.id.toString()}

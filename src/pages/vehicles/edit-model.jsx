@@ -44,7 +44,7 @@ const EditModel = () => {
   const [file, setFile] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
@@ -64,7 +64,7 @@ const EditModel = () => {
         const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-maker`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         });
         const resData = await res.data;
@@ -80,7 +80,7 @@ const EditModel = () => {
         const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-class`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         });
         const resData = await res.data;
@@ -131,7 +131,7 @@ const EditModel = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -197,7 +197,7 @@ const EditModel = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {vehicleClass.map((item) => {
+                      {vehicleClass?.map((item) => {
                         return (
                           <SelectItem key={item.id} value={item.id.toString()}>
                             {item.cab_class}
@@ -239,7 +239,7 @@ const EditModel = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {vehicleManufacturer.map((item) => (
+                      {vehicleManufacturer?.map((item) => (
                         <SelectItem key={item.id} value={item.id.toString()}>
                           {item.maker}
                         </SelectItem>

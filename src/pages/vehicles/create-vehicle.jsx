@@ -103,7 +103,7 @@ const CreateVehicle = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
@@ -142,7 +142,7 @@ const CreateVehicle = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -176,7 +176,7 @@ const CreateVehicle = () => {
       const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `token ${user.token}`,
+          Authorization: `token ${token}`,
         },
       });
       const resData = await res.data;
@@ -206,7 +206,7 @@ const CreateVehicle = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

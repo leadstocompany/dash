@@ -277,7 +277,7 @@ import PropTypes from "prop-types";
 
 const ViewAllCoupons = () => {
   const { user } = useSelector((state) => state.user);
-  let a = JSON.parse(user.token)
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refresh, setRefresh] = useState(false); // [1
@@ -287,11 +287,11 @@ const ViewAllCoupons = () => {
     try {
       setIsLoading(true);
       const resClass = await axios.get(
-        `${SERVER_URL}/cab-booking-admin-api/coupon-code-setting/`,
+        `${SERVER_URL}/couponcode/admin/coupons`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${a.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -340,7 +340,7 @@ const ViewAllCoupons = () => {
           </TableHeader>
           <TableBody>
             {couponsData &&
-              couponsData.map((_, i) => {
+              couponsData?.map((_, i) => {
                 return (
                   <TableRow key={i + "-all-coupons"}>
                     <TableCell className="font-medium">{_.id}</TableCell>
@@ -350,11 +350,11 @@ const ViewAllCoupons = () => {
                         <AvatarFallback>{_?.coupon_code}</AvatarFallback>
                       </Avatar>
                     </TableCell>
-                    <TableCell>{_?.coupon_code}</TableCell>
+                    <TableCell>{_?.code}</TableCell>
                     <TableCell>
                       {dayjs(_.expire_date).format("DD MMMM hh:mm a")}
                     </TableCell>
-                    <TableCell>{_.coupon_discount}%</TableCell>
+                    <TableCell>{_.discount}%</TableCell>
                     <TableCell>
                       {_.is_active ? (
                         <Badge className="bg-green-600">Active</Badge>

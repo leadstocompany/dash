@@ -72,7 +72,7 @@ const ViewAllFares = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { toast } = useToast();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const fetchAllFares = async () => {
     setIsLoading(true);
     try {
@@ -81,7 +81,7 @@ const ViewAllFares = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -118,7 +118,7 @@ const ViewAllFares = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -162,7 +162,7 @@ const ViewAllFares = () => {
           </TableHeader>
           <TableBody>
             {faresList &&
-              faresList.map((_, i) => {
+              faresList?.map((_, i) => {
                 return (
                   <TableRow key={i + "-all-fares"}>
                     <TableCell className="font-medium">{i + 1}</TableCell>

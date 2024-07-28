@@ -46,7 +46,7 @@ const CreateVehicleModel = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const CreateVehicleModel = () => {
         const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-maker`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         });
         const resData = await res.data;
@@ -71,7 +71,7 @@ const CreateVehicleModel = () => {
         const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-class`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         });
         const resData = await res.data;
@@ -108,7 +108,7 @@ const CreateVehicleModel = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -162,7 +162,7 @@ const CreateVehicleModel = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {vehicleClass.map((item) => {
+                      {vehicleClass?.map((item) => {
                         return (
                           <SelectItem key={item.id} value={item.id.toString()}>
                             {item.cab_class}
@@ -193,7 +193,7 @@ const CreateVehicleModel = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {vehicleManufacturer.map((item) => (
+                      {vehicleManufacturer?.map((item) => (
                         <SelectItem key={item.id} value={item.id.toString()}>
                           {item.maker}
                         </SelectItem>

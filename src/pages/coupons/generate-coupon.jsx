@@ -52,7 +52,7 @@ const GenerateCoupons = () => {
   const { user } = useSelector((state) => state.user);
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
   const form = useForm({
@@ -80,12 +80,12 @@ const GenerateCoupons = () => {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/cab-booking-admin-api/coupon-code-setting/`,
+        `${SERVER_URL}/couponcode/admin/coupons`,
         submitData,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

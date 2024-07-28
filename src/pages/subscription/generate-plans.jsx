@@ -111,7 +111,7 @@ const GeneratePlans = () => {
       console.log(error);
       toast({
         title: "Something went wrong",
-        description: "Failed to generate coupon",
+        description: "Failed to generate subscription.",
       });
     } finally {
       setIsLoading(false);

@@ -32,7 +32,7 @@ const CreateVehicleType = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
   const onSubmit = async (data) => {
@@ -50,7 +50,7 @@ const CreateVehicleType = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

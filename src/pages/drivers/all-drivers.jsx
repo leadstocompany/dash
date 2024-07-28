@@ -465,6 +465,8 @@ const AllDrivers = () => {
     page_size: 10,
     next_null: false,
   });
+
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const fetchAllDrivers = async () => {
     setIsLoading(true);
     try {
@@ -472,7 +474,7 @@ const AllDrivers = () => {
         `${SERVER_URL}/cab-booking-admin-api/drivers/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -539,7 +541,7 @@ const AllDrivers = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -603,7 +605,7 @@ const AllDrivers = () => {
               </TableHeader>
               <TableBody>
                 {drivers &&
-                  drivers.map((_, i) => {
+                  drivers?.map((_, i) => {
                     return (
                       <TableRow
                         key={i + "-table-view"}
@@ -717,7 +719,7 @@ const AllDrivers = () => {
           className="bg-white rounded-md p-2.5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           {drivers &&
-            drivers.map((_, i) => {
+            drivers?.map((_, i) => {
               return (
                 <Card key={i + "-grid-view"} className="p-2.5">
                   <CardHeader className="flex flex-col items-center text-center">
@@ -734,7 +736,7 @@ const AllDrivers = () => {
                     <span className="flex gap-1.5 justify-center">
                       {Array(5)
                         .fill(0)
-                        .map((x, i) => {
+                        ?.map((x, i) => {
                           return (
                             <Star
                               key={i + "-star"}

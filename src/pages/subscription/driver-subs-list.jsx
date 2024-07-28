@@ -38,13 +38,15 @@ const plan =[
 
 const driversubslist = () => {
   const { user } = useSelector((state) => state.user);
-  let a = JSON.parse(user.token)
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refresh, setRefresh] = useState(false); // [1
   const [couponsData, setCouponsData] = useState([]);
+  
 
   const fetchCoupons = async () => {
+    const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
     try {
       setIsLoading(true);
       const resClass = await axios.get(
@@ -52,7 +54,7 @@ const driversubslist = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${a.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -101,7 +103,7 @@ const driversubslist = () => {
           </TableHeader>
           <TableBody>
             {couponsData &&
-              couponsData.map((_, i) => {
+              couponsData?.map((_, i) => {
                 return (
                   <TableRow key={i + "-all-coupons"}>
                     <TableCell center className="font-medium">{_?.id}</TableCell>

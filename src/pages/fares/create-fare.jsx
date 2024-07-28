@@ -44,6 +44,7 @@ const CreateFare = () => {
 
   const [vehicleModels, setVehicleModels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
@@ -57,11 +58,11 @@ const CreateFare = () => {
         const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-class`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         });
         const resData = await res.data;
-        setVehicleModels(resData.data);
+        setVehicleModels(resData);
         console.log(resData);
       } catch (error) {
         console.log(error);
@@ -85,7 +86,7 @@ const CreateFare = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -134,7 +135,7 @@ const CreateFare = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {vehicleModels.map((vehicleModel) => (
+                      {vehicleModels?.map((vehicleModel) => (
                         <SelectItem
                           key={vehicleModel.id}
                           value={vehicleModel.id.toString()}

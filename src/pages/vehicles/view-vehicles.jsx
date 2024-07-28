@@ -35,7 +35,7 @@ const ViewVehicles = () => {
   //initializers
   const dispatch = useDispatch();
   const { toast } = useToast();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const fetchVehicles = async () => {
     setIsLoading(true);
     try {
@@ -43,7 +43,7 @@ const ViewVehicles = () => {
         `${SERVER_URL}/cab-booking-admin-api/vehicles/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -108,7 +108,7 @@ const ViewVehicles = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

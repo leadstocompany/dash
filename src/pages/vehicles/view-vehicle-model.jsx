@@ -25,7 +25,7 @@ const ViewVehicleModel = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [vehicleModel, setVehicleModel] = useState([]);
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
   const fetchVehicleModel = async () => {
     try {
@@ -35,7 +35,7 @@ const ViewVehicleModel = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -72,7 +72,7 @@ const ViewVehicleModel = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -119,7 +119,7 @@ const ViewVehicleModel = () => {
           </TableHeader>
           <TableBody>
             {vehicleModel &&
-              vehicleModel.map((_, i) => {
+              vehicleModel?.map((_, i) => {
                 return (
                   <TableRow key={i + "-all-fares"}>
                     <TableCell className="font-medium">{i + 1}</TableCell>

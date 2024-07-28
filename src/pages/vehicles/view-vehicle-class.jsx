@@ -29,8 +29,9 @@ const ViewVehicleClass = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const fetchVehicleClass = async () => {
+
     try {
       setIsLoading(true);
       const resClass = await axios.get(
@@ -38,12 +39,12 @@ const ViewVehicleClass = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
       const resClassData = await resClass.data;
-      setVehicleClass(resClassData.data);
+      setVehicleClass(resClassData);
       console.log(resClassData.data, "resClassData.data");
     } catch (error) {
       console.log(error);
@@ -75,7 +76,7 @@ const ViewVehicleClass = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

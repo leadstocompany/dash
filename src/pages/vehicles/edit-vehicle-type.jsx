@@ -52,6 +52,8 @@ const EditVehicleType = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+
   const onSubmit = async (d) => {
     console.log(d);
     try {
@@ -62,7 +64,7 @@ const EditVehicleType = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
