@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TextArea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { SERVER_URL, cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,53 +34,79 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { z } from "zod";
+import { TagPicker } from 'rsuite';
 
 const schema = z.object({
-  title: z.string().min(3, {
-    message: "Title should be atleast 3 characters long",
+  name: z.string().min(1, {
+    message: "Name should be atleast 3 characters long",
   }),
   //set amount or percentage value based on coupon type
-  description: z.string().min(1, {
-    message: "Description should not be empty",
-  }),
+//   document: z.string().min(1, {
+//     message: "Document should not be empty",
+//   }),
+//   suggestion: z.string().min(1, {
+//     message: "Suggestion should not be empty",
+//   }),
+//   picture: z.string().min(1, {
+//     message: "picture should not be empty",
+//   }),
   //set expiry date but it can be null
  
   //set minimum amount
 });
 
-const GenerateFeedback = () => {
+const data = ['Text Field' , 'Upload Images'].map(
+    item => ({ label: item, value: item })
+  );
+
+  const datas = ['Front Image' , 'Back Image', 'Normal Image'].map(
+    item => ({ label: item, value: item })
+  );
+
+const CreateVehicleImage = () => {
   const { user } = useSelector((state) => state.user);
+ 
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const [doc_type, setDoc_type] = useState([])
+  const [pic_type, setPic_type] = useState([])
 
   const { toast } = useToast();
+
+  let a = doc_type?.filter(i => i === 'Text Field');
+  let b = doc_type?.filter(j=>j === 'Upload Images')
+
+  let fi = pic_type?.filter(i=> i==='Front Image')
+  let bi = pic_type?.filter(i=>i==='Back Image')
+  let ni = pic_type?.filter(i=>i==='Normal Image')
+
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
-      description:''
+    name: "",
+     
+      
     },
   });
 
   const onSubmit = async (data) => {
+    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
     console.log({
       ...data,
       
     });
 
     const submitData = {
-      title: data.title,
-      sub_title: data.description,
-      active: true
+        field_name: data.name,
+        active: true
+     
     };
 
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/admin-api/feedbacksetting/`,
+        `${SERVER_URL}/admin-api/vehiclecertificatefields/`,
         submitData,
         {
           headers: {
@@ -92,13 +117,13 @@ const GenerateFeedback = () => {
       );
       const resData = await res.data;
       toast({
-        title: resData.message || "Feedback Created.",
+        title: resData.message || "Vehicle Document Generated.",
       });
     } catch (error) {
       console.log(error);
       toast({
         title: "Something went wrong",
-        description: "Failed to Feedback Created",
+        description: "Failed to vehicle generate document",
       });
     } finally {
       setIsLoading(false);
@@ -132,15 +157,18 @@ const GenerateFeedback = () => {
     }
   };
 
+
+  
+
   return (
     <Container>
-      <Heading>Create Feedback for user</Heading>
+      <Heading>Create Vehicle Image</Heading>
       <Container
         className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
       >
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit()}
             className="grid grid-cols-2 gap-2.5"
           >
             {/* <div className="grid gap-2.5">
@@ -149,33 +177,20 @@ const GenerateFeedback = () => {
             </div> */}
              <FormField
               control={form.control}
-              name="title"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <TextArea {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            ></FormField>
+            ></FormField>  
             <div className="flex justify-end items-center col-span-2 py-2.5 pr-2.5">
               <Button isLoading={isLoading} type="submit">
-                Create Feedback
+                Create Image
               </Button>
             </div>
           </form>
@@ -185,4 +200,4 @@ const GenerateFeedback = () => {
   );
 };
 
-export default GenerateFeedback;
+export default CreateVehicleImage;

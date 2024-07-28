@@ -277,6 +277,7 @@ import PropTypes from "prop-types";
 
 const ViewAllCoupons = () => {
   const { user } = useSelector((state) => state.user);
+  let a = JSON.parse(user.token)
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refresh, setRefresh] = useState(false); // [1
@@ -290,7 +291,7 @@ const ViewAllCoupons = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${a.token}`,
           },
         }
       );

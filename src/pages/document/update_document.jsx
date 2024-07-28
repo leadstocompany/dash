@@ -30,48 +30,85 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { z } from "zod";
+import { TagPicker } from 'rsuite';
+import { useSearchParams } from "react-router-dom";
+
 
 const schema = z.object({
-  plan_name: z.string().min(3, {
-    message: "Plan name should be atleast 3 characters long",
+  name: z.string().min(3, {
+    message: "Name should be atleast 3 characters long",
   }),
   //set amount or percentage value based on coupon type
-  ride_number: z.string().min(1, {
-    message: "Ride number should not be empty",
+//   document: z.string().min(1, {
+//     message: "Document should not be empty",
+//   }),
+  suggestion: z.string().min(1, {
+    message: "Suggestion should not be empty",
   }),
-  discount: z.string().min(1, {
-    message: " Discount should not be empty",
-  }),
-  price: z.string().min(2, {
-    message: "price should not be empty",
-  }),
+//   picture: z.string().min(1, {
+//     message: "picture should not be empty",
+//   }),
   //set expiry date but it can be null
-  original_price:z.string().min(2, {
-    message: "Original price should not be empty",
-  }),
+ 
   //set minimum amount
 });
 
-const GeneratePlans = () => {
+
+
+const data = ['Text Field' , 'Upload Images'].map(
+    item => ({ label: item, value: item })
+  );
+
+  const datas = ['Front Image' , 'Back Image', 'Normal Image'].map(
+    item => ({ label: item, value: item })
+  );
+
+const UpdateDoc = () => {
   const { user } = useSelector((state) => state.user);
  
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [doc_type, setDoc_type] = useState([])
+  const [pic_type, setPic_type] = useState([])
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [doc_fetch, setDoc_fetch] = useState()
+
+  const name = searchParams.get('field_name')
+  const textfield = searchParams.get('textfield')
+  const filefield = searchParams.get('filefield')
 
   const { toast } = useToast();
+
+  let a = doc_type?.filter(i => i === 'Text Field');
+  let b = doc_type?.filter(j=>j === 'Upload Images')
+
+  let fi = pic_type?.filter(i=> i==='Front Image')
+  let bi = pic_type?.filter(i=>i==='Back Image')
+  let ni = pic_type?.filter(i=>i==='Normal Image')
+
+  useEffect(() => {
+    if(textfield && filefield){
+        setDoc_fetch(['Text Field','Upload Images'])
+    }
+    if(filefield ){
+        setDoc_fetch(['Upload Images'])
+    }
+  }, [])
+  
+console.log(doc_fetch)
 
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      plan_name: "",
-      discount: "",
-      ride_number:'',
-      price:'',
-      original_price: '',
+    name: name,
+      document: "",
+      suggestion:'',
+      picture:'',
+      
     },
   });
 
@@ -83,18 +120,19 @@ const GeneratePlans = () => {
     });
 
     const submitData = {
-      plan_name: data.plan_name,
-      discount: parseInt(data.discount) || 0,
-      ride_numbers: parseInt(data.ride_number),
-      price:parseInt(data.price),
-      original_price:parseInt(data.original_price),
-     is_active: true
+        field_name: data.name,
+  textfield: a=='Text Field'? true:false,
+  filefield: b == 'Upload Images'? true:false,
+  front: fi == 'Front Image'? true:false,
+  back: bi == 'Back Image'? true:false,
+  active: true
+     
     };
 
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/subscriptions/admin/subscription-plans/`,
+        `${SERVER_URL}/admin-api/userdocumentfields/`,
         submitData,
         {
           headers: {
@@ -105,13 +143,13 @@ const GeneratePlans = () => {
       );
       const resData = await res.data;
       toast({
-        title: resData.message || "Subscription Plan Generated.",
+        title: resData.message || "Document Generated.",
       });
     } catch (error) {
       console.log(error);
       toast({
         title: "Something went wrong",
-        description: "Failed to generate coupon",
+        description: "Failed to generate document",
       });
     } finally {
       setIsLoading(false);
@@ -145,9 +183,12 @@ const GeneratePlans = () => {
     }
   };
 
+
+  
+
   return (
     <Container>
-      <Heading>Create Subscription plan</Heading>
+      <Heading>Create Document For Driver</Heading>
       <Container
         className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
       >
@@ -162,10 +203,10 @@ const GeneratePlans = () => {
             </div> */}
              <FormField
               control={form.control}
-              name="plan_name"
+              name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Plan Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -175,61 +216,57 @@ const GeneratePlans = () => {
             ></FormField>
             <FormField
               control={form.control}
-              name="ride_number"
+              name="document_type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ride Numbers</FormLabel>
+                  <FormLabel>Document type</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    {/* <Input {...field} /> */}
+                    <TagPicker defaultValue={doc_fetch}
+                onChange={(e)=>setDoc_type(e)} 
+                className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300" 
+                placeholder="Choose Document Type" block data={data}  />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             ></FormField>
 
-<FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Price</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            ></FormField>
-            <FormField
-              control={form.control}
-              name="discount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Discount</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            ></FormField>
 
-             <FormField 
+{a =='Text Field' && <FormField
+            control={form.control}
+            name="suggestion"
+            render={({ field }) => (
+            <FormItem>
+                <FormLabel>Suggestion Text</FormLabel>
+                <FormControl>
+                <Input {...field} />
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+            )}
+        ></FormField>}
+
+{b =='Upload Images' && <FormField
               control={form.control}
-              name="original_price"
+              name="picture"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Original Price</FormLabel>
+                  <FormLabel>Pictures type</FormLabel>
                   <FormControl>
-                    <Input style={{backgroundColor:'#B5C0D0'}} {...field} />
+                    {/* <Input {...field} /> */}
+                    <TagPicker onChange={(e)=>setPic_type(e)} className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-400 dark:focus-visible:ring-slate-300" placeholder="Choose Document Type" block data={datas}  />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
+            ></FormField>}
+            
+
+             
             <div className="flex justify-end items-center col-span-2 py-2.5 pr-2.5">
               <Button isLoading={isLoading} type="submit">
-                Create plan
+               Update Document
               </Button>
             </div>
           </form>
@@ -239,4 +276,4 @@ const GeneratePlans = () => {
   );
 };
 
-export default GeneratePlans;
+export default UpdateDoc;

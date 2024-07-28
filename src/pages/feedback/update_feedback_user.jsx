@@ -34,6 +34,7 @@ import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 
 const schema = z.object({
@@ -49,10 +50,15 @@ const schema = z.object({
   //set minimum amount
 });
 
-const GenerateFeedback = () => {
+const UpdateFeedbackUser = () => {
   const { user } = useSelector((state) => state.user);
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const id = searchParams.get('id')
+  const title = searchParams.get('title');
+  const sub_title = searchParams.get('sub_title')
 
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
 
@@ -61,8 +67,8 @@ const GenerateFeedback = () => {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
-      description:''
+      title: title,
+      description:sub_title
     },
   });
 
@@ -78,12 +84,15 @@ const GenerateFeedback = () => {
       active: true
     };
 
+    
+
     try {
       setIsLoading(true);
-      const res = await axios.post(
-        `${SERVER_URL}/admin-api/feedbacksetting/`,
+      const res = await axios.patch(
+        `${SERVER_URL}/admin-api/feedbacksetting/${id}/`,
         submitData,
         {
+           
           headers: {
             "Content-Type": "application/json",
             Authorization: `token ${token}`,
@@ -175,7 +184,7 @@ const GenerateFeedback = () => {
             ></FormField>
             <div className="flex justify-end items-center col-span-2 py-2.5 pr-2.5">
               <Button isLoading={isLoading} type="submit">
-                Create Feedback
+                Update Feedback
               </Button>
             </div>
           </form>
@@ -185,4 +194,4 @@ const GenerateFeedback = () => {
   );
 };
 
-export default GenerateFeedback;
+export default UpdateFeedbackUser;

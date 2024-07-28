@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SERVER_URL, cn } from "@/lib/utils";
-import { setUser } from "@/store/slice/user";
+import { setToken, setUser } from "@/store/slice/user";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -36,6 +36,7 @@ const SignIn = () => {
     try {
       const res = await axios.post(`${SERVER_URL}/admin-api/login`, form);
       const data = await res.data;
+      console.log(res.data)
       const name = data.first_name + " " + data.last_name;
       const phone = data.phone;
       const avatar = data.profile_photo;
@@ -45,7 +46,8 @@ const SignIn = () => {
 
       if (data.success === "true") {
         dispatch(setUser({ name, phone, avatar, token, isAdmin, email }));
-        localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, token);
+        dispatch(setToken(token))
+        localStorage.setItem("LOCAL_STORAGE_TOKEN_KEY", token);
         localStorage.setItem(
           LOCAL_STORAGE_USER_KEY,
           JSON.stringify({

@@ -14,9 +14,11 @@ import {
   User2,
   UserCheck,
   CalendarClock,
-
+Wallet,
+FileText
 } from "lucide-react";
 import { GiNotebook } from "react-icons/gi";
+import { HiBellAlert } from "react-icons/hi2";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +40,10 @@ const SideBar = () => {
     fareManagement: true,
     support: true,
     subscription:true,
-    feedback:true
+    feedback:true,
+    Wallet:true,
+    sos:true,
+    document:true
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -232,6 +237,25 @@ const SideBar = () => {
         </CollapseableLink>
 
         <CollapseableLink
+          buttonIcon={<Wallet size={18} />}
+          buttonContent={"Wallet"}
+          state={sideBarStates.Wallet}
+        >
+          <Link
+            to="/wallet/customer_wallet"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Customers
+          </Link>
+          <Link
+            to="/wallet/driver_wallet"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Drivers
+          </Link>
+        </CollapseableLink>
+
+        <CollapseableLink
           buttonIcon={<GiNotebook size={18} />}
           buttonContent={"Feedback"}
           state={sideBarStates.feedback}
@@ -252,6 +276,32 @@ const SideBar = () => {
 
 
         <CollapseableLink
+          buttonIcon={<FileText size={18} />}
+          buttonContent={"Document For Driver"}
+          state={sideBarStates.document}
+        >
+          <Link
+            to="/document/personal_document"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+          Personal Document
+          </Link>
+          <Link
+            to="/document/vehicle_photos"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Vehicle Photos
+          </Link>
+          <Link
+            to="/document/vehicle_document"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Vehicle Document
+          </Link>
+        </CollapseableLink>
+
+
+        <CollapseableLink
           buttonIcon={<UserCheck size={18} />}
           buttonContent={"Support"}
           state={sideBarStates.support}
@@ -267,6 +317,24 @@ const SideBar = () => {
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
             Customer Support
+          </Link>
+        </CollapseableLink>
+        <CollapseableLink
+          buttonIcon={<HiBellAlert size={18} color="#F5004F" />}
+          buttonContent={"SOS"}
+          state={sideBarStates.sos}
+        >
+          <Link
+            to="sos/active"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Active
+          </Link>
+          <Link
+            to="sos/completed"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+           Completed
           </Link>
         </CollapseableLink>
       </div>

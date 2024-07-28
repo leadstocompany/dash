@@ -24,21 +24,35 @@ import PropTypes from "prop-types";
 
 
 
-const UserFeedback = () => {
+const plan =[
+    {
+        id: 1,
+            planName: "Gold plan",
+            rideNumbers:100,
+            price:2500,
+            Discount:'25',
+          
+    }
+]
+
+const PersonalDocument = () => {
   const { user } = useSelector((state) => state.user);
+  
+
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refresh, setRefresh] = useState(false); // [1
   const [couponsData, setCouponsData] = useState([]);
-
-  let token = localStorage.getItem('LOCAL_STORAGE_TOKEN_KEY')
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
 
   const fetchCoupons = async () => {
+
+    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
     try {
       setIsLoading(true);
       const resClass = await axios.get(
-        `${SERVER_URL}/admin-api/feedbacksetting/`,
-        {
+        `${SERVER_URL}/admin-api/userdocumentfields/`,
+        { 
           headers: {
             "Content-Type": "application/json",
             Authorization: `token ${token}`,
@@ -55,6 +69,8 @@ const UserFeedback = () => {
     }
   };
 
+  
+
   useEffect(() => {
     if (user) {
       fetchCoupons();
@@ -63,14 +79,14 @@ const UserFeedback = () => {
   return (
     <Container>
       <div className="flex justify-between items-center">
-        <Heading>Feedback for User</Heading>
+        <Heading>Personal Document</Heading>
         <Button className="rounded-3xl h-auto active:scale-95 duration-100">
           <Link
-            to="/feedback/generate_user_feedback"
+            to="/document/create_driver_document"
             className="flex items-center justify-center active:scale-95 duration-100"
           >
             <Plus className="w-3.5 h-3.5 mr-1 stroke-[3px]" />
-            Create new Feedback page 
+            Create new Document
           </Link>
         </Button>
       </div>
@@ -80,29 +96,34 @@ const UserFeedback = () => {
           <TableHeader>
             <TableRow>
               <TableHead >S.No</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Description</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Document Type</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {couponsData.map((_, i) => {
+            {couponsData &&
+              couponsData.map((_, i) => {
                 return (
                   <TableRow key={i}>
-                    <TableCell center className="font-medium">{_.id}</TableCell>
+                    <TableCell center className="font-medium">{_?.id}</TableCell>
                     <TableCell>
-                    {_?.title}
+                    {_?.field_name}
                     </TableCell>
-                    <TableCell >{_?.sub_title}</TableCell>             
-                  <TableActionItem
+                    
+                    <TableCell>
+                     <p>{_?.filefield== true? 'Uplaod Images':''}</p>   
+                     <p>{_?.textfield== true? 'Text Field':''}</p>                  </TableCell>
+                   
+                  
+                    <TableActionItem
                       data={_}
                       edit={true}
                       fetchData={fetchCoupons}
-                      deleteUrl="/admin-api/feedbacksetting/"
-                      pathname={`${_?.id}`}
+                      deleteUrl="/admin-api/userdocumentfields/"
+                      pathname={`update/${_?.id}`}
                     />
                   
-                   
                   </TableRow>
                 );
               })}
@@ -168,4 +189,4 @@ const UserFeedback = () => {
 //   fetchCoupons: PropTypes.func,
 // };
 
-export default UserFeedback;
+export default PersonalDocument;
