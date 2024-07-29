@@ -471,7 +471,7 @@ const AllDrivers = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${SERVER_URL}/cab-booking-admin-api/drivers/?page=${pagination.page}&page_size=${pagination.page_size}`,
+        `${SERVER_URL}/admin-api/driver/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
             Authorization: `token ${token}`,
@@ -659,7 +659,7 @@ const AllDrivers = () => {
                         </TableCell>
                         <TableActionItem
                           data={_}
-                          deleteUrl="/cab-booking-admin-api/drivers/"
+                          deleteUrl="/admin-api/driver/"
                           edit={true}
                           fetchData={fetchAllDrivers}
                           pathname="/drivers/edit"

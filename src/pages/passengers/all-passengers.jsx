@@ -432,7 +432,7 @@ const AllPassengers = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${SERVER_URL}/cab-booking-admin-api/passengers/?page=${pagination.page}&page_size=${pagination.page_size}`,
+        `${SERVER_URL}/admin-api/passengers/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
             Authorization: `token ${token}`,
@@ -588,7 +588,7 @@ const AllPassengers = () => {
                     </TableCell>
                     <TableActionItem
                       data={_}
-                      deleteUrl="/cab-booking-admin-api/passengers/"
+                      deleteUrl="/admin-api/passenger/"
                       edit={true}
                       fetchData={fetchPassengers}
                       pathname="/passengers/edit"

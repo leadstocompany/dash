@@ -16,6 +16,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const EditCLassDetails = () => {
   const { user } = useSelector((state) => state.user);
@@ -28,6 +30,16 @@ const EditCLassDetails = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const form = useForm({
+    // resolver: zodResolver(schema),
+    mode: "onSubmit",
+    values: {
+      cab_type: data.cab_type,
+      cab_class: data.cab_class,
+      icon: data.icon,
+    },
+  });
+
   useEffect(() => {
     const fetchVehicleType = async () => {
       try {
@@ -38,7 +50,7 @@ const EditCLassDetails = () => {
           },
         });
         const resData = await res.data;
-        setVehicleType(resData.data);
+        setVehicleType(resData);
         console.log(resData);
       } catch (error) {
         console.log(error);

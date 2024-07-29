@@ -75,7 +75,7 @@ const EditManufacturer = () => {
           },
         });
         const resData = await res.data;
-        setVehicleType(resData.data);
+        setVehicleType(resData);
         console.log(resData);
       } catch (error) {
         console.log(error);
@@ -136,12 +136,14 @@ const EditManufacturer = () => {
                     </FormLabel>
                     <Select
                       value={data.cab_type}
-                      // onValueChange={handleClassChange}
-                      onOpenChange={(isOpen) => {
-                        if (!isOpen) {
+                      onValueChange={(v) => {
+                        setData((prev) => ({ ...prev, cab_type_change: v }));
+                      }}
+                      onOpenChange={(v) => {
+                        if (v === false && data.cab_type_change) {
                           setData((prev) => ({
                             ...prev,
-                            cab_type: field.onChange,
+                            cab_type: prev.cab_type_change,
                           }));
                         }
                       }}

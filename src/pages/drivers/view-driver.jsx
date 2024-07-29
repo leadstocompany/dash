@@ -14,7 +14,7 @@ const ViewDriver = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
   useEffect(() => {
@@ -22,11 +22,11 @@ const ViewDriver = () => {
       try {
         setIsLoading(true);
         const res = await axios.get(
-          `${SERVER_URL}/cab-booking-admin-api/drivers/${id}/`,
+          `${SERVER_URL}/admin-api/driver/${id}/`,
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `token ${user.token}`,
+              Authorization: `token ${token}`,
             },
           }
         );

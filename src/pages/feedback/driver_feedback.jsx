@@ -292,16 +292,16 @@ const DriverFeedback = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [refresh, setRefresh] = useState(false); // [1
   const [couponsData, setCouponsData] = useState([]);
-
+  let token = localStorage.getItem('LOCAL_STORAGE_TOKEN_KEY')
   const fetchCoupons = async () => {
     try {
       setIsLoading(true);
       const resClass = await axios.get(
-        `${SERVER_URL}/cab-booking-admin-api/coupon-code-setting/`,
+        `${SERVER_URL}/admin-api/driver-feedback-page/`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -317,7 +317,7 @@ const DriverFeedback = () => {
 
   useEffect(() => {
     if (user) {
-      //fetchCoupons();
+      fetchCoupons();
     }
   }, [user]);
   return (
@@ -351,14 +351,15 @@ const DriverFeedback = () => {
                   <TableRow key={i + "-all-coupons"}>
                     <TableCell center className="font-medium">{_.id}</TableCell>
                     <TableCell>
-                    {_?.planName}
+                    {_?.title}
                     </TableCell>
-                    <TableCell >{_?.rideNumbers}</TableCell>             
+                    <TableCell >{_?.description}</TableCell>             
                   <TableActionItem
                       data={_}
                       edit={true}
                       fetchData={fetchCoupons}
-                      deleteUrl="/cab-booking-admin-api/coupon-code-setting/"
+                      deleteUrl="/admin-api/driver-feedback-page/"
+                      pathname={`${_?.id}`}
                     />
                   
                    

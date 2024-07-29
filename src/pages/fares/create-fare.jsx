@@ -31,10 +31,13 @@ import { z } from "zod";
 
 const schema = z.object({
   vehicleType: z.string().nonempty({ message: "Vehicle type cannot be empty" }),
-  farePerKm: z.string().nonempty({
+  base_fare: z.string().nonempty({
     message: "Fare per km cannot be empty",
   }),
-  platformCharge: z
+  extra_km_fare: z
+    .string()
+    .nonempty({ message: "Platform charge cannot be empty" }),
+    waiting_fare: z
     .string()
     .nonempty({ message: "Platform charge cannot be empty" }),
 });
@@ -77,11 +80,13 @@ const CreateFare = () => {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/cab-booking-admin-api/price-settings/`,
+        `${SERVER_URL}/admin-api/cabbookingprices/`,
         {
-          price: parseInt(data.farePerKm),
+          
           cab_class: data.vehicleType,
-          platform_charge: data.platformCharge,
+          base_fare:data.base_fare,
+          extra_km_fare:data.extra_km_fare,
+          waiting_fare_per_minute: data.waiting_fare,
         },
         {
           headers: {
@@ -151,11 +156,11 @@ const CreateFare = () => {
             />
             <FormField
               control={form.control}
-              name="farePerKm"
+              name="base_fare"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>
-                    Fare Per Km <span className="text-red-500">*</span>
+                    Base Fare <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} type="number" min="0" />
@@ -166,11 +171,26 @@ const CreateFare = () => {
             />
             <FormField
               control={form.control}
-              name="platformCharge"
+              name="extra_km_fare"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Extra Km Fare <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" min="0" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="waiting_fare"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    platform Charge <span className="text-red-500">*</span>
+                    Waiting Fare <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} type="number" min="0" max="100" />

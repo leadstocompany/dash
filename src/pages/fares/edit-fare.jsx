@@ -29,13 +29,16 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 
 const schema = z.object({
-  cab_class: z.string().min(1, { message: "Vehicle type cannot be empty" }),
-  price: z.string().min(1, {
+  vehicleType: z.string().nonempty({ message: "Vehicle type cannot be empty" }),
+  base_fare: z.string().nonempty({
     message: "Fare per km cannot be empty",
   }),
-  platform_charge: z
+  extra_km_fare: z
     .string()
-    .min(1, { message: "Platform charge cannot be empty" }),
+    .nonempty({ message: "Platform charge cannot be empty" }),
+    waiting_fare: z
+    .string()
+    .nonempty({ message: "Platform charge cannot be empty" }),
 });
 
 const EditFare = () => {
@@ -45,14 +48,17 @@ const EditFare = () => {
   const [vehicleModels, setVehicleModels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  
+  const id = searchParams.get('id')
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
     values: {
-      cab_class: data.cab_class,
-      price: data.price,
-      platform_charge: data.platform_charge,
+      cab_class: data.vehicleType,
+      base_fare:data.base_fare,
+      extra_km_fare:data.extra_km_fare,
+      waiting_fare: data.waiting_fare_per_minute,
     },
   });
 
@@ -78,7 +84,7 @@ const EditFare = () => {
           },
         });
         const resData = await res.data;
-        setVehicleModels(resData.data);
+        setVehicleModels(resData);
         console.log(resData);
       } catch (error) {
         console.log(error);
@@ -92,12 +98,13 @@ const EditFare = () => {
   const onSubmit = async (d) => {
     try {
       setIsLoading(true);
-      const res = await axios.put(
-        `${SERVER_URL}/cab-booking-admin-api/price-settings/${data.id}/`,
+      const res = await axios.patch(
+        `${SERVER_URL}/admin-api/cabbookingprices/${id}/`,
         {
-          price: parseInt(d.price),
-          platform_charge: d.platform_charge,
-          cab_class: d.cab_class,
+          cab_class: data.vehicleType,
+          base_fare:data.base_fare,
+          extra_km_fare:data.extra_km_fare,
+          waiting_fare_per_minute: data.waiting_fare,
         },
         {
           headers: {
@@ -136,13 +143,13 @@ const EditFare = () => {
           >
             <FormField
               control={form.control}
-              name="cab_class"
+              name="vehicleType"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>
                     Vehicle Class <span className="text-red-500">*</span>
                   </FormLabel>
-                  <Select
+                  <Select 
                     value={data?.cab_class}
                     onValueChange={(v) =>
                       setData((prev) => ({ ...prev, cab_class_change: v }))
@@ -153,7 +160,7 @@ const EditFare = () => {
                           ...prev,
                           cab_class: data.cab_class_change,
                         }));
-                        form.setValue("cab_class", data.cab_class_change);
+                        form.setValue("vehicleType", data.cab_class_change);
                       }
                     }}
                   >
@@ -177,13 +184,14 @@ const EditFare = () => {
                 </FormItem>
               )}
             />
+            
             <FormField
               control={form.control}
-              name="price"
+              name="base_fare"
               render={({ field, fieldState }) => (
                 <FormItem>
                   <FormLabel>
-                    Fare Per Km <span className="text-red-500">*</span>
+                    Base Fare <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} type="number" min="0" />
@@ -194,11 +202,26 @@ const EditFare = () => {
             />
             <FormField
               control={form.control}
-              name="platform_charge"
+              name="extra_km_fare"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Extra Km Fare <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" min="0" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="waiting_fare"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    platform Charge <span className="text-red-500">*</span>
+                    Waiting Fare <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input {...field} type="number" min="0" max="100" />

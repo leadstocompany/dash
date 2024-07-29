@@ -34,6 +34,7 @@ import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 
 const schema = z.object({
@@ -49,10 +50,15 @@ const schema = z.object({
   //set minimum amount
 });
 
-const GenerateFeedbackDriver = () => {
+const UpdateFeedbackDriver = () => {
   const { user } = useSelector((state) => state.user);
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams()
+  const id = searchParams.get('id')
+  const title = searchParams.get('title');
+  const sub_title = searchParams.get('description')
 
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
 
@@ -61,8 +67,8 @@ const GenerateFeedbackDriver = () => {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      title: "",
-      description:''
+      title: title,
+      description:sub_title
     },
   });
 
@@ -74,16 +80,19 @@ const GenerateFeedbackDriver = () => {
 
     const submitData = {
       title: data.title,
-      sub_title: data.description,
+      description: data.description,
       active: true
     };
 
+    
+
     try {
       setIsLoading(true);
-      const res = await axios.post(
-        `${SERVER_URL}/admin-api/driver-feedback-page/`,
+      const res = await axios.patch(
+        `${SERVER_URL}/admin-api/driver-feedback-page/${id}/`,
         submitData,
         {
+           
           headers: {
             "Content-Type": "application/json",
             Authorization: `token ${token}`,
@@ -134,7 +143,7 @@ const GenerateFeedbackDriver = () => {
 
   return (
     <Container>
-      <Heading>Create Feedback for user</Heading>
+      <Heading>Create Feedback for Driver</Heading>
       <Container
         className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
       >
@@ -175,7 +184,7 @@ const GenerateFeedbackDriver = () => {
             ></FormField>
             <div className="flex justify-end items-center col-span-2 py-2.5 pr-2.5">
               <Button isLoading={isLoading} type="submit">
-                Create Feedback
+                Update Feedback
               </Button>
             </div>
           </form>
@@ -185,4 +194,4 @@ const GenerateFeedbackDriver = () => {
   );
 };
 
-export default GenerateFeedbackDriver;
+export default UpdateFeedbackDriver;

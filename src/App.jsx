@@ -64,6 +64,7 @@ import UpdateDoc from "./pages/document/update_document";
 import UpdateVehicleDoc from "./pages/document/update_vehicle_doc";
 import CreateVehicleDoc from "./pages/document/create_vehicle_doc";
 import CreateVehicleImage from "./pages/document/create_vehicle_image";
+import UpdateFeedbackDriver from "./pages/feedback/update_feedback_driver";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -125,6 +126,7 @@ function Root() {
 <Route path="generate_user_feedback" element={<GenerateFeedback />}></Route>
 <Route path="generate_driver_feedback" element={<GenerateFeedbackDriver />}></Route>
 <Route path="user/:id" element={<UpdateFeedbackUser />} ></Route>
+<Route path="driver/:id" element={<UpdateFeedbackDriver />} ></Route>
         </Route>
         <Route path="drivers">
           <Route path="view">

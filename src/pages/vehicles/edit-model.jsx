@@ -68,7 +68,7 @@ const EditModel = () => {
           },
         });
         const resData = await res.data;
-        setVehicleManufacturer(resData.data);
+        setVehicleManufacturer(resData);
         console.log("vehicle model");
         console.log(resData);
       } catch (error) {
@@ -84,7 +84,7 @@ const EditModel = () => {
           },
         });
         const resData = await res.data;
-        setVehicleClass(resData.data);
+        setVehicleClass(resData);
         console.log(resData, "vehicle class");
       } catch (error) {
         console.log(error);

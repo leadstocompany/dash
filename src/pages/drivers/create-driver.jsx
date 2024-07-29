@@ -111,7 +111,7 @@ const AddDriver = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const [fileUploads, setFileUploads] = useState({
     aadharFront: null,
     aadharBack: null,
@@ -171,12 +171,12 @@ const AddDriver = () => {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/cab-booking-admin-api/drivers/`,
+        `${SERVER_URL}/admin-api/driver/`,
         driverObject,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -207,7 +207,7 @@ const AddDriver = () => {
       const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `token ${user.token}`,
+          Authorization: `token ${token}`,
         },
       });
       const resData = await res.data;

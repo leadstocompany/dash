@@ -28,7 +28,7 @@ const EditPassenger = () => {
     try {
       setIsLoading(true);
       const res = await axios.put(
-        `${SERVER_URL}/cab-booking-admin-api/passengers/${data.id}/`,
+        `${SERVER_URL}/admin-api/passenger/${data.id}/`,
         data,
         {
           headers: {

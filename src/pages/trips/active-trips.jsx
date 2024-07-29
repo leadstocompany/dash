@@ -35,16 +35,17 @@ const ActiveTrips = () => {
   //initializers
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
 
   useEffect(() => {
     const fetchDrivers = async () => {
       setIsLoading(true);
       try {
         const res = await axios.get(
-          `${SERVER_URL}/cab-booking-admin-api/active-trip/?page=${pagination.page}&page_size=${pagination.page_size}`,
+          `${SERVER_URL}/admin-api/active-trips/?page=${pagination.page}&page_size=${pagination.page_size}`,
           {
             headers: {
-              Authorization: `token ${user.token}`,
+              Authorization: `token ${token}`,
             },
           }
         );

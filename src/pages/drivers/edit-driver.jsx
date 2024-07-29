@@ -66,7 +66,7 @@ const EditDriver = () => {
       setData((prev) => ({ ...prev, [key]: value }));
     });
   }, []);
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
   const navigate = useNavigate();
   const formInfo = useForm({
@@ -101,12 +101,12 @@ const EditDriver = () => {
     try {
       setIsLoading(true);
       const res = await axios.patch(
-        `${SERVER_URL}/cab-booking-admin-api/drivers/${data.id}/`,
+        `${SERVER_URL}/admin-api/driver/${data.id}/`,
         submitData,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );
@@ -136,7 +136,7 @@ const EditDriver = () => {
       const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `token ${user.token}`,
+          Authorization: `token ${token}`,
         },
       });
       const resData = await res.data;

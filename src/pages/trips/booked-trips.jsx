@@ -34,15 +34,15 @@ const BookedTrips = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
-
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const fetchCompletedTrips = async () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${SERVER_URL}/cab-booking-admin-api/booked-trip/?page=${pagination.page}&page_size=${pagination.page_size}`,
+        `${SERVER_URL}/admin-api/booked-trips/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
-            Authorization: `token ${user.token}`,
+            Authorization: `token ${token}`,
           },
         }
       );

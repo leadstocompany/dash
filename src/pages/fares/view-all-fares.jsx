@@ -77,7 +77,7 @@ const ViewAllFares = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${SERVER_URL}/cab-booking-admin-api/price-settings/`,
+        `${SERVER_URL}/admin-api/cabbookingprices/`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -155,8 +155,9 @@ const ViewAllFares = () => {
             <TableRow>
               <TableHead>No</TableHead>
               <TableHead>Vehicle Class</TableHead>
-              <TableHead>Fare Per KM</TableHead>
-              <TableHead>Platform Charge</TableHead>
+              <TableHead>Base Fare</TableHead>
+              <TableHead>Extra KM Fare</TableHead>
+              <TableHead>Waiting Fare</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -166,12 +167,13 @@ const ViewAllFares = () => {
                 return (
                   <TableRow key={i + "-all-fares"}>
                     <TableCell className="font-medium">{i + 1}</TableCell>
-                    <TableCell>{_.cab_class_name}</TableCell>
-                    <TableCell>${_.price}</TableCell>
-                    <TableCell>{_.platform_charge}%</TableCell>
+                    <TableCell>{_.cab_class?.cab_class}</TableCell>
+                    <TableCell>{_.base_fare}$</TableCell>
+                    <TableCell>{_.extra_km_fare}</TableCell>
+                    <TableCell>{_.waiting_fare_per_minute}</TableCell>
                     <TableActionItem
                       data={_}
-                      deleteUrl="/cab-booking-admin-api/price-settings/"
+                      deleteUrl="/admin-api/cabbookingprices/"
                       fetchData={fetchAllFares}
                       edit={true}
                       pathname="/fares/edit/"

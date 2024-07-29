@@ -137,7 +137,7 @@ const CreateVehicle = () => {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/cab-booking-admin-api/vehicles/`,
+        `${SERVER_URL}/admin-api/vehicles/`,
         vehicleObject,
         {
           headers: {
