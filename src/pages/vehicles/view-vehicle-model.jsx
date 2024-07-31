@@ -131,13 +131,13 @@ const ViewVehicleModel = () => {
                           className="object-contain"
                         />
                         <AvatarFallback className="text-xs font-semibold bg-gradient-to-l from-indigo-600 to-purple-600 text-white">
-                          {_.model}
+                          {_.model_image}
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
-                    <TableCell>{_.cab_class_name}</TableCell>
+                    <TableCell>{_.maker?.cab_type?.cab_type}</TableCell>
                     <TableCell>{_.model}</TableCell>
-                    <TableCell>{_.maker_name}</TableCell>
+                    <TableCell>{_.maker?.maker}</TableCell>
                     <TableCell>{_.is_active ? "Active" : "Inactive"}</TableCell>
                     <TableActionItem
                       data={_}

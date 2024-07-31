@@ -83,15 +83,18 @@ const CreateVehicleManufacturer = () => {
         }
       );
       const resData = await res.data;
-      if (
-        resData.success === "true" ||
-        resData.success === "True" ||
-        resData.success === true
-      ) {
-        toast({
-          title: resData.message,
-        });
-      }
+      // if (
+      //   resData.success === "true" ||
+      //   resData.success === "True" ||
+      //   resData.success === true
+      // ) {
+      //   toast({
+      //     title: resData.message,
+      //   });
+      // }
+      toast({
+        title: resData.message || "Vehicle Manufacture Created Successfully.",
+      });
       console.log(resData);
     } catch (error) {
       console.log(error);

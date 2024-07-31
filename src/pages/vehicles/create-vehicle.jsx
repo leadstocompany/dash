@@ -111,7 +111,7 @@ const CreateVehicle = () => {
     const vehicleObject = {
       phone: data.phone,
       number_plate: data.number_plate,
-      // driver: parseInt(data.driver),
+       driver: parseInt(data.driver),
       maker_id: parseInt(data.maker) || "",
       model_id: parseInt(data.model) || "",
       cab_type_id: parseInt(data.cab_type) || "",

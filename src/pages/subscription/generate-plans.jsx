@@ -30,9 +30,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useForm, } from "react-hook-form";
 import { useSelector } from "react-redux";
+
 import { z } from "zod";
 
 const schema = z.object({
@@ -43,16 +44,16 @@ const schema = z.object({
   ride_number: z.string().min(1, {
     message: "Ride number should not be empty",
   }),
-  discount: z.string().min(1, {
+  discount: z.string().min(0, {
     message: " Discount should not be empty",
   }),
   price: z.string().min(2, {
     message: "price should not be empty",
   }),
   //set expiry date but it can be null
-  original_price:z.string().min(2, {
-    message: "Original price should not be empty",
-  }),
+  // original_price:z.string().min(2, {
+  //   message: "Original price should not be empty",
+  // }),
   //set minimum amount
 });
 
@@ -61,6 +62,7 @@ const GeneratePlans = () => {
  
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [total, setTotal] = useState(0)
 
   const { toast } = useToast();
 
@@ -68,26 +70,35 @@ const GeneratePlans = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       plan_name: "",
-      discount: "",
+       discount: "",
       ride_number:'',
       price:'',
       original_price: '',
     },
   });
 
+  const { register, watch, setValue , getValues} = useForm()
+
+ 
+
+
+  const onChangeFirst = value => {setValue('original_price', value);
+    console.log(getValues());
+  }
   const onSubmit = async (data) => {
     let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
     console.log({
       ...data,
       
     });
-
+    setTotal(parseInt(data.discount) + parseInt(data.price))
+    console.log(getValues());
     const submitData = {
       plan_name: data.plan_name,
       discount: parseInt(data.discount) || 0,
       ride_numbers: parseInt(data.ride_number),
       price:parseInt(data.price),
-      original_price:parseInt(data.original_price),
+      original_price:parseInt(data.discount) || 0 + parseInt(data.price),
      is_active: true
     };
 
@@ -194,7 +205,9 @@ const GeneratePlans = () => {
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} 
+         
+    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -207,26 +220,31 @@ const GeneratePlans = () => {
                 <FormItem>
                   <FormLabel>Discount</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input   {...field}  />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             ></FormField>
+            <div style={{flexDirection:"column", display:'flex'}}>
+            <Label >Original Price</Label>
+            <Input value={total} disabled style={{backgroundColor:'#B5C0D0'}} className="mt-4" defaultValue="helo"  />
+            </div>
 
-             <FormField 
+
+             {/* <FormField 
               control={form.control}
               name="original_price"
-              render={({ field }) => (
+              render={({ field  }) => (
                 <FormItem>
                   <FormLabel>Original Price</FormLabel>
                   <FormControl>
-                    <Input style={{backgroundColor:'#B5C0D0'}} {...field} />
+                    <Input  style={{backgroundColor:'#B5C0D0'}} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
+            ></FormField> */}
             <div className="flex justify-end items-center col-span-2 py-2.5 pr-2.5">
               <Button isLoading={isLoading} type="submit">
                 Create plan

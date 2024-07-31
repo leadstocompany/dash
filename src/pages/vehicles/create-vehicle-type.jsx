@@ -55,11 +55,11 @@ const CreateVehicleType = () => {
         }
       );
       const resData = await res.data;
-      if (resData.success === "true") {
+      // if (resData.success === "true") {
         toast({
-          title: resData.message,
+          title: resData.message || "Vehicle Type Created Successfully.",
         });
-      }
+     // }
       console.log(resData, "vehicle type");
     } catch (error) {
       console.log(error);
