@@ -44,7 +44,7 @@ const EditModel = () => {
   const [file, setFile] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
@@ -115,19 +115,22 @@ const EditModel = () => {
 
     const formData = new FormData();
     // formData.append("model_image", file);
+    formData.append("model_image", file);
+    formData.append("cabtype", data.vehicleType);
     formData.append("model", d.model);
     formData.append("maker", d.maker);
-    formData.append("cab_class", d.cab_class);
+    formData.append("cabclass", d.cab_class);
 
     try {
       setIsLoading(true);
-      const res = await axios.put(
+      const res = await axios.patch(
         `${SERVER_URL}/admin-api/vehicle-model/${data.id}/`,
-        {
-          model: d.model,
-          maker: d.maker,
-          cab_class: d.cab_class,
-        },
+        // {
+        //   model: d.model,
+        //   maker: d.maker,
+        //   cab_class: d.cab_class,
+        // },
+        formData,
         {
           headers: {
             "Content-Type": "application/json",

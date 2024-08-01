@@ -135,7 +135,8 @@ const ViewVehicleModel = () => {
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
-                    <TableCell>{_.maker?.cab_type?.cab_type}</TableCell>
+
+                    <TableCell>{_.cabtype?.cab_type}</TableCell>
                     <TableCell>{_.model}</TableCell>
                     <TableCell>{_.maker?.maker}</TableCell>
                     <TableCell>{_.is_active ? "Active" : "Inactive"}</TableCell>

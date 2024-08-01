@@ -33,6 +33,7 @@ const schema = z.object({
   vehicleManufacturer: z
     .string()
     .min(1, { message: "Vehicle manufacturer cannot be empty" }),
+  vehicleType: z.string().min(1, { message: "Vehicle class cannot be empty" }),
   vehicleClass: z.string().min(1, { message: "Vehicle class cannot be empty" }),
 });
 
@@ -42,11 +43,12 @@ const CreateVehicleModel = () => {
   const [vehicleManufacturer, setVehicleManufacturer] = useState([]);
   const [vehicleClass, setVehicleClass] = useState([]);
   const [file, setFile] = useState(null);
+  const [vehicleType, setVehicleType] = useState([]);
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -87,8 +89,32 @@ const CreateVehicleModel = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const fetchVehicleType = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-type`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        });
+        const resData = await res.data;
+        setVehicleType(resData);
+        console.log(resData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (user) {
+      fetchVehicleType();
+    }
+  }, [user]);
+  console.log(file, "file");
   const onSubmit = async (data) => {
-    console.log(file, "file");
+    const cab_id = vehicleType.find(
+      (vehicleType) => vehicleType.cab_type === data.vehicleType
+    );
+
     if (!user) {
       toast({
         title: "Please login to continue",
@@ -101,7 +127,8 @@ const CreateVehicleModel = () => {
       formData.append("model_image", file);
       formData.append("model", data.vehicleModel);
       formData.append("maker", data.vehicleManufacturer);
-      formData.append("cab_class", data.vehicleClass);
+      formData.append("cabclass", data.vehicleClass);
+      formData.append("cabtype", data.vehicleType);
       const res = await axios.post(
         `${SERVER_URL}/admin-api/vehicle-model`,
         formData,
@@ -169,6 +196,38 @@ const CreateVehicleModel = () => {
                           </SelectItem>
                         );
                       })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="vehicleType"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Vehicle Type <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Vehicle Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehicleType?.map((vehicleModel) => (
+                        <SelectItem
+                          key={vehicleModel.id}
+                          value={vehicleModel.id.toString()}
+                        >
+                          {vehicleModel.cab_type}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

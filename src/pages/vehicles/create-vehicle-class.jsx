@@ -39,13 +39,14 @@ const CreateVehicleClass = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [vehicleType, setVehicleType] = useState([]);
   const [fileUploads, setFileUploads] = useState({});
+  const [file, setFile] = useState(null);
 
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });
 
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -81,16 +82,23 @@ const CreateVehicleClass = () => {
     }
     try {
       setIsLoading(true);
+      const formData = new FormData();
+      formData.append("icon", file);
+      formData.append("cab_class", data.vehicleClass);
+      formData.append("cab_type", data.vehicleType);
+      formData.append("is_active", true);
       const res = await axios.post(
         `${SERVER_URL}/admin-api/vehicle-class`,
-        {
-          cab_class: data.vehicleClass,
-          cab_type: cab_id.id,
-          icon: fileUploads.vehicleIcon,
-        },
+
+        formData,
+        // {
+        //   cab_class: data.vehicleClass,
+        //   cab_type: cab_id.id,
+        //   icon: fileUploads.vehicleIcon,
+        // },
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `token ${token}`,
           },
         }
@@ -181,8 +189,7 @@ const CreateVehicleClass = () => {
                       {vehicleType?.map((vehicleModel) => (
                         <SelectItem
                           key={vehicleModel.id}
-                          value={vehicleModel.cab_type}
-                          data-id={vehicleModel.id}
+                          value={vehicleModel.id.toString()}
                         >
                           {vehicleModel.cab_type}
                         </SelectItem>
@@ -213,7 +220,15 @@ const CreateVehicleClass = () => {
                 Vehicle Icon
                 {/* <span className="text-red-500">*</span> */}
               </Label>
-              <Input type="file" name="vehicleIcon" onChange={handleUpload} />
+              <Input
+                type="file"
+                name="vehicleIcon"
+                // onChange={handleUpload}
+                onChange={(e) => {
+                  // console.log(e.target.files[0], "file");
+                  setFile(e.target.files[0]);
+                }}
+              />
             </div>
             <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
               <Button type="submit">
