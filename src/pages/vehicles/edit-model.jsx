@@ -31,8 +31,9 @@ import { z } from "zod";
 
 const schema = z.object({
   model: z.string().min(1, { message: "Vehicle model cannot be empty" }),
-  maker: z.string().min(1, { message: "Vehicle manufacturer cannot be empty" }),
-  cab_class: z.string().min(1, { message: "Vehicle class cannot be empty" }),
+   maker: z.string().min(0, { message: "Vehicle manufacturer cannot be empty" }),
+   vehicleType: z.string().min(0, { message: "Vehicle class cannot be empty" }),
+   cab_class: z.string().min(1, { message: "Vehicle class cannot be empty" }),
 });
 
 const EditModel = () => {
@@ -41,6 +42,7 @@ const EditModel = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [vehicleManufacturer, setVehicleManufacturer] = useState([]);
   const [vehicleClass, setVehicleClass] = useState([]);
+  const [vehicleType, setVehicleType] = useState([]);
   const [file, setFile] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -97,6 +99,27 @@ const EditModel = () => {
   }, [user]);
 
   useEffect(() => {
+    const fetchVehicleType = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-type`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        });
+        const resData = await res.data;
+        setVehicleType(resData);
+        console.log(resData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (user) {
+      fetchVehicleType();
+    }
+  }, [user]);
+
+  useEffect(() => {
     for (const [key, value] of searchParams.entries()) {
       setData((prev) => ({ ...prev, [key]: value }));
       console.log(`${key}: ${value}`);
@@ -116,10 +139,11 @@ const EditModel = () => {
     const formData = new FormData();
     // formData.append("model_image", file);
     formData.append("model_image", file);
-    formData.append("cabtype", data.vehicleType);
+    formData.append("cabtype", d.vehicleType);
     formData.append("model", d.model);
     formData.append("maker", d.maker);
     formData.append("cabclass", d.cab_class);
+    formData.append('is_active', true)
 
     try {
       setIsLoading(true);
@@ -133,7 +157,7 @@ const EditModel = () => {
         formData,
         {
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             Authorization: `token ${token}`,
           },
         }
@@ -268,20 +292,48 @@ const EditModel = () => {
                 </FormItem>
               )}
             />
-            {/* <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="vehicleType"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Vehicle Type <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Vehicle Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehicleType?.map((vehicleModel) => (
+                        <SelectItem
+                          key={vehicleModel.id}
+                          value={vehicleModel.id.toString()}
+                        >
+                          {vehicleModel.cab_type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid gap-2">
               <Label>Vehicle Image</Label>
               <Input
                 type="file"
-                name="model_image"
                 onChange={(e) => {
+                  // console.log(e.target.files[0], "file");
                   setFile(e.target.files[0]);
-                  setData((prev) => ({
-                    ...prev,
-                    model_image: e.target.files[0],
-                  }));
                 }}
               />
-            </div> */}
+            </div>
             <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
               <Button isLoading={isLoading} type="submit">
                 Update Vehicle Model{" "}

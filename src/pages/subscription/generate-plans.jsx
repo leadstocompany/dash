@@ -44,12 +44,12 @@ const schema = z.object({
   ride_number: z.string().min(1, {
     message: "Ride number should not be empty",
   }),
-  discount: z.string().min(0, {
-    message: " Discount should not be empty",
-  }),
-  price: z.string().min(2, {
-    message: "price should not be empty",
-  }),
+  // discount: z.string().min(0, {
+  //   message: " Discount should not be empty",
+  // }),
+  // price: z.string().min(2, {
+  //   message: "price should not be empty",
+  // }),
   //set expiry date but it can be null
   // original_price:z.string().min(2, {
   //   message: "Original price should not be empty",
@@ -63,6 +63,8 @@ const GeneratePlans = () => {
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [total, setTotal] = useState(0)
+  const [discount, setDiscount] = useState('');
+  const [price, setPrice] = useState('')
 
   const { toast } = useToast();
 
@@ -82,9 +84,26 @@ const GeneratePlans = () => {
  
 
 
-  const onChangeFirst = value => {setValue('original_price', value);
-    console.log(getValues());
+  const onChangePrice = value => {
+    console.log(value);
   }
+  const onChangeDiscount= value => {
+    console.log(value);
+  }
+
+
+useEffect(() => {
+  if(!discount){
+    setTotal(parseInt(price))
+  }
+  else{
+  setTotal(parseInt(discount)  + parseInt(price))
+  }
+}, [price , discount])
+
+console.log(discount)
+console.log(price)
+
   const onSubmit = async (data) => {
     let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
     console.log({
@@ -95,10 +114,10 @@ const GeneratePlans = () => {
     console.log(getValues());
     const submitData = {
       plan_name: data.plan_name,
-      discount: parseInt(data.discount) || 0,
+      discount: parseInt(discount) || 0,
       ride_numbers: parseInt(data.ride_number),
-      price:parseInt(data.price),
-      original_price:parseInt(data.discount) || 0 + parseInt(data.price),
+      price:parseInt(price),
+      original_price:total,
      is_active: true
     };
 
@@ -198,7 +217,7 @@ const GeneratePlans = () => {
               )}
             ></FormField>
 
-<FormField
+            {/* <FormField
               control={form.control}
               name="price"
               render={({ field }) => (
@@ -206,14 +225,27 @@ const GeneratePlans = () => {
                   <FormLabel>Price</FormLabel>
                   <FormControl>
                     <Input {...field} 
+                    onChange={e => {
+                      onChangePrice(e.target.value);
+                      
+                    }}
          
     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
-            <FormField
+            ></FormField> */}
+            <div style={{flexDirection:"column", display:'flex'}}>
+            <Label >Price</Label>
+            <Input value={price} onChange={(e)=>setPrice(e.target.value)}
+              className="mt-4" defaultValue="helo"  />
+            </div>
+            <div style={{flexDirection:"column", display:'flex'}}>
+            <Label >Discount</Label>
+            <Input value={discount} onChange={(e)=>setDiscount(e.target.value)} className="mt-4" defaultValue="helo"  />
+            </div>
+            {/* <FormField
               control={form.control}
               name="discount"
               render={({ field }) => (
@@ -225,10 +257,10 @@ const GeneratePlans = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
+            ></FormField> */}
             <div style={{flexDirection:"column", display:'flex'}}>
             <Label >Original Price</Label>
-            <Input value={total} disabled style={{backgroundColor:'#B5C0D0'}} className="mt-4" defaultValue="helo"  />
+            <Input value={total ||0} disabled style={{backgroundColor:'#B5C0D0'}} className="mt-4" defaultValue="helo"  />
             </div>
 
 

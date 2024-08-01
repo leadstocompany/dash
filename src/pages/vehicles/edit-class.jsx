@@ -37,6 +37,7 @@ const schema = z.object({
 const EditCLass = () => {
   const { user } = useSelector((state) => state.user);
   const [data, setData] = useState({});
+  const [file, setFile] = useState(null);
   const [vehicleType, setVehicleType] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [serchParams, setSearchParams] = useSearchParams();
@@ -46,7 +47,8 @@ const EditCLass = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
     values: {
-      vehicleClass: data.vehicleClass,
+      vehicleClass: data.cab_class,
+      vehicleType:data.cab_type
     },
   });
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
@@ -61,7 +63,7 @@ const EditCLass = () => {
           },
         });
         const resData = await res.data;
-        setVehicleType(resData.data);
+        setVehicleType(resData);
         console.log(resData);
       } catch (error) {
         console.log(error);
@@ -74,34 +76,40 @@ const EditCLass = () => {
 
   useEffect(() => {
     for (const [key, value] of serchParams.entries()) {
-      console.log(key, value);
       setData((prev) => ({ ...prev, [key]: value }));
-      if (key === "icon") {
+      if (key === "vehicleClassIcon") {
         setFileUploads((prev) => ({ ...prev, [key]: value }));
       }
+      console.log(`${key}: ${value}`);
     }
-    // console.log(fileUploads, "fileUploads");
   }, []);
   console.log(data, "data");
 
-  const onSubmit = async (submit_data) => {
-    console.log(submit_data);
-    console.log(fileUploads, "fileUploads");
+  const id = serchParams.get('id')
+
+  const onSubmit = async (data) => {
+    // console.log(submit_data);
+    // console.log(fileUploads, "fileUploads");
     const submitData = {
       cab_type:
         parseInt(data.vehicleTypeIdChange) || parseInt(data.vehicleTypeId),
       cab_class: data.vehicleClass,
       icon: fileUploads.vehicleClassIcon,
     };
+    const formData = new FormData();
+      formData.append("icon", file);
+      formData.append("cab_class", data.vehicleClass);
+      formData.append("cab_type", data.vehicleType);
+      formData.append("is_active", true);
     try {
       setIsLoading(true);
       console.log(data.vehicleClassId, "data.vehicleClassId");
-      const res = await axios.put(
-        `${SERVER_URL}/admin-api/vehicle-class/${data.vehicleClassId}/`,
-        submitData,
+      const res = await axios.patch(
+        `${SERVER_URL}/admin-api/vehicle-class/${id}/`,
+        formData,
         {
           headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
             Authorization: `token ${token}`,
           },
         }
@@ -156,102 +164,89 @@ const EditCLass = () => {
   };
   return (
     <Container>
-      <Heading>Update Vehicle Class</Heading>
-      <Container
-        className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
-      >
-        <Form {...form} className="grid grid-cols-2 gap-2.5">
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="vehicleType"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Type <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select
-                    onValueChange={(value) => {
-                      setData((prev) => ({
-                        ...prev,
-                        vehicleTypeIdChange: value,
-                      }));
-                    }}
-                    onOpenChange={(value) => {
-                      if (value === false && data.vehicleTypeIdChange) {
-                        setData((prev) => ({
-                          ...prev,
-                          vehicleTypeId: data.vehicleTypeIdChange,
-                        }));
-                      }
-                    }}
-                    value={data.vehicleTypeId}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Vehicle Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleType?.map((vehicleModel) => (
-                        <SelectItem
-                          key={vehicleModel.id}
-                          value={vehicleModel.id.toString()}
-                        >
-                          {vehicleModel.cab_type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="vehicleClass"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Class <span className="text-red-500">*</span>
-                  </FormLabel>
+    <Heading>Update Vehicle Class</Heading>
+    <Container
+      className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
+    >
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-2 gap-2.5"
+        >
+          <FormField
+            control={form.control}
+            name="vehicleType"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>
+                  Vehicle Type <span className="text-red-500">*</span>
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
-                    <Input
-                      {...field}
-                      onChange={(e) => {
-                        setData((prev) => ({
-                          ...prev,
-                          vehicleClass: e.target.value,
-                        }));
-                      }}
-                      value={data.vehicleClass}
-                      type="text"
-                    />
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Vehicle Type" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+                  <SelectContent>
+                    {vehicleType?.map((vehicleModel) => (
+                      <SelectItem
+                        key={vehicleModel.id}
+                        value={vehicleModel.id.toString()}
+                      >
+                        {vehicleModel.cab_type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="vehicleClass"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Vehicle Class <span className="text-red-500">*</span>
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} type="text" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="w-full flex flex-col gap-3">
+            <Label>
+              Vehicle Icon
+              {/* <span className="text-red-500">*</span> */}
+            </Label>
+            <Input
+              type="file"
+              name="vehicleIcon"
+              // onChange={handleUpload}
+              onChange={(e) => {
+                // console.log(e.target.files[0], "file");
+                setFile(e.target.files[0]);
+              }}
             />
-            <div className="w-full flex flex-col gap-3">
-              <Label>Vehicle Icon</Label>
-              <Input
-                type="file"
-                name="vehicleClassIcon"
-                onChange={handleUpload}
-              />
-            </div>
-            <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
-              <Button type="submit">
-                {isLoading ? "Updating Class..." : "Update Class"}
-                {isLoading && (
-                  <Loader2 className="animate-spin ml-2" size={20} />
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </Container>
+          </div>
+          <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
+            <Button type="submit">
+              {isLoading ? "Creating Class..." : "Create Class"}
+              {isLoading && (
+                <Loader2 className="animate-spin ml-2" size={20} />
+              )}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </Container>
+  </Container>
   );
 };
 

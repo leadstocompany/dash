@@ -38,6 +38,7 @@ import {
   CreateVehicleManufacturer,
   CreateVehicleModel,
   CreateVehicleType,
+  EditCLass,
   ViewAllVehicletype,
   ViewVehicleById,
   ViewVehicleClass,
@@ -144,7 +145,7 @@ function Root() {
         <Route path="vehicles">
           <Route path="edit">
             <Route path="vehicle" element={<EditVehicle />} />
-            <Route path="class" element={<EditCLassDetails />} />
+            <Route path="class" element={<EditCLass />} />
             <Route path="type" element={<EditVehicleType />} />
             <Route path="manufacturer" element={<EditManufacturer />} />
             <Route path="model" element={<EditModel />} />
