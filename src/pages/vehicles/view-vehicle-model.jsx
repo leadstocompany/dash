@@ -25,7 +25,7 @@ const ViewVehicleModel = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [vehicleModel, setVehicleModel] = useState([]);
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
   const fetchVehicleModel = async () => {
     try {
@@ -127,11 +127,11 @@ const ViewVehicleModel = () => {
                     <TableCell>
                       <Avatar className="w-16 h-14 rounded-md">
                         <AvatarImage
-                          src={_.model_image}
+                          src={`https://jomlahapp.com${_.model_image}`}
                           className="object-contain"
                         />
                         <AvatarFallback className="text-xs font-semibold bg-gradient-to-l from-indigo-600 to-purple-600 text-white">
-                          {_.model_image}
+                          {`https://jomlahapp.com${_.model_image}`}
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
