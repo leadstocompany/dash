@@ -140,11 +140,14 @@ const CreateVehicleModel = () => {
         }
       );
       const resData = await res.data;
-      if (resData.success === "true") {
-        toast({
-          title: resData.message,
-        });
-      }
+      // if (resData.success === "true") {
+      //   toast({
+      //     title: resData.message,
+      //   });
+      // }
+      toast({
+        title: resData.message || "Vehicle modal added.",
+      });
       console.log(resData, "vehicle type");
     } catch (error) {
       console.log(error);
