@@ -66,6 +66,8 @@ import UpdateVehicleDoc from "./pages/document/update_vehicle_doc";
 import CreateVehicleDoc from "./pages/document/create_vehicle_doc";
 import CreateVehicleImage from "./pages/document/create_vehicle_image";
 import UpdateFeedbackDriver from "./pages/feedback/update_feedback_driver";
+import ActiveSubsList from "./pages/subscription/active-subs-list";
+import ExpireSubsList from "./pages/subscription/expire-subs-list";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -95,6 +97,8 @@ function Root() {
 <Route index path="plans" element={<Plans />}></Route>
 <Route path="driver_subscription_list" element={<DriverSubscriptionList/>}></Route>
 <Route path="generate" element={<GeneratePlans />}></Route>
+<Route path="active_subscription_list" element={<ActiveSubsList />}></Route>
+<Route path="expire_subscription_list" element={<ExpireSubsList />}></Route>
 <Route path="plans/update/:id" element={<UpdatePlans />}></Route>
         </Route>
 

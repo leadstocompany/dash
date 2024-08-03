@@ -42,55 +42,119 @@ const schema = z.object({
     message: "Plan name should be atleast 3 characters long",
   }),
   //set amount or percentage value based on coupon type
-  ride_number: z.string().min(1, {
-    message: "Ride number should not be empty",
+  days: z.string().min(1, {
+    message: "Days should not be empty",
   }),
-  discount: z.string().min(1, {
-    message: " Discount should not be empty",
-  }),
-  price: z.string().min(2, {
-    message: "price should not be empty",
-  }),
+  vehicleClass: z.string().min(1, { message: "Vehicle class cannot be empty" }),
+  // discount: z.string().min(0, {
+  //   message: " Discount should not be empty",
+  // }),
+  // price: z.string().min(2, {
+  //   message: "price should not be empty",
+  // }),
   //set expiry date but it can be null
-  original_price:z.string().min(2, {
-    message: "Original price should not be empty",
-  }),
+  // original_price:z.string().min(2, {
+  //   message: "Original price should not be empty",
+  // }),
   //set minimum amount
 });
 
 const UpdatePlans = () => {
   const { user } = useSelector((state) => state.user);
-
+  const [data, setData] = useState({});
   const [searchParams, setSearchParams] = useSearchParams()
+  const [vehicleClass, setVehicleClass] = useState([]);
+  const [total, setTotal] = useState(0)
+  const [discount, setDiscount] = useState('');
+  const [price, setPrice] = useState('')
   const id = searchParams.get('id')
   const plan_name = searchParams.get('plan_name');
   const ride_number = searchParams.get('ride_numbers');
-  const price = searchParams.get('price');
-  const discount = searchParams.get('discount');
+  const prices = searchParams.get('price');
+  const discounts = searchParams.get('discount');
   const original_price = searchParams.get('original_price');
- 
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
- 
-
   const { toast } = useToast();
+
+
+  const form = useForm({
+    resolver: zodResolver(schema),
+    mode: "onSubmit",
+    values: {
+      vehicleClass:data.vehicle_class,
+      plan_name: data.plan_name,
+      discount: data.discount,
+      days:data.days,
+      price: data.price,
+      original_price: data.original_price,
+    },
+  });
+
+
+  useEffect(() => {
+    for (const [key, value] of searchParams.entries()) {
+      setData((prev) => ({ ...prev, [key]: value }));
+      setPrice(prices)
+      setDiscount(discounts)
+      setTotal(original_price)
+      console.log(`${key}: ${value}`);
+    }
+  }, [searchParams]);
+
+
+  useEffect(() => {
+    if(!discount){
+      setTotal(parseInt(price))
+    }
+    else{
+  let a = parseInt(price)*parseInt(discount) /100
+  
+  let b = parseInt(price) -a
+    setTotal(b)
+     }
+  }, [price , discount])
+
+  useEffect(() => {
+
+    const fetchVehicleClass = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-class`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        });
+        const resData = await res.data;
+        setVehicleClass(resData);
+        console.log(resData, "vehicle class");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (user) {
+     
+      fetchVehicleClass();
+    }
+  }, [user]);
 
 
 
   const onSubmit = async (data) => {
-    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+    
     console.log({
       ...data,
       
     });
 
     const submitData = {
+      vehicle_class:data.vehicleClass,
       plan_name: data.plan_name,
-      discount: parseInt(data.discount) ,
-      ride_numbers: parseInt(data.ride_number),
-      price:parseInt(data.price),
-      original_price:parseInt(data.original_price),
+      discount: parseInt(discount) ||0,
+      days: parseInt(data.days),
+      price:parseInt(price),
+      original_price:total,
      is_active: true
     };
 
@@ -152,29 +216,16 @@ const UpdatePlans = () => {
 
 
 
-  
 
- 
-
-  const form = useForm({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      plan_name: plan_name,
-      discount: discount,
-      ride_number:ride_number,
-      price: price,
-      original_price: original_price,
-    },
-  });
   
 
   return (
     <Container>
-      <Heading>Create Subscription plan</Heading>
+      <Heading>Update Subscription plan</Heading>
       <Container
         className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
       >
-        <Form {...form}>
+       <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="grid grid-cols-2 gap-2.5"
@@ -183,6 +234,50 @@ const UpdatePlans = () => {
               <Label>Coupon Image</Label>
               <Input type="file" onChange={handleUpload} />
             </div> */}
+
+            
+<FormField
+              control={form.control}
+              name="vehicleClass"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Vehicle Class <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <Select
+                    value={data.vehicleClass}
+                    onValueChange={(v) =>
+                      setData((prev) => ({ ...prev, cab_class_change: v }))
+                    }
+                    onOpenChange={(isOpen) => {
+                      if (!isOpen && data.cab_class_change) {
+                        setData((prev) => ({
+                          ...prev,
+                          vehicleClass: data.cab_class_change,
+                        }));
+                        form.setValue("vehicleClass", data.cab_class_change);
+                      }
+                    }}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Vehicle Class" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehicleClass?.map((item) => {
+                        return (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.cab_class}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
              <FormField
               control={form.control}
               name="plan_name"
@@ -190,7 +285,7 @@ const UpdatePlans = () => {
                 <FormItem>
                   <FormLabel>Plan Name</FormLabel>
                   <FormControl>
-                    <Input  {...field} />
+                    <Input {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -198,10 +293,10 @@ const UpdatePlans = () => {
             ></FormField>
             <FormField
               control={form.control}
-              name="ride_number"
+              name="days"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ride Numbers</FormLabel>
+                  <FormLabel>Days</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -210,49 +305,69 @@ const UpdatePlans = () => {
               )}
             ></FormField>
 
-<FormField
+            {/* <FormField
               control={form.control}
               name="price"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} 
+                    onChange={e => {
+                      onChangePrice(e.target.value);
+                      
+                    }}
+         
+    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
-            <FormField
+            ></FormField> */}
+            <div style={{flexDirection:"column", display:'flex'}}>
+            <Label >Price</Label>
+            <Input  value={price} onChange={(e)=>setPrice(e.target.value)}
+              className="mt-4"  />
+            </div>
+            <div style={{flexDirection:"column", display:'flex'}}>
+            <Label >Percentage (Optional)</Label>
+            <Input value={discount} onChange={(e)=>setDiscount(e.target.value)} className="mt-4" defaultValue="helo"  />
+            </div>
+            {/* <FormField
               control={form.control}
               name="discount"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Discount</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input   {...field}  />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
+            ></FormField> */}
+            <div style={{flexDirection:"column", display:'flex'}}>
+            <Label >Original Price</Label>
+            <Input value={total ||0} disabled style={{backgroundColor:'#B5C0D0'}} className="mt-4" defaultValue="helo"  />
+            </div>
 
-             <FormField 
+
+             {/* <FormField 
               control={form.control}
               name="original_price"
-              render={({ field }) => (
+              render={({ field  }) => (
                 <FormItem>
                   <FormLabel>Original Price</FormLabel>
                   <FormControl>
-                    <Input style={{backgroundColor:'#B5C0D0'}} {...field} />
+                    <Input  style={{backgroundColor:'#B5C0D0'}} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
+            ></FormField> */}
             <div className="flex justify-end items-center col-span-2 py-2.5 pr-2.5">
               <Button isLoading={isLoading} type="submit">
-                Update plan
+                Create plan
               </Button>
             </div>
           </form>

@@ -229,11 +229,23 @@ const SideBar = () => {
             Plans
           </Link>
           <Link
+            to="/subscription/active_subscription_list"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Active subscription list
+          </Link>
+          <Link
+            to="/subscription/expire_subscription_list"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Expire subscription list
+          </Link>
+          {/* <Link
             to="/subscription/driver_subscription_list"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
             Driver Subscription Plans
-          </Link>
+          </Link> */}
         </CollapseableLink>
 
         <CollapseableLink

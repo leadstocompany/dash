@@ -41,9 +41,10 @@ const schema = z.object({
     message: "Plan name should be atleast 3 characters long",
   }),
   //set amount or percentage value based on coupon type
-  ride_number: z.string().min(1, {
-    message: "Ride number should not be empty",
+  days: z.string().min(1, {
+    message: "Days should not be empty",
   }),
+  vehicleClass: z.string().min(1, { message: "Vehicle class cannot be empty" }),
   // discount: z.string().min(0, {
   //   message: " Discount should not be empty",
   // }),
@@ -62,10 +63,11 @@ const GeneratePlans = () => {
  
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [vehicleClass, setVehicleClass] = useState([]);
   const [total, setTotal] = useState(0)
   const [discount, setDiscount] = useState('');
   const [price, setPrice] = useState('')
-
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
   const { toast } = useToast();
 
   const form = useForm({
@@ -97,25 +99,53 @@ useEffect(() => {
     setTotal(parseInt(price))
   }
   else{
-  setTotal(parseInt(discount)  + parseInt(price))
-  }
+let a = parseInt(price)*parseInt(discount) /100
+
+let b = parseInt(price) -a
+  setTotal(b)
+   }
 }, [price , discount])
 
 console.log(discount)
 console.log(price)
 
+
+useEffect(() => {
+
+  const fetchVehicleClass = async () => {
+    try {
+      const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-class`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `token ${token}`,
+        },
+      });
+      const resData = await res.data;
+      setVehicleClass(resData);
+      console.log(resData, "vehicle class");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  if (user) {
+   
+    fetchVehicleClass();
+  }
+}, [user]);
+
   const onSubmit = async (data) => {
-    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+ 
     console.log({
       ...data,
       
     });
-    setTotal(parseInt(data.discount) + parseInt(data.price))
+    
     console.log(getValues());
     const submitData = {
+      vehicle_class:data.vehicleClass,
       plan_name: data.plan_name,
       discount: parseInt(discount) || 0,
-      ride_numbers: parseInt(data.ride_number),
+      days: parseInt(data.days),
       price:parseInt(price),
       original_price:total,
      is_active: true
@@ -181,6 +211,7 @@ console.log(price)
       <Container
         className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
       >
+
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -190,6 +221,39 @@ console.log(price)
               <Label>Coupon Image</Label>
               <Input type="file" onChange={handleUpload} />
             </div> */}
+
+            
+<FormField
+              control={form.control}
+              name="vehicleClass"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Vehicle Class <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Vehicle Class" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehicleClass?.map((item) => {
+                        return (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.cab_class}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
              <FormField
               control={form.control}
               name="plan_name"
@@ -205,10 +269,10 @@ console.log(price)
             ></FormField>
             <FormField
               control={form.control}
-              name="ride_number"
+              name="days"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ride Numbers</FormLabel>
+                  <FormLabel>Days</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -242,7 +306,7 @@ console.log(price)
               className="mt-4" defaultValue="helo"  />
             </div>
             <div style={{flexDirection:"column", display:'flex'}}>
-            <Label >Discount</Label>
+            <Label >Percentage (Optional)</Label>
             <Input value={discount} onChange={(e)=>setDiscount(e.target.value)} className="mt-4" defaultValue="helo"  />
             </div>
             {/* <FormField
