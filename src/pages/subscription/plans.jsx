@@ -111,7 +111,7 @@ const Plans = () => {
                   <TableRow key={i}>
                     <TableCell center className="font-medium">{_?.id}</TableCell>
                     <TableCell>
-                    {_?.vehicle_class}
+                    {_?.vehicle_class?.cab_class}
                     </TableCell>
                     <TableCell >{_?.plan_name}</TableCell>
                     <TableCell>
