@@ -177,9 +177,9 @@ const UpdatePlans = () => {
         title: resData.message || "Subscription Plan Generated.",
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.request.responseText);
       toast({
-        title: "Something went wrong",
+        title: error.request.responseText ||"Something went wrong",
         description: "Failed to generate coupon",
       });
     } finally {
@@ -245,19 +245,8 @@ const UpdatePlans = () => {
                     Vehicle Class <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
-                    value={data.vehicleClass}
-                    onValueChange={(v) =>
-                      setData((prev) => ({ ...prev, cab_class_change: v }))
-                    }
-                    onOpenChange={(isOpen) => {
-                      if (!isOpen && data.cab_class_change) {
-                        setData((prev) => ({
-                          ...prev,
-                          vehicleClass: data.cab_class_change,
-                        }));
-                        form.setValue("vehicleClass", data.cab_class_change);
-                      }
-                    }}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
                   >
                     <FormControl>
                       <SelectTrigger>
