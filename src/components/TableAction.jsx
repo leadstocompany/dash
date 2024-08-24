@@ -21,7 +21,7 @@ export const TableActionItem = ({
   const { user } = useSelector((state) => state.user);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -55,7 +55,7 @@ export const TableActionItem = ({
   const handleNavigate = (pathname) => {
     navigate({
       pathname: pathname,
-      search: createSearchParams(JSON.stringify(data)).toString(),
+      search: createSearchParams(data).toString(),
     });
   };
 

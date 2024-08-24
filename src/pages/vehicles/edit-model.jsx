@@ -31,9 +31,9 @@ import { z } from "zod";
 
 const schema = z.object({
   model: z.string().min(1, { message: "Vehicle model cannot be empty" }),
-   maker: z.string().min(0, { message: "Vehicle manufacturer cannot be empty" }),
-   vehicleType: z.string().min(0, { message: "Vehicle class cannot be empty" }),
-   cab_class: z.string().min(1, { message: "Vehicle class cannot be empty" }),
+  maker: z.string().min(0, { message: "Vehicle manufacturer cannot be empty" }),
+  vehicleType: z.string().min(0, { message: "Vehicle class cannot be empty" }),
+  cab_class: z.string().min(1, { message: "Vehicle class cannot be empty" }),
 });
 
 const EditModel = () => {
@@ -43,7 +43,8 @@ const EditModel = () => {
   const [vehicleManufacturer, setVehicleManufacturer] = useState([]);
   const [vehicleClass, setVehicleClass] = useState([]);
   const [vehicleType, setVehicleType] = useState([]);
-  const [file, setFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [file, setFile] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams();
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
@@ -125,7 +126,6 @@ const EditModel = () => {
   //   console.log(p);
   // }
 
-  
   // useEffect(() => {
   //   // const searchParams1 = new URLSearchParams(searchParams);
   //   for (const value of searchParams) {
@@ -134,9 +134,7 @@ const EditModel = () => {
   //     // console.log(data);
   //     //  console.log(`${key}: ${value}`);
   //   }
-    
-  
-  
+
   // }, [searchParams]);
 
   useEffect(() => {
@@ -163,7 +161,7 @@ const EditModel = () => {
     formData.append("model", d.model);
     formData.append("maker", d.maker);
     formData.append("cabclass", d.cab_class);
-    formData.append('is_active', true)
+    formData.append("is_active", true);
 
     try {
       setIsLoading(true);
@@ -177,7 +175,7 @@ const EditModel = () => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `token ${token}`,
           },
         }
@@ -201,6 +199,39 @@ const EditModel = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    setIsUploading(true);
+    const { name } = event.target;
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    try {
+      console.log("uploading image");
+      const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `token ${token}`,
+        },
+      });
+      const resData = await res.data;
+      // setFiles({ ...files, [name]: resData.url });
+      console.log(resData, "image url");
+      setFile(resData.url);
+      toast({
+        title: "Image Uploaded",
+        description: "Image Uploaded successfully",
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Something went wrong",
+        description: "Failed to upload image",
+      });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -348,10 +379,11 @@ const EditModel = () => {
               <Label>Vehicle Image</Label>
               <Input
                 type="file"
-                onChange={(e) => {
-                  // console.log(e.target.files[0], "file");
-                  setFile(e.target.files[0]);
-                }}
+                onChange={handleUpload}
+                // onChange={(e) => {
+                //   // console.log(e.target.files[0], "file");
+                //   setFile(e.target.files[0]);
+                // }}
               />
             </div>
             <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
