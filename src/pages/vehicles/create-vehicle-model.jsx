@@ -42,7 +42,8 @@ const CreateVehicleModel = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [vehicleManufacturer, setVehicleManufacturer] = useState([]);
   const [vehicleClass, setVehicleClass] = useState([]);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const [vehicleType, setVehicleType] = useState([]);
   const form = useForm({
     resolver: zodResolver(schema),
@@ -134,7 +135,7 @@ const CreateVehicleModel = () => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `token ${token}`,
           },
         }
@@ -161,6 +162,39 @@ const CreateVehicleModel = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    setIsUploading(true);
+    const { name } = event.target;
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    try {
+      console.log("uploading image");
+      const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `token ${token}`,
+        },
+      });
+      const resData = await res.data;
+      // setFiles({ ...files, [name]: resData.url });
+      console.log(resData, "image url");
+      setFile(resData.url);
+      toast({
+        title: "Image Uploaded",
+        description: "Image Uploaded successfully",
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Something went wrong",
+        description: "Failed to upload image",
+      });
+    } finally {
+      setIsUploading(false);
     }
   };
   return (
@@ -285,10 +319,12 @@ const CreateVehicleModel = () => {
               <Label>Vehicle Image</Label>
               <Input
                 type="file"
-                onChange={(e) => {
-                  // console.log(e.target.files[0], "file");
-                  setFile(e.target.files[0]);
-                }}
+                name="vehicle_image"
+                onChange={handleUpload}
+                // onChange={(e) => {
+                //   // console.log(e.target.files[0], "file");
+                //   setFile(e.target.files[0]);
+                // }}
               />
             </div>
             <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">

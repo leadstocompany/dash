@@ -72,6 +72,9 @@ import CreateVehicleImage from "./pages/document/create_vehicle_image";
 import UpdateFeedbackDriver from "./pages/feedback/update_feedback_driver";
 import ActiveSubsList from "./pages/subscription/active-subs-list";
 import ExpireSubsList from "./pages/subscription/expire-subs-list";
+import NewDrivers from "./pages/drivers/new-drivers";
+import RejectDrivers from "./pages/drivers/rejected-driver";
+import SuspendDrivers from "./pages/drivers/suspend-driver";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -192,6 +195,12 @@ function Root() {
           </Route>
           <Route path="edit" element={<EditDriver />} />
           <Route path="create" element={<CreateDriver />} />
+          <Route path="new_request_driver" element={<NewDrivers />} />
+          <Route path="reject_driver" element={<RejectDrivers />} />
+          <Route path="suspend_driver" element={<SuspendDrivers />} />
+          <Route path="view">
+            <Route path=":id" element={<ViewDriver />} />
+          </Route>
           <Route path="payments" element={<DriverPayments />} />
         </Route>
 

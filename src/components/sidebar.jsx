@@ -167,19 +167,19 @@ const SideBar = () => {
             All Driver
           </Link>
           <Link
-            // to="/drivers/all"
+            to="/drivers/new_request_driver"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
             New Driver Request
           </Link>
           <Link
-            // to="/drivers/all"
+            to="/drivers/reject_driver"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
             Rejected Driver
           </Link>
           <Link
-            // to="/drivers/all"
+            to="/drivers/suspend_driver"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
             Supendend Driver
