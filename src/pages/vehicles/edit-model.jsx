@@ -51,7 +51,7 @@ const EditModel = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
     values: {
-      cab_class: data.cab_class,
+      cab_class: data?.cab_class,
       model: data.model,
       maker: data.maker,
     },
@@ -119,12 +119,32 @@ const EditModel = () => {
     }
   }, [user]);
 
+  // const searchParams1 = new URLSearchParams(searchParams);
+
+  // for (let p of searchParams1) {
+  //   console.log(p);
+  // }
+
+  
+  // useEffect(() => {
+  //   // const searchParams1 = new URLSearchParams(searchParams);
+  //   for (const value of searchParams) {
+  //      console.log(`${value}`);
+  //     setData(JSON.parse(value[0]));
+  //     // console.log(data);
+  //     //  console.log(`${key}: ${value}`);
+  //   }
+    
+  
+  
+  // }, [searchParams]);
+
   useEffect(() => {
     for (const [key, value] of searchParams.entries()) {
       setData((prev) => ({ ...prev, [key]: value }));
       console.log(`${key}: ${value}`);
     }
-  }, [searchParams]);
+  }, []);
 
   console.log(data);
 
@@ -204,7 +224,7 @@ const EditModel = () => {
                     Vehicle Class <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
-                    value={data.cab_class}
+                    value={data?.cab_class}
                     onValueChange={(v) =>
                       setData((prev) => ({ ...prev, cab_class_change: v }))
                     }

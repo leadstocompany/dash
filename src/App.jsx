@@ -28,10 +28,10 @@ import {
   CompletedTrips,
   RouteMap,
 } from "./pages/trips";
-import {WalletCustomer, WalletUser } from './pages/wallet'
-import {Active, Completed} from './pages/sos'
-import {Plans, DriverSubscriptionList} from "./pages/subscription"
-import {DriverFeedback, UserFeedback} from './pages/feedback'
+import { WalletCustomer, WalletUser } from "./pages/wallet";
+import { Active, Completed } from "./pages/sos";
+import { Plans, DriverSubscriptionList } from "./pages/subscription";
+import { DriverFeedback, UserFeedback } from "./pages/feedback";
 import {
   CreateVehicle,
   CreateVehicleClass,
@@ -46,7 +46,11 @@ import {
   ViewVehicleModel,
   ViewVehicles,
 } from "./pages/vehicles";
-import {PersonalDocument, VehiclePhoto, VehicleDocument} from './pages/document'
+import {
+  PersonalDocument,
+  VehiclePhoto,
+  VehicleDocument,
+} from "./pages/document";
 import EditCLassDetails from "./pages/vehicles/edit-class-details";
 import EditManufacturer from "./pages/vehicles/edit-manufacturer";
 import EditModel from "./pages/vehicles/edit-model";
@@ -94,54 +98,103 @@ function Root() {
           <Route path="route-map" element={<RouteMap />} />
         </Route>
         <Route path="subscription">
-<Route index path="plans" element={<Plans />}></Route>
-<Route path="driver_subscription_list" element={<DriverSubscriptionList/>}></Route>
-<Route path="generate" element={<GeneratePlans />}></Route>
-<Route path="active_subscription_list" element={<ActiveSubsList />}></Route>
-<Route path="expire_subscription_list" element={<ExpireSubsList />}></Route>
-<Route path="plans/update/:id" element={<UpdatePlans />}></Route>
+          <Route index path="plans" element={<Plans />}></Route>
+          <Route
+            path="driver_subscription_list"
+            element={<DriverSubscriptionList />}
+          ></Route>
+          <Route path="generate" element={<GeneratePlans />}></Route>
+          <Route
+            path="active_subscription_list"
+            element={<ActiveSubsList />}
+          ></Route>
+          <Route
+            path="expire_subscription_list"
+            element={<ExpireSubsList />}
+          ></Route>
+          <Route path="plans/update/:id" element={<UpdatePlans />}></Route>
         </Route>
 
         <Route path="document">
-<Route index path="personal_document" element={<PersonalDocument />}></Route>
-<Route path="vehicle_photos" element={<VehiclePhoto/>}></Route>
-<Route path="vehicle_document" element={<VehicleDocument />}></Route>
-<Route path="create_driver_document" element={<CreateDriverDoc />}></Route>
-<Route path="create_vehicle_document" element={<CreateVehicleDoc />}></Route>
-<Route path="create_vehicle_image" element={<CreateVehicleImage />}></Route>
-<Route path="personal_document/update/:id" element={<UpdateDoc />}></Route>
-<Route path="vehicle_document/update/:id" element={<UpdateVehicleDoc />}></Route>
+          <Route
+            index
+            path="personal_document"
+            element={<PersonalDocument />}
+          ></Route>
+          <Route path="vehicle_photos" element={<VehiclePhoto />}></Route>
+          <Route path="vehicle_document" element={<VehicleDocument />}></Route>
+          <Route
+            path="create_driver_document"
+            element={<CreateDriverDoc />}
+          ></Route>
+          <Route
+            path="create_vehicle_document"
+            element={<CreateVehicleDoc />}
+          ></Route>
+          <Route
+            path="create_vehicle_image"
+            element={<CreateVehicleImage />}
+          ></Route>
+          <Route
+            path="personal_document/update/:id"
+            element={<UpdateDoc />}
+          ></Route>
+          <Route
+            path="vehicle_document/update/:id"
+            element={<UpdateVehicleDoc />}
+          ></Route>
         </Route>
 
         <Route path="wallet">
-<Route index path="customer_wallet" element={<WalletCustomer />}></Route>
-<Route path="driver_wallet" element={<WalletDriver/>}></Route>
-<Route path="customer_wallet_detail" element={<CustomerWalletDetails />}></Route>
-<Route path="driver_wallet_detail" element={<DriverWalletDetails />}></Route>
+          <Route
+            index
+            path="customer_wallet"
+            element={<WalletCustomer />}
+          ></Route>
+          <Route path="driver_wallet" element={<WalletDriver />}></Route>
+          <Route
+            path="customer_wallet_detail"
+            element={<CustomerWalletDetails />}
+          ></Route>
+          <Route
+            path="driver_wallet_detail"
+            element={<DriverWalletDetails />}
+          ></Route>
         </Route>
         <Route path="sos">
-<Route index path="active" element={<Active />}></Route>
-<Route path="completed" element={<Completed/>}></Route>
-<Route path="active_sos_detail" element={<ActiveSosList />}></Route>
-<Route path="completed_sos_detail" element={<DriverWalletDetails />}></Route>
+          <Route index path="active" element={<Active />}></Route>
+          <Route path="completed" element={<Completed />}></Route>
+          <Route path="active_sos_detail" element={<ActiveSosList />}></Route>
+          <Route
+            path="completed_sos_detail"
+            element={<DriverWalletDetails />}
+          ></Route>
         </Route>
         <Route path="feedback">
-<Route index path="user" element={<UserFeedback />}></Route>
-<Route path="driver" element={<DriverFeedback/>}></Route>
-<Route path="generate_user_feedback" element={<GenerateFeedback />}></Route>
-<Route path="generate_driver_feedback" element={<GenerateFeedbackDriver />}></Route>
-<Route path="user/:id" element={<UpdateFeedbackUser />} ></Route>
-<Route path="driver/:id" element={<UpdateFeedbackDriver />} ></Route>
+          <Route index path="user" element={<UserFeedback />}></Route>
+          <Route path="driver" element={<DriverFeedback />}></Route>
+          <Route
+            path="generate_user_feedback"
+            element={<GenerateFeedback />}
+          ></Route>
+          <Route
+            path="generate_driver_feedback"
+            element={<GenerateFeedbackDriver />}
+          ></Route>
+          <Route path="user/:id" element={<UpdateFeedbackUser />}></Route>
+          <Route path="driver/:id" element={<UpdateFeedbackDriver />}></Route>
         </Route>
+
         <Route path="drivers">
+          <Route path="all" element={<AllDrivers />} />
           <Route path="view">
             <Route path=":id" element={<ViewDriver />} />
           </Route>
           <Route path="edit" element={<EditDriver />} />
-          <Route path="all" element={<AllDrivers />} />
           <Route path="create" element={<CreateDriver />} />
           <Route path="payments" element={<DriverPayments />} />
         </Route>
+
         <Route path="passengers">
           <Route index path="all" element={<AllPassengers />} />
           <Route path="edit" element={<EditPassenger />} />

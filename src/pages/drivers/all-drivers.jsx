@@ -471,7 +471,7 @@ const AllDrivers = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${SERVER_URL}/admin-api/driver/?page=${pagination.page}&page_size=${pagination.page_size}`,
+        `${SERVER_URL}/admin-api/drivers/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
             Authorization: `token ${token}`,
@@ -595,11 +595,11 @@ const AllDrivers = () => {
                   <TableHead>Image</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Mobile</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Address</TableHead>
+                  <TableHead>City</TableHead>
+                  <TableHead>Vehicle Class</TableHead>
                   <TableHead>Joining Date</TableHead>
-                  <TableHead>Trips</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Rides</TableHead>
+                  
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
@@ -611,7 +611,7 @@ const AllDrivers = () => {
                         key={i + "-table-view"}
                         className="items-center"
                       >
-                        <TableCell>{_?.id}</TableCell>
+                        <TableCell>{i+1}</TableCell>
                         <TableCell>
                           {
                             <Avatar>
@@ -634,27 +634,26 @@ const AllDrivers = () => {
                           {_.phone}
                         </TableCell>
                         <TableCell className="max-w-[150px] break-words">
-                          {_.email}
+                          {_.city}
                         </TableCell>
                         <TableCell>
-                          {_.full_address}, {_.road_or_area}, {_.city} -{" "}
-                          {_.pincode} {_.state}
+                        {_?.vehicle_class}
                         </TableCell>
                         <TableCell>
                           {dayjs(_.date_joined).format("DD MMMM hh:mm a")}
                         </TableCell>
-                        <TableCell>{_.total_trips}</TableCell>
+                        
                         <TableCell>
                           <Badge
                             variant={
-                              _.status === "AVAILABLE"
+                              _.rides_status?.status === "Available"
                                 ? ""
-                                : _.status === "ON TRIP"
+                                : _.rides_status?.status === "on trip"
                                 ? "outline"
                                 : "destructive"
                             }
                           >
-                            {_.status}
+                            {_.rides_status?.status}
                           </Badge>
                         </TableCell>
                         <TableActionItem

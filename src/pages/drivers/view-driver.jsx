@@ -1,5 +1,4 @@
 import Loader from "@/components/loader";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/components/ui/use-toast";
 import { SERVER_URL, cn } from "@/lib/utils";
 import axios from "axios";
@@ -8,13 +7,31 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 
+import Container from "@/components/container";
+import Heading from "@/components/heading";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { handleCSVDownload, handlePDFDownload } from "@/lib/utils";
+import { setActiveTrips } from "@/store/slice/app";
+import { Loader2, MapPin } from "lucide-react";
+import { List, Rate, Avatar } from "rsuite";
+import { Timeline } from "rsuite";
+
 const ViewDriver = () => {
   const { user } = useSelector((state) => state.user);
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -22,7 +39,7 @@ const ViewDriver = () => {
       try {
         setIsLoading(true);
         const res = await axios.get(
-          `${SERVER_URL}/admin-api/driver/${id}/`,
+          `${SERVER_URL}/admin-api/driver/${id}/details`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -50,217 +67,590 @@ const ViewDriver = () => {
   if (isLoading) return <Loader />;
   console.log(data);
   return (
-    <div className="p-5 flex flex-col justify-start items-start w-full gap-5">
-      <div className="flex justify-between items-center w-full">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="text-4xl font-semibold">
-            {data?.first_name + " " + data?.last_name}
-          </h1>
-          <p className="text-base font-medium text-gray-500">
-            {data?.email || "No Email"} | {data?.phone_number || "No Phone"}
-          </p>
-        </div>
-        <div className="flex gap-8">
-          <div className="flex flex-col leading-[.75] text-gray-500 text-sm items-start justify-start">
-            Date Joined
-            <span className="text-black text-lg font-semibold">
-              {dayjs(data?.date_joined).format("DD MMM YYYY")}
-            </span>
-          </div>
-          <div className="flex flex-col leading-[.75] text-gray-500 text-sm items-start justify-start">
-            Status
-            <span className="text-black text-lg font-semibold">
-              {data?.status}
-            </span>
-          </div>
-        </div>
+    <Container>
+      <div className="flex items-center gap-2">
+        <Avatar size="lg" circle src={data?.phtoto_upload} />
+        <Heading>{`${data?.first_name} ${data?.last_name}`}</Heading>
       </div>
-      <div className="grid grid-cols-3 gap-2 w-full p-2 bg-gray-100 rounded-xl">
-        <div className="relative group">
-          <Avatar className="w-full h-full rounded-xl max-h-[300px]">
-            <AvatarImage
-              src={data?.photo_upload}
-              className="w-full h-full object-cover"
-            />
-            <AvatarFallback className="text-xs px-5 py-8 text-center rounded-xl font-semibold bg-gradient-to-l from-purple-600 to-pink-300 text-white">
-              Profile photo - No Image
-            </AvatarFallback>
-          </Avatar>
-          <Link
-            to={data?.photo_upload}
-            target={data?.photo_upload ? "_blank" : "_self"}
-            className={cn(
-              "absolute rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible inset-0 w-full h-full bg-black/70 text-white flex font-semibold justify-center items-center gap-2 duration-150",
-              data?.photo_upload ? "" : "hidden"
-            )}
-          >
-            view image
-          </Link>
-        </div>
-        <div className="relative group">
-          <Avatar className="w-full h-full rounded-xl max-h-[300px]">
-            <AvatarImage
-              src={data?.aadhar_upload_front}
-              className="w-full h-full object-cover"
-            />
-            <AvatarFallback className="text-xs px-5 py-8 text-center rounded-xl font-semibold bg-gradient-to-l from-purple-600 to-pink-300 text-white">
-              Aadhar Front - No Image
-            </AvatarFallback>
-          </Avatar>
-          <Link
-            to={data?.aadhar_upload_front}
-            target={"_blank"}
-            className={cn(
-              "absolute rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible inset-0 w-full h-full bg-black/70 text-white flex font-semibold justify-center items-center gap-2 duration-150",
-              data?.aadhar_upload_front ? "" : "hidden"
-            )}
-          >
-            view image
-          </Link>
-        </div>
-        <div className="relative group">
-          <Avatar className="w-full h-full rounded-xl max-h-[300px]">
-            <AvatarImage
-              src={data?.aadhar_upload_back}
-              className="w-full h-full object-cover"
-            />
-            <AvatarFallback className="text-xs px-5 py-8 text-center rounded-xl font-semibold bg-gradient-to-l from-purple-600 to-pink-300 text-white">
-              Aadhar Back - No Image
-            </AvatarFallback>
-          </Avatar>
-          <Link
-            to={data?.aadhar_upload_back}
-            target={"_blank"}
-            className={cn(
-              "absolute rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible inset-0 w-full h-full bg-black/70 text-white flex font-semibold justify-center items-center gap-2 duration-150",
-              data?.aadhar_upload_back ? "" : "hidden"
-            )}
-          >
-            view image
-          </Link>
-        </div>
-        <div className="relative group">
-          <Avatar className="w-full h-full rounded-xl max-h-[300px]">
-            <AvatarImage
-              src={data?.pan_upload}
-              className="w-full h-full object-cover"
-            />
-            <AvatarFallback className="text-xs px-5 py-8 text-center rounded-xl font-semibold bg-gradient-to-l from-purple-600 to-pink-300 text-white">
-              PAN - No Image
-            </AvatarFallback>
-          </Avatar>
-          <Link
-            to={data?.pan_upload}
-            target={"_blank"}
-            className={cn(
-              "absolute rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible inset-0 w-full h-full bg-black/70 text-white flex font-semibold justify-center items-center gap-2 duration-150",
-              data?.pan_upload ? "" : "hidden"
-            )}
-          >
-            view image
-          </Link>
-        </div>
-        <div className="relative group">
-          <Avatar className="w-full h-full rounded-xl max-h-[300px]">
-            <AvatarImage
-              src={data?.license_upload_front}
-              className="w-full h-full object-cover"
-            />
-            <AvatarFallback className="text-xs px-5 py-8 text-center rounded-xl font-semibold bg-gradient-to-l from-purple-600 to-pink-300 text-white">
-              License Front - No Image
-            </AvatarFallback>
-          </Avatar>
-          <Link
-            to={data?.license_upload_front}
-            target={"_blank"}
-            className={cn(
-              "absolute rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible inset-0 w-full h-full bg-black/70 text-white flex font-semibold justify-center items-center gap-2 duration-150",
-              data?.license_upload_front ? "" : "hidden"
-            )}
-          >
-            view image
-          </Link>
-        </div>
-        <div className="relative group">
-          <Avatar className="w-full h-full rounded-xl max-h-[300px]">
-            <AvatarImage
-              src={data?.license_upload_back}
-              className="w-full h-full object-cover"
-            />
-            <AvatarFallback className="text-xs text-center px-5 py-8 rounded-xl font-semibold bg-gradient-to-l from-purple-600 to-pink-300 text-white">
-              License Back - No Image
-            </AvatarFallback>
-          </Avatar>
-          <Link
-            to={data?.license_upload_back}
-            target={"_blank"}
-            className={cn(
-              "absolute rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible inset-0 w-full h-full bg-black/70 text-white flex font-semibold justify-center items-center gap-2 duration-150",
-              data?.license_upload_back ? "" : "hidden"
-            )}
-          >
-            view image
-          </Link>
-        </div>
+      <div
+        style={{
+          display: "flex",
+          position: "absolute",
+          alignSelf: "flex-end",
+          gap: "25px",
+        }}
+      >
+        <p>
+          Date <br />
+          <span>{dayjs(data?.date_joined).format("DD MMMM hh:mm a")}</span>
+        </p>
+        <p>
+          Status <br />
+          <span style={{ color: data?.driver_duty == true ? "green" : "red" }}>
+            {data?.driver_duty == true ? "On-duty" : "Blocked"}
+          </span>
+        </p>
       </div>
-      <div className="w-full">
-        <h1 className="text-2xl font-semibold mb-2.5">Details</h1>
-        <div className="grid grid-cols-2 gap-2.5 w-full">
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">
-              Street Address
-            </p>
-            <p className="text-base font-medium text-black">
-              {data?.house_or_building}
-            </p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">Full Address</p>
-            <p className="text-base font-medium text-black">
-              {data?.full_address}
-            </p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">City</p>
-            <p className="text-base font-medium text-black">{data?.city}</p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">State</p>
-            <p className="text-base font-medium text-black">{data?.state}</p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">Phone Number</p>
-            <p className="text-base font-medium text-black">{data?.phone}</p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">
-              Alternate Phone Number
-            </p>
-            <p className="text-base font-medium text-black">
-              {data?.alternate_number}
-            </p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">Aadhar Number</p>
-            <p className="text-base font-medium text-black">
-              {data?.aadhar_number}
-            </p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center">
-            <p className="text-base font-medium text-gray-600">Pan Number</p>
-            <p className="text-base font-medium text-black">
-              {data?.pan_number}
-            </p>
-          </div>
-          <div className="px-4 py-2.5 rounded-lg bg-gray-100 flex justify-between items-center col-span-2">
-            <p className="text-base font-medium text-gray-600">Licence</p>
-            <p className="text-base font-medium text-black">
-              {data?.license_number}
-            </p>
-          </div>
-        </div>
+      <div
+        style={{
+          display: "flex",
+          position: "absolute",
+          marginTop: "4%",
+          marginLeft: "5.5%",
+        }}
+      >
+        <span>{`${data?.email} | ${data?.phone}`}</span>
       </div>
-    </div>
+
+      <p
+        style={{
+          gap: 10,
+          display: "flex",
+          position: "relative",
+          marginLeft: "8%",
+        }}
+      >
+        <span
+          style={{
+            background: "orange",
+            width: "25px",
+            borderRadius: 5,
+            textAlign: "center",
+            color: "#fff",
+            fontSize: "15px",
+          }}
+        >
+          4.5
+        </span>
+        <Rate defaultValue={4.5} size="xs" color="yellow" allowHalf />
+      </p>
+
+      <div className="mt-5">
+        <h1>Address</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Pincode -
+              <span style={{ fontWeight: "lighter" }}>{data?.pincode}</span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Country -{" "}
+              <span style={{ fontWeight: "lighter" }}>{data?.country}</span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              State -{" "}
+              <span style={{ fontWeight: "lighter" }}>{data?.state}</span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              City - <span style={{ fontWeight: "lighter" }}>{data?.city}</span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              House no, Building Name -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.house_or_building}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Road Name, Area, Colony -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.road_or_area}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Near by famous shop / mall / landmark -{" "}
+              <span style={{ fontWeight: "lighter" }}>{data?.landmark}</span>
+            </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-4">
+        <h1>Personal Documents</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Pan No - </p>
+            <p style={{ fontWeight: "bold" }}>Front Image - </p>
+          </List.Item>
+
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Aadhar No - </p>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Front Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Back Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Driving License No - </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Vehicle Details</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Type -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.vehicle?.cab_type}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Manufacturer -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.vehicle?.maker}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Model -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.vehicle?.model}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Vehicle Number -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.vehicle?.number_plate}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Vehicle Class -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.vehicle?.cab_class}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Price / km -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.vehicle?.price_per_km}
+              </span>
+            </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-4">
+        <h1>Vehicle Images</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Front Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Back Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Inside Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-4">
+        <h1>Vehicle Documents</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Pollution Paper -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Insurance Paper -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              RC Paper -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src=""
+              />
+            </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Bank Account Details</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Account Holder Name - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Bank Account Name - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>IFSC Code - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Bank Name - </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Subscription Details</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Plan Name -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.subscription_details?.subscription_data?.plan}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Price -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.subscription_details?.subscription_data?.pay_amount}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Purchase Date and Time -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.subscription_details?.subscription_data?.subscribe_date}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Expire Date and Time -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.subscription_details?.subscription_data?.expire_date}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>History - </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Ride History</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Total Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.total_rides}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Total Km -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.total_km}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Current Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.current_rides}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Schedule Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.scheduled_rides}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Total Earnings -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.total_earning}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Completed Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.completed_rides}
+              </span>
+            </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Wallet Details</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Wallet Balance -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.wallet?.balance}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              More Details -
+              <span>
+                <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
+                  <Link
+                    //to="/wallet/customer_wallet_detail"
+                    className="flex items-center justify-center active:scale-95 duration-100"
+                  >
+                    Click here
+                  </Link>
+                </Button>
+              </span>
+            </p>
+          </List.Item>
+        </List>
+      </div>
+      <div className="mt-5">
+        <h1>Chat History</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Chats - </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Active Ride Details</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Current Ride -{" "}
+              <span>
+                <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
+                  <Link
+                    //to="/wallet/customer_wallet_detail"
+                    className="flex items-center justify-center active:scale-95 duration-100"
+                  >
+                    Click here
+                  </Link>
+                </Button>
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Schedule Ride - </p>
+          </List.Item>
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Feedbacks</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Chats - </p>
+          </List.Item>
+        </List>
+      </div>
+
+      {/* <div className="mt-4">
+        <h1>Trip Details</h1>
+      </div> */}
+      {/* <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <div style={{ flexDirection: "row", display: "flex" }}>
+              <div>
+                <p style={{ fontWeight: "bold" }}>
+                  Pickup and Drop-up location -
+                </p>
+              </div>
+              <div className="ml-10">
+                <Timeline>
+                  <Timeline.Item>16:27:41 </Timeline.Item>
+                  <Timeline.Item>16:28:43 </Timeline.Item>
+                </Timeline>
+              </div>
+            </div>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Distance - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Time - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Total Fare - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Trip Status - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Payment method - </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Track Ride -
+              <span>
+                <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
+                  <Link
+                    //to="/wallet/customer_wallet_detail"
+                    className="flex items-center justify-center active:scale-95 duration-100"
+                  >
+                    Click here
+                  </Link>
+                </Button>
+              </span>
+            </p>{" "}
+          </List.Item>
+        </List>
+      </div> */}
+      <div className="justify-center flex items-center">
+        <p>For Block this profile click on the below button</p>
+      </div>
+      <div className="justify-center flex items-center">
+        <Button
+          className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+          style={{ background: "red" }}
+        >
+          <Link
+            //to="/wallet/customer_wallet_detail"
+            className="flex items-center justify-center active:scale-95 duration-100"
+          >
+            block
+          </Link>
+        </Button>
+      </div>
+    </Container>
   );
 };
 

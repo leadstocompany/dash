@@ -55,7 +55,7 @@ export const TableActionItem = ({
   const handleNavigate = (pathname) => {
     navigate({
       pathname: pathname,
-      search: createSearchParams(data).toString(),
+      search: createSearchParams(JSON.stringify(data)).toString(),
     });
   };
 

@@ -14,8 +14,8 @@ import {
   User2,
   UserCheck,
   CalendarClock,
-Wallet,
-FileText
+  Wallet,
+  FileText,
 } from "lucide-react";
 import { GiNotebook } from "react-icons/gi";
 import { HiBellAlert } from "react-icons/hi2";
@@ -23,7 +23,9 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { FaCarOn } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { FaRegAddressCard } from "react-icons/fa6";
 
 const LOCAL_STORAGE_TOKEN_KEY = import.meta.env.VITE_LOCAL_STORAGE_TOKEN_KEY;
 const LOCAL_STORAGE_USER_KEY = import.meta.env.VITE_LOCAL_STORAGE_USER_KEY;
@@ -39,11 +41,11 @@ const SideBar = () => {
     coupons: true,
     fareManagement: true,
     support: true,
-    subscription:true,
-    feedback:true,
-    Wallet:true,
-    sos:true,
-    document:true
+    subscription: true,
+    feedback: true,
+    Wallet: true,
+    sos: true,
+    document: true,
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -153,14 +155,43 @@ const SideBar = () => {
           </Link>
         </CollapseableLink>
 
-       
+        <CollapseableLink
+          buttonIcon={<FaRegAddressCard size={18} />}
+          buttonContent={"Driver"}
+          state={sideBarStates.driver}
+        >
+          <Link
+            to="/drivers/all"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            All Driver
+          </Link>
+          <Link
+            // to="/drivers/all"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            New Driver Request
+          </Link>
+          <Link
+            // to="/drivers/all"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Rejected Driver
+          </Link>
+          <Link
+            // to="/drivers/all"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Supendend Driver
+          </Link>
+        </CollapseableLink>
 
-        <Link
+        {/* <Link
           to="drivers/all"
           className="px-2 py-3 rounded-md border border-transparent hover:border-slate-100 hover:bg-white text-black flex items-center gap-2"
         >
-          <User size={18} /> <span className="text-sm"> All Drivers</span>
-        </Link>
+          <User size={18} /> <span className="text-sm">Driver</span>
+        </Link> */}
         <Link
           to="passengers/all"
           className="px-2 py-3 rounded-md border border-transparent hover:border-slate-100 hover:bg-white text-black flex items-center gap-2"
@@ -216,7 +247,7 @@ const SideBar = () => {
           <CircleDollarSign size={18} />{" "}
           <span className="text-sm">Fare Management</span>
         </Link>
-        
+
         <CollapseableLink
           buttonIcon={<CalendarClock size={18} />}
           buttonContent={"Subscription"}
@@ -276,7 +307,7 @@ const SideBar = () => {
             to="/feedback/user"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
-           User
+            User
           </Link>
           <Link
             to="/feedback/driver"
@@ -285,7 +316,6 @@ const SideBar = () => {
             Driver
           </Link>
         </CollapseableLink>
-
 
         <CollapseableLink
           buttonIcon={<FileText size={18} />}
@@ -296,7 +326,7 @@ const SideBar = () => {
             to="/document/personal_document"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
-          Personal Document
+            Personal Document
           </Link>
           <Link
             to="/document/vehicle_photos"
@@ -311,7 +341,6 @@ const SideBar = () => {
             Vehicle Document
           </Link>
         </CollapseableLink>
-
 
         <CollapseableLink
           buttonIcon={<UserCheck size={18} />}
@@ -346,7 +375,7 @@ const SideBar = () => {
             to="sos/completed"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
-           Completed
+            Completed
           </Link>
         </CollapseableLink>
       </div>
