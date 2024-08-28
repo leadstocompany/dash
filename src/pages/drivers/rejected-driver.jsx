@@ -48,7 +48,7 @@ const RejectDrivers = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${SERVER_URL}/admin-api/drivers/?page=${pagination.page}&page_size=${pagination.page_size}`,
+        `${SERVER_URL}/admin-api/rejected-drivers/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
             Authorization: `token ${token}`,
@@ -72,7 +72,7 @@ const RejectDrivers = () => {
   };
   useEffect(() => {
     if (user) {
-      //   fetchAllDrivers();
+      fetchAllDrivers();
     }
   }, [pagination.page, user]);
 
@@ -217,7 +217,7 @@ const RejectDrivers = () => {
                           edit={true}
                           fetchData={fetchAllDrivers}
                           //   pathname="/drivers/edit"
-                          viewPath={`/drivers/new_request_driver/view/${_.id}`}
+                          viewPath={`/drivers/view-reject-driver/${_.id}`}
                           view={true}
                         />
                         {/* <TableCell className="text-right space-x-2 flex">

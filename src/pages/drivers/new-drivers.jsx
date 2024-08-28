@@ -48,7 +48,7 @@ const NewDrivers = () => {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${SERVER_URL}/admin-api/drivers/?page=${pagination.page}&page_size=${pagination.page_size}`,
+        `${SERVER_URL}/admin-api/new-drivers/?page=${pagination.page}&page_size=${pagination.page_size}`,
         {
           headers: {
             Authorization: `token ${token}`,
@@ -72,7 +72,7 @@ const NewDrivers = () => {
   };
   useEffect(() => {
     if (user) {
-      //   fetchAllDrivers();
+      fetchAllDrivers();
     }
   }, [pagination.page, user]);
 
@@ -156,8 +156,7 @@ const NewDrivers = () => {
                   <TableHead>City</TableHead>
                   <TableHead>Vehicle Class</TableHead>
                   <TableHead>Request Date and Time</TableHead>
-
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead>Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -198,26 +197,13 @@ const NewDrivers = () => {
                           {dayjs(_.date_joined).format("DD MMMM hh:mm a")}
                         </TableCell>
 
-                        <TableCell>
-                          <Badge
-                            variant={
-                              _.rides_status?.status === "Available"
-                                ? ""
-                                : _.rides_status?.status === "on trip"
-                                ? "outline"
-                                : "destructive"
-                            }
-                          >
-                            {_.rides_status?.status}
-                          </Badge>
-                        </TableCell>
                         <TableActionItem
                           data={_}
                           //   deleteUrl="/admin-api/driver/"
-                          edit={true}
+                          //edit={true}
                           fetchData={fetchAllDrivers}
                           //   pathname="/drivers/edit"
-                          viewPath={`/drivers/new_request_driver/view/${_.id}`}
+                          viewPath={`/drivers/view-new-driver/${_.id}`}
                           view={true}
                         />
                         {/* <TableCell className="text-right space-x-2 flex">

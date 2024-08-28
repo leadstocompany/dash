@@ -9,6 +9,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
@@ -18,6 +25,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import { List, Rate, Avatar } from "rsuite";
 import * as z from "zod";
 
 const formSchema = z.object({
@@ -78,6 +86,12 @@ const formSchema = z.object({
   phone: z.string().nullable(),
   alternateNumber: z.string().nullable(),
   panCardNumber: z.string().nullable(),
+  vehicleModel: z.string().min(1, { message: "Vehicle model cannot be empty" }),
+  vehicleManufacturer: z
+    .string()
+    .min(1, { message: "Vehicle manufacturer cannot be empty" }),
+  vehicleType: z.string().min(1, { message: "Vehicle class cannot be empty" }),
+  vehicleClass: z.string().min(1, { message: "Vehicle class cannot be empty" }),
 });
 
 const DriverObject = {
@@ -106,12 +120,14 @@ const DriverObject = {
 
 const AddDriver = () => {
   const { user } = useSelector((state) => state.user);
-
+  const [vehicleManufacturer, setVehicleManufacturer] = useState([]);
+  const [vehicleClass, setVehicleClass] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [vehicleType, setVehicleType] = useState([]);
 
   const { toast } = useToast();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const [fileUploads, setFileUploads] = useState({
     aadharFront: null,
     aadharBack: null,
@@ -139,6 +155,10 @@ const AddDriver = () => {
       aadharNumber: "",
       panCardNumber: "",
       licenceNumber: "",
+      vehicleClass: "",
+      vehicleManufacturer: "",
+      vehicleModel: "",
+      vehicleType: "",
     },
   });
 
@@ -231,7 +251,7 @@ const AddDriver = () => {
 
   return (
     <Container>
-      <Heading>Add Driver</Heading>
+      <Heading>Create Driver</Heading>
       <Container className="rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50">
         <Form {...formInfo}>
           <form
@@ -245,11 +265,77 @@ const AddDriver = () => {
                 <FormItem className="w-full">
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
+                    <Input type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={formInfo.control}
+              name="lastName"
+              render={({ field }) => {
+                return (
+                  <FormItem className="w-full">
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+
+            <FormField
+              control={formInfo.control}
+              name="phone"
+              render={({ field }) => {
+                return (
+                  <FormItem className="w-full">
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input type="number" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              control={formInfo.control}
+              name="email"
+              render={({ field }) => {
+                return (
+                  <FormItem className="w-full">
+                    <FormLabel>Email Id(optional)</FormLabel>
+                    <FormControl>
+                      <Input type="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <div className="w-full flex flex-col gap-3">
+              <Label>Profile Picture</Label>
+              <Input
+                type="file"
+                name="profilePicture"
+                onChange={handleUpload}
+              />
+            </div>
+
+            {/* <FormField
+              control={formInfo.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
                     <Input
                       type="text"
-                      // name="name"
-                      // id="name"
-                      // className="rounded-md p-2 bg-white"
+                     
                       {...field}
                     />
                   </FormControl>
@@ -265,7 +351,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Last Name
-                      {/* <span className="text-red-500">*</span> */}
+                     
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -283,7 +369,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Full Address
-                      {/* <span className="text-red-500">*</span> */}
+                     
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -301,7 +387,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Road or Street Address
-                      {/* <span className="text-red-500">*</span> */}
+                     
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -319,7 +405,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       House or Building Address
-                      {/* <span className="text-red-500">*</span> */}
+                     
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -338,7 +424,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       City
-                      {/* <span className="text-red-500">*</span> */}
+                      
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -356,7 +442,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       State
-                      {/* <span className="text-red-500">*</span> */}
+                      
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -374,7 +460,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Zip Code
-                      {/* <span className="text-red-500">*</span> */}
+                      
                     </FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
@@ -392,7 +478,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Email
-                      {/* <span className="text-red-500">*</span> */}
+                    
                     </FormLabel>
                     <FormControl>
                       <Input type="email" {...field} />
@@ -410,7 +496,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Phone Number
-                      {/* <span className="text-red-500">*</span> */}
+                     
                     </FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
@@ -428,7 +514,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Alternate Phone Number
-                      {/* <span className="text-red-500">*</span> */}
+                   
                     </FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
@@ -446,7 +532,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Aadhar Number
-                      {/* <span className="text-red-500">*</span> */}
+                     
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -464,7 +550,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Pan Card Number
-                      {/* <span className="text-red-500">*</span> */}
+                      
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -482,7 +568,7 @@ const AddDriver = () => {
                   <FormItem className="w-full">
                     <FormLabel>
                       Licence Number
-                      {/* <span className="text-red-500">*</span> */}
+                    
                     </FormLabel>
                     <FormControl>
                       <Input type="text" {...field} />
@@ -495,7 +581,7 @@ const AddDriver = () => {
             <div className="w-full flex flex-col gap-3">
               <Label>
                 Profile Picture
-                {/* <span className="text-red-500">*</span> */}
+               
               </Label>
               <Input
                 type="file"
@@ -506,35 +592,35 @@ const AddDriver = () => {
             <div className="w-full flex flex-col gap-3">
               <Label>
                 Aadhar Card Front
-                {/* <span className="text-red-500">*</span> */}
+                
               </Label>
               <Input type="file" name="aadharFront" onChange={handleUpload} />
             </div>
             <div className="w-full flex flex-col gap-3">
               <Label>
                 Aadhar Card Back
-                {/* <span className="text-red-500">*</span> */}
+               
               </Label>
               <Input type="file" name="aadharBack" onChange={handleUpload} />
             </div>
             <div className="w-full flex flex-col gap-3">
               <Label>
                 Pan Card
-                {/* <span className="text-red-500">*</span> */}
+               
               </Label>
               <Input type="file" name="panCard" onChange={handleUpload} />
             </div>
             <div className="w-full flex flex-col gap-3">
               <Label>
                 Licence Front
-                {/* <span className="text-red-500">*</span> */}
+               
               </Label>
               <Input type="file" name="licenceFront" onChange={handleUpload} />
             </div>
             <div className="w-full flex flex-col gap-3">
               <Label>
                 Licence Back
-                {/* <span className="text-red-500">*</span> */}
+               
               </Label>
               <Input type="file" name="licenceBack" onChange={handleUpload} />
             </div>
@@ -542,8 +628,353 @@ const AddDriver = () => {
               <Button type="submit" className="px-10">
                 Submit
               </Button>
-            </div>
+            </div> */}
           </form>
+          <div className="mt-4">
+            <h1>Address</h1>
+          </div>
+          <div className="border rounded-md ">
+            <List bordered>
+              <List.Item>
+                <form
+                  className="grid grid-cols-2 gap-4  place-items-center"
+                  // onSubmit={formInfo.handleSubmit(onSubmit)}
+                >
+                  <FormField
+                    control={formInfo.control}
+                    name="pincode"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>Pincode</FormLabel>
+                          <FormControl>
+                            <Input type="number" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="country"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>Country</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="state"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>State</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="city"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>City</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="house"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>House no, Building Name</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="area"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>Road Name, Area, Colony</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="landmark"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>
+                            Near by famous shop /mall /landmark
+                          </FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </form>
+              </List.Item>
+            </List>
+          </div>
+          <div className="mt-4">
+            <h1>Personal Documents</h1>
+          </div>
+          <div className="border rounded-md ">
+            <List bordered>
+              <List.Item>
+                <div>
+                  <h1>Pan Card</h1>
+                </div>
+                {/* <List.Item> */}
+                <form
+                //className="grid grid-cols-2 gap-4  place-items-center"
+                // onSubmit={formInfo.handleSubmit(onSubmit)}
+                >
+                  <div
+                    className="grid grid-cols-2"
+                    style={{
+                      // display: "flex",
+                      gap: 20,
+                      marginTop: 10,
+                    }}
+                  >
+                    <FormField
+                      control={formInfo.control}
+                      name="pan_number"
+                      render={({ field }) => {
+                        return (
+                          <FormItem className="w-full">
+                            <FormLabel>Pan Number</FormLabel>
+                            <FormControl>
+                              <Input type="number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
+                    />
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Front Image</Label>
+                      <Input
+                        type="file"
+                        name="FrontImage"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                  </div>
+
+                  {/* </List.Item> */}
+                  <div style={{ display: "flex", marginTop: 20 }}>
+                    <h1>Aadhar Card</h1>
+                  </div>
+                  {/* <List.Item> */}
+
+                  <div
+                    className="grid grid-cols-2"
+                    style={{
+                      // display: "flex",
+                      marginTop: 10,
+                      gap: 20,
+                    }}
+                  >
+                    <FormField
+                      control={formInfo.control}
+                      name="aadhar_number"
+                      render={({ field }) => {
+                        return (
+                          <FormItem className="w-full">
+                            <FormLabel>Aadhar Number</FormLabel>
+                            <FormControl>
+                              <Input type="number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        );
+                      }}
+                    />
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Front Image</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Back Image</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                  </div>
+                </form>
+                {/* </List.Item> */}
+              </List.Item>
+            </List>
+          </div>
+          <div className="mt-4">
+            <h1>Create Vehicle</h1>
+          </div>
+          <div className="border rounded-md ">
+            <List bordered>
+              <List.Item>
+                <form
+                  className="grid grid-cols-2 gap-4"
+                  //className="grid grid-cols-2 gap-4  place-items-center"
+                  // onSubmit={formInfo.handleSubmit(onSubmit)}
+                >
+                  <FormField
+                    control={formInfo.control}
+                    name="vehicleClass"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>Vehicle Type</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose Vehicle Type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {vehicleClass?.map((item) => {
+                              return (
+                                <SelectItem
+                                  key={item.id}
+                                  value={item.id.toString()}
+                                >
+                                  {item.cab_class}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="vehicleClass"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>Manufacturer</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose Manufacturer" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {vehicleClass?.map((item) => {
+                              return (
+                                <SelectItem
+                                  key={item.id}
+                                  value={item.id.toString()}
+                                >
+                                  {item.cab_class}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="vehicleClass"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormLabel>Model</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose Model" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {vehicleClass?.map((item) => {
+                              return (
+                                <SelectItem
+                                  key={item.id}
+                                  value={item.id.toString()}
+                                >
+                                  {item.cab_class}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="plate_number"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>Plate Number</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </form>
+              </List.Item>
+            </List>
+          </div>
         </Form>
       </Container>
     </Container>

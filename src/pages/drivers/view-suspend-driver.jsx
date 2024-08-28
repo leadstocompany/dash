@@ -25,7 +25,7 @@ import { Loader2, MapPin } from "lucide-react";
 import { List, Rate, Avatar } from "rsuite";
 import { Timeline } from "rsuite";
 
-const ViewNewDriver = () => {
+const ViewSuspendDriver = () => {
   const { user } = useSelector((state) => state.user);
 
   const [data, setData] = useState({});
@@ -71,7 +71,7 @@ const ViewNewDriver = () => {
     try {
       // setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/admin-api/drivers/approve/${id}/`,
+        `${SERVER_URL}/admin-api/drivers/unblock/${id}/`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -509,7 +509,9 @@ const ViewNewDriver = () => {
           </List.Item>
         </List>
       </div> */}
-
+      <div className="justify-center flex items-center">
+        <p>For Unblock this profile click on the below button</p>
+      </div>
       <div className="justify-center flex items-center gap-4">
         <Button
           onClick={accept}
@@ -520,10 +522,10 @@ const ViewNewDriver = () => {
             //to="/wallet/customer_wallet_detail"
             className="flex items-center justify-center active:scale-95 duration-100"
           >
-            Accept
+            Unblock
           </Link>
         </Button>
-        <Button
+        {/* <Button
           onClick={reject}
           className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
           style={{ background: "red" }}
@@ -534,10 +536,10 @@ const ViewNewDriver = () => {
           >
             Reject
           </Link>
-        </Button>
+        </Button> */}
       </div>
     </Container>
   );
 };
 
-export default ViewNewDriver;
+export default ViewSuspendDriver;

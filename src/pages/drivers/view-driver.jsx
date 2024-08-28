@@ -81,7 +81,8 @@ const ViewDriver = () => {
         }}
       >
         <p>
-          Date <br />
+          Date and Time
+          <br />
           <span>{dayjs(data?.date_joined).format("DD MMMM hh:mm a")}</span>
         </p>
         <p>

@@ -26,6 +26,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaCarOn } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { FaRegAddressCard } from "react-icons/fa6";
+import { GiModernCity } from "react-icons/gi";
 
 const LOCAL_STORAGE_TOKEN_KEY = import.meta.env.VITE_LOCAL_STORAGE_TOKEN_KEY;
 const LOCAL_STORAGE_USER_KEY = import.meta.env.VITE_LOCAL_STORAGE_USER_KEY;
@@ -198,40 +199,46 @@ const SideBar = () => {
         >
           <User2 size={18} /> <span className="text-sm">All Passengers</span>
         </Link>
+        <Link
+          to="city/list"
+          className="px-2 py-3 rounded-md border border-transparent hover:border-slate-100 hover:bg-white text-black flex items-center gap-2"
+        >
+          <GiModernCity size={18} /> <span className="text-sm">City</span>
+        </Link>
         <CollapseableLink
           buttonIcon={<Car size={18} />}
           buttonContent={"Vehicle"}
           state={sideBarStates.vehicle}
         >
-          <Link
+          {/* <Link
             to="vehicles/view/all"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
             View Vehicles
-          </Link>
+          </Link> */}
           <Link
             to="vehicles/view/type"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
-            View Vehicle types
+            Vehicle types
           </Link>
           <Link
             to="vehicles/view/class"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
-            View Vehicle Classes
+            Vehicle Classes
           </Link>
           <Link
             to="vehicles/view/manufacturer"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
-            View Vehicle Manufacturers
+            Vehicle Manufacturers
           </Link>
           <Link
             to="vehicles/view/model"
             className="p-2 rounded-md text-black flex items-center gap-2"
           >
-            View Vehicle Models
+            Vehicle Models
           </Link>
         </CollapseableLink>
         <Link

@@ -75,6 +75,11 @@ import ExpireSubsList from "./pages/subscription/expire-subs-list";
 import NewDrivers from "./pages/drivers/new-drivers";
 import RejectDrivers from "./pages/drivers/rejected-driver";
 import SuspendDrivers from "./pages/drivers/suspend-driver";
+import CityList from "./pages/city/city_list";
+import CreateCity from "./pages/city/create_city";
+import ViewNewDriver from "./pages/drivers/view-new-driver";
+import ViewRejectDriver from "./pages/drivers/view-reject-driver";
+import ViewSuspendDriver from "./pages/drivers/view-suspend-driver";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -198,8 +203,14 @@ function Root() {
           <Route path="new_request_driver" element={<NewDrivers />} />
           <Route path="reject_driver" element={<RejectDrivers />} />
           <Route path="suspend_driver" element={<SuspendDrivers />} />
-          <Route path="view">
-            <Route path=":id" element={<ViewDriver />} />
+          <Route path="view-new-driver">
+            <Route path=":id" element={<ViewNewDriver />} />
+          </Route>
+          <Route path="view-reject-driver">
+            <Route path=":id" element={<ViewRejectDriver />} />
+          </Route>
+          <Route path="view-suspend-driver">
+            <Route path=":id" element={<ViewSuspendDriver />} />
           </Route>
           <Route path="payments" element={<DriverPayments />} />
         </Route>
@@ -207,6 +218,10 @@ function Root() {
         <Route path="passengers">
           <Route index path="all" element={<AllPassengers />} />
           <Route path="edit" element={<EditPassenger />} />
+        </Route>
+        <Route path="city">
+          <Route index path="list" element={<CityList />} />
+          <Route path="create_city" element={<CreateCity />} />
         </Route>
         <Route path="vehicles">
           <Route path="edit">
