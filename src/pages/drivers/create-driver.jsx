@@ -22,7 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { SERVER_URL, cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { List, Rate, Avatar } from "rsuite";
@@ -169,6 +169,66 @@ const AddDriver = () => {
       // vehicleType: "",
     },
   });
+
+  useEffect(() => {
+    const fetchVehicleModel = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-maker`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        });
+        const resData = await res.data;
+        setVehicleManufacturer(resData);
+
+        console.log(resData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchVehicleClass = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-model`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        });
+        const resData = await res.data;
+        setVehicleClass(resData.data);
+        console.log(resData, "vehicle class");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (user) {
+      fetchVehicleModel();
+      fetchVehicleClass();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const fetchVehicleType = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-type`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        });
+        const resData = await res.data;
+        // console.log(resData)
+        setVehicleType(resData);
+        console.log(resData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (user) {
+      fetchVehicleType();
+    }
+  }, [user]);
 
   const onSubmit = async (values) => {
     console.log(values);
@@ -887,13 +947,13 @@ const AddDriver = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {vehicleClass?.map((item) => {
+                              {vehicleType?.map((item) => {
                                 return (
                                   <SelectItem
                                     key={item.id}
                                     value={item.id.toString()}
                                   >
-                                    {item.cab_class}
+                                    {item.cab_type}
                                   </SelectItem>
                                 );
                               })}
@@ -919,13 +979,13 @@ const AddDriver = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {vehicleClass?.map((item) => {
+                              {vehicleManufacturer?.map((item) => {
                                 return (
                                   <SelectItem
                                     key={item.id}
                                     value={item.id.toString()}
                                   >
-                                    {item.cab_class}
+                                    {item.maker}
                                   </SelectItem>
                                 );
                               })}
@@ -952,12 +1012,13 @@ const AddDriver = () => {
                             </FormControl>
                             <SelectContent>
                               {vehicleClass?.map((item) => {
+                                // console.log({ item });
                                 return (
                                   <SelectItem
                                     key={item.id}
                                     value={item.id.toString()}
                                   >
-                                    {item.cab_class}
+                                    {item.model}
                                   </SelectItem>
                                 );
                               })}
