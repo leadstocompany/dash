@@ -975,6 +975,219 @@ const AddDriver = () => {
               </List.Item>
             </List>
           </div>
+          <div className="mt-4">
+            <h1>Vehicle Images</h1>
+          </div>
+          <div className="border rounded-md ">
+            <List bordered>
+              <List.Item>
+                {/* <List.Item> */}
+                <form
+                //className="grid grid-cols-2 gap-4  place-items-center"
+                // onSubmit={formInfo.handleSubmit(onSubmit)}
+                >
+                  <div
+                    className="grid grid-cols-2"
+                    style={{
+                      // display: "flex",
+                      gap: 20,
+                      marginTop: 10,
+                    }}
+                  >
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Pollution</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>RC</Label>
+                      <Input
+                        type="file"
+                        name="FrontImage"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    className="grid grid-cols-2"
+                    style={{
+                      // display: "flex",
+                      marginTop: 10,
+                      gap: 20,
+                    }}
+                  >
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Insurance</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Sound</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                  </div>
+                </form>
+                {/* </List.Item> */}
+              </List.Item>
+            </List>
+          </div>
+          <div className="mt-4">
+            <h1>Vehicle Documents</h1>
+          </div>
+          <div className="border rounded-md ">
+            <List bordered>
+              <List.Item>
+                {/* <List.Item> */}
+                <form
+                //className="grid grid-cols-2 gap-4  place-items-center"
+                // onSubmit={formInfo.handleSubmit(onSubmit)}
+                >
+                  <div
+                    className="grid grid-cols-2"
+                    style={{
+                      // display: "flex",
+                      gap: 20,
+                      marginTop: 10,
+                    }}
+                  >
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Pollution</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>RC</Label>
+                      <Input
+                        type="file"
+                        name="FrontImage"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    className="grid grid-cols-2"
+                    style={{
+                      // display: "flex",
+                      marginTop: 10,
+                      gap: 20,
+                    }}
+                  >
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Insurance</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                    <div className="w-full flex flex-col gap-3">
+                      <Label>Sound</Label>
+                      <Input
+                        type="file"
+                        name="aadharFront"
+                        onChange={handleUpload}
+                      />
+                    </div>
+                  </div>
+                </form>
+                {/* </List.Item> */}
+              </List.Item>
+            </List>
+          </div>
+          <div className="mt-4">
+            <h1>Bank Account Details</h1>
+          </div>
+          <div className="border rounded-md ">
+            <List bordered>
+              <List.Item>
+                <form
+                  className="grid grid-cols-2 gap-4  place-items-center"
+                  // onSubmit={formInfo.handleSubmit(onSubmit)}
+                >
+                  <FormField
+                    control={formInfo.control}
+                    name="pincode"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>Account Number</FormLabel>
+                          <FormControl>
+                            <Input type="number" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="country"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>IFSC Code</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="state"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>Bank Name</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={formInfo.control}
+                    name="city"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-full">
+                          <FormLabel>Account Holder Name</FormLabel>
+                          <FormControl>
+                            <Input type="text" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </form>
+              </List.Item>
+            </List>
+          </div>
+          <div className="flex justify-center items-center col-span-2 py-2.5 pr-2.5">
+            <Button isLoading={isLoading} type="submit">
+              Create
+            </Button>
+          </div>
         </Form>
       </Container>
     </Container>
