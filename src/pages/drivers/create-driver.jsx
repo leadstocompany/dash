@@ -151,22 +151,22 @@ const AddDriver = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      // fullAddress: "",
-      // streetAddress: "",
-      // houseOrBuildingAddress: "",
-      // city: "",
-      // state: "",
+      fullAddress: "",
+      streetAddress: "",
+      houseOrBuildingAddress: "",
+      city: "",
+      state: "",
       pinCode: "",
       email: "",
       phone: "",
-      // alternateNumber: "",
-      // aadharNumber: "",
-      // panCardNumber: "",
-      // licenceNumber: "",
-      // vehicleClass: "",
-      // vehicleManufacturer: "",
-      // vehicleModel: "",
-      // vehicleType: "",
+      alternateNumber: "",
+      aadharNumber: "",
+      panCardNumber: "",
+      licenceNumber: "",
+      vehicleClass: "",
+      vehicleManufacturer: "",
+      vehicleModel: "",
+      vehicleType: "",
     },
   });
 
@@ -245,15 +245,26 @@ const AddDriver = () => {
       email: values.email,
       phone: values.phone,
       alternate_number: values.alternateNumber,
-      aadhar_number: values.aadharNumber,
-      pan_number: values.panCardNumber,
-      licence_number: values.licenceNumber,
-      aadhar_upload_front: fileUploads.aadharFront,
-      aadhar_upload_back: fileUploads.aadharBack,
-      pan_upload: fileUploads.panCard,
-      licence_upload_front: fileUploads.licenceFront,
-      licence_upload_back: fileUploads.licenceBack,
+      user_doc: [
+        {
+          aadhar_number: values.aadharNumber,
+          aadhar_upload_front: fileUploads.aadharFront,
+          aadhar_upload_back: fileUploads.aadharBack,
+        },
+        { pan_number: values.panCardNumber, pan_upload: fileUploads.panCard },
+        {
+          licence_number: values.licenceNumber,
+
+          licence_upload_front: fileUploads.licenceFront,
+        },
+        {
+          licence_upload_back: fileUploads.licenceBack,
+        },
+      ],
       photo_upload: fileUploads.profilePicture,
+      terms_policy: true,
+      myride_insurance: true,
+      profile_status: "Approve",
     };
     console.log(driverObject);
     try {
@@ -773,7 +784,7 @@ const AddDriver = () => {
                     />
                     <FormField
                       control={formInfo.control}
-                      name="house"
+                      name="houseOrBuildingAddress"
                       render={({ field }) => {
                         return (
                           <FormItem className="w-full">
@@ -788,7 +799,7 @@ const AddDriver = () => {
                     />
                     <FormField
                       control={formInfo.control}
-                      name="area"
+                      name="streetAddress"
                       render={({ field }) => {
                         return (
                           <FormItem className="w-full">
@@ -846,13 +857,13 @@ const AddDriver = () => {
                     >
                       <FormField
                         control={formInfo.control}
-                        name="pan_number"
+                        name="panCardNumber"
                         render={({ field }) => {
                           return (
                             <FormItem className="w-full">
                               <FormLabel>Pan Number</FormLabel>
                               <FormControl>
-                                <Input type="number" {...field} />
+                                <Input type="text" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -885,7 +896,7 @@ const AddDriver = () => {
                     >
                       <FormField
                         control={formInfo.control}
-                        name="aadhar_number"
+                        name="aadharNumber"
                         render={({ field }) => {
                           return (
                             <FormItem className="w-full">
@@ -1189,7 +1200,7 @@ const AddDriver = () => {
                   >
                     <FormField
                       control={formInfo.control}
-                      name="pincode"
+                      name="accountNumber"
                       render={({ field }) => {
                         return (
                           <FormItem className="w-full">
@@ -1204,7 +1215,7 @@ const AddDriver = () => {
                     />
                     <FormField
                       control={formInfo.control}
-                      name="country"
+                      name="ifscCode"
                       render={({ field }) => {
                         return (
                           <FormItem className="w-full">
@@ -1219,7 +1230,7 @@ const AddDriver = () => {
                     />
                     <FormField
                       control={formInfo.control}
-                      name="state"
+                      name="bankName"
                       render={({ field }) => {
                         return (
                           <FormItem className="w-full">
@@ -1234,7 +1245,7 @@ const AddDriver = () => {
                     />
                     <FormField
                       control={formInfo.control}
-                      name="city"
+                      name="accountHolderName"
                       render={({ field }) => {
                         return (
                           <FormItem className="w-full">
