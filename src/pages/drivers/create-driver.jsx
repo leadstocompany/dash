@@ -289,7 +289,11 @@ const AddDriver = () => {
       console.log(error);
       toast({
         title: "Something went wrong",
-        description: error?.response?.data?.error || error?.message || "",
+        description:
+          error?.response?.data?.email ||
+          error?.response?.data?.error ||
+          error?.message ||
+          "",
       });
     } finally {
       setIsLoading(false);

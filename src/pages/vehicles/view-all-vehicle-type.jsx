@@ -25,7 +25,7 @@ const ViewAllVehicletype = () => {
   const [ViewAllVehicletype, setVehicleType] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
 
   const fetchVehicleType = async () => {
@@ -38,7 +38,7 @@ const ViewAllVehicletype = () => {
         },
       });
       const resData = await res.data;
-      console.log(resData)
+      console.log(resData);
       setVehicleType(resData);
     } catch (error) {
       console.log(error);
@@ -125,7 +125,7 @@ const ViewAllVehicletype = () => {
                     <TableCell>{_.cab_type}</TableCell>
                     <TableActionItem
                       data={_}
-                      deleteUrl="/admin-api/vehicle-type/"
+                      deleteUrl="/admin-api/cabtypes/delete/"
                       fetchData={fetchVehicleType}
                       pathname="/vehicles/edit/type"
                       edit={true}

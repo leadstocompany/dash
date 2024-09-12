@@ -29,7 +29,7 @@ export const TableActionItem = ({
   const deleteTableItem = async (id) => {
     try {
       setIsDeleting(true);
-      const res = await axios.delete(`${SERVER_URL}${deleteUrl}${id}/`, {
+      const res = await axios.delete(`${SERVER_URL}${deleteUrl}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `token ${token}`,

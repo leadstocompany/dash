@@ -29,9 +29,8 @@ const ViewVehicleClass = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const fetchVehicleClass = async () => {
-
     try {
       setIsLoading(true);
       const resClass = await axios.get(
@@ -159,7 +158,7 @@ const ViewVehicleClass = () => {
                     <TableActionItem
                       data={_}
                       fetchData={fetchVehicleClass}
-                      deleteUrl="/admin-api/vehicle-class/"
+                      deleteUrl="/admin-api/cabclasses/delete/"
                       pathname={"/vehicles/edit/class"}
                       edit={true}
                     />

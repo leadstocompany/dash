@@ -142,7 +142,7 @@ const ViewVehicleModel = () => {
                     <TableCell>{_.is_active ? "Active" : "Inactive"}</TableCell>
                     <TableActionItem
                       data={_}
-                      deleteUrl="/admin-api/vehicle-model/"
+                      deleteUrl="/admin-api/vehiclemodel/delete/"
                       fetchData={fetchVehicleModel}
                       edit={true}
                       pathname="/vehicles/edit/model"

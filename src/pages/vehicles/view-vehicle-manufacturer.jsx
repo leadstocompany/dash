@@ -26,7 +26,7 @@ const ViewVehicleManufacturer = () => {
   const [vehicleManufacturer, setVehicleManufacturer] = useState([]); //[{id, price, model, model_name, platformCharge}
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
 
   const { toast } = useToast();
 
@@ -139,7 +139,7 @@ const ViewVehicleManufacturer = () => {
                     </TableCell>
                     <TableActionItem
                       data={_}
-                      deleteUrl="/admin-api/vehicle-maker/"
+                      deleteUrl="/admin-api/vehiclemaker/delete/"
                       fetchData={fetchVehicleManufacturer}
                       edit={true}
                       pathname="/vehicles/edit/manufacturer"

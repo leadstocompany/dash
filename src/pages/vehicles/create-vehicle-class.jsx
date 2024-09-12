@@ -98,7 +98,7 @@ const CreateVehicleClass = () => {
         // },
         {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `token ${token}`,
           },
         }
@@ -130,6 +130,7 @@ const CreateVehicleClass = () => {
 
   const handleUpload = async (event) => {
     event.preventDefault();
+    setIsUploading(true);
     const { name } = event.target;
     const formData = new FormData();
     formData.append("file", event.target.files[0]);
@@ -142,9 +143,9 @@ const CreateVehicleClass = () => {
         },
       });
       const resData = await res.data;
-      setFileUploads({ ...fileUploads, [name]: resData.url });
+      // setFiles({ ...files, [name]: resData.url });
       console.log(resData, "image url");
-      // setFiles({ ...files, [name]: resData.data.image_url });
+      setFile(resData.url);
       toast({
         title: "Image Uploaded",
         description: "Image Uploaded successfully",
@@ -226,11 +227,11 @@ const CreateVehicleClass = () => {
               <Input
                 type="file"
                 name="vehicleIcon"
-                // onChange={handleUpload}
-                onChange={(e) => {
-                  // console.log(e.target.files[0], "file");
-                  setFile(e.target.files[0]);
-                }}
+                onChange={handleUpload}
+                // onChange={(e) => {
+                //   // console.log(e.target.files[0], "file");
+                //   setFile(e.target.files[0]);
+                // }}
               />
             </div>
             <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">

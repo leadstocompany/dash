@@ -1,4 +1,4 @@
-import { TableActionItem } from "@/components/TableAction";
+import { TableActionItem } from "@/components/TableAction1";
 import Container from "@/components/container";
 import Heading from "@/components/heading";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -225,8 +225,8 @@ const AllDrivers = () => {
                         </TableCell>
                         <TableActionItem
                           data={_}
-                          deleteUrl="/admin-api/driver/"
-                          //edit={true}
+                          deleteUrl={`/admin-api/driver/${_.id}/delete/`}
+                          edit={true}
                           fetchData={fetchAllDrivers}
                           pathname="/drivers/edit"
                           viewPath={`/drivers/view/${_.id}`}
