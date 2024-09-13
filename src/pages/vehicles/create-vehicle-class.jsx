@@ -120,8 +120,11 @@ const CreateVehicleClass = () => {
     } catch (error) {
       console.log(error);
       toast({
-        title: "Something went wrong",
-        description: error.message || "Failed to create vehicle class",
+        title: "Error",
+        description:
+          error?.response?.data?.cab_class[0] ||
+          error?.message ||
+          "Failed to create vehicle class",
       });
     } finally {
       setIsLoading(false);
