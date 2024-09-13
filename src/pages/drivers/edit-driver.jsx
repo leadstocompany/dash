@@ -271,7 +271,7 @@ const EditDriver = () => {
     console.log(driverObject);
     try {
       setIsLoading(true);
-      const res = await axios.patch(
+      const res = await axios.put(
         `${SERVER_URL}/admin-api/driver/${id}/update/`,
         driverObject,
         {

@@ -127,11 +127,11 @@ const ViewVehicleModel = () => {
                     <TableCell>
                       <Avatar className="w-16 h-14 rounded-md">
                         <AvatarImage
-                          src={`https://jomlahapp.com${_.model_image}`}
+                          src={`${_?.model_image}`}
                           className="object-contain"
                         />
                         <AvatarFallback className="text-xs font-semibold bg-gradient-to-l from-indigo-600 to-purple-600 text-white">
-                          {`https://jomlahapp.com${_.model_image}`}
+                          {`{_?.model_image}`}
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>
