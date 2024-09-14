@@ -76,7 +76,7 @@ const EditCLass = () => {
 
   useEffect(() => {
     for (const [key, value] of serchParams.entries()) {
-      console.log({ [key]: value });
+      //console.log("ROute", { [key]: value });
       setData((prev) => ({ ...prev, [key]: value }));
       if (key === "vehicleClassIcon") {
         setFileUploads((prev) => ({ ...prev, [key]: value }));
@@ -178,34 +178,37 @@ const EditCLass = () => {
             <FormField
               control={form.control}
               name="vehicleType"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Type <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Vehicle Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleType?.map((vehicleModel) => (
-                        <SelectItem
-                          key={vehicleModel.id}
-                          value={vehicleModel.id.toString()}
-                        >
-                          {vehicleModel.cab_type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field, fieldState }) => {
+                console.log("Fields", field);
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Vehicle Type <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Vehicle Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {vehicleType?.map((vehicleModel) => (
+                          <SelectItem
+                            key={vehicleModel.id}
+                            value={vehicleModel.id.toString()}
+                          >
+                            {vehicleModel.cab_type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               control={form.control}

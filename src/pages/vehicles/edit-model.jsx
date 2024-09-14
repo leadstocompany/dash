@@ -144,7 +144,7 @@ const EditModel = () => {
     }
   }, []);
 
-  console.log(data);
+  console.log(data.model_image);
 
   const onSubmit = async (d) => {
     if (!user) {
