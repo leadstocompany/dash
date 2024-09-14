@@ -36,7 +36,7 @@ const schema = z.object({
 
 const EditCLass = () => {
   const { user } = useSelector((state) => state.user);
-  const [data, setData] = useState({});
+  const [datas, setData] = useState({});
   const [file, setFile] = useState(null);
   const [vehicleType, setVehicleType] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,8 +47,8 @@ const EditCLass = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
     values: {
-      vehicleClass: data.cab_class,
-      vehicleType: data.cab_type,
+      vehicleClass: datas.cab_class,
+      vehicleType: datas.cab_type,
     },
   });
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
@@ -84,27 +84,23 @@ const EditCLass = () => {
       console.log(`${key}: ${value}`);
     }
   }, []);
-  console.log(data, "data");
+  console.log(datas, "datas");
 
   const id = serchParams.get("id");
 
   const onSubmit = async (data) => {
-    // console.log(submit_data);
+    //  console.log(submit_data);
     // console.log(fileUploads, "fileUploads");
-    const submitData = {
-      cab_type:
-        parseInt(data.vehicleTypeIdChange) || parseInt(data.vehicleTypeId),
-      cab_class: data.vehicleClass,
-      icon: fileUploads.vehicleClassIcon,
-    };
+
     const formData = new FormData();
-    formData.append("icon", file);
+    formData.append("icon", file || datas.icon);
     formData.append("cab_class", data.vehicleClass);
-    formData.append("cab_type", data.vehicleType);
+    formData.append("cab_type", data.cab_type || data.vehicleType);
     formData.append("is_active", true);
+
     try {
       setIsLoading(true);
-      console.log(data.vehicleClassId, "data.vehicleClassId");
+
       const res = await axios.patch(
         `${SERVER_URL}/admin-api/vehicle-class/${id}/`,
         formData,
@@ -120,7 +116,7 @@ const EditCLass = () => {
         title: "Vehicle Class",
         description: "Vehicle Class Updated successfully",
       });
-      console.log(resData, "vehicle type");
+      //console.log(resData, "vehicle type");
     } catch (error) {
       console.log(error);
       toast({
@@ -131,7 +127,7 @@ const EditCLass = () => {
       setIsLoading(false);
     }
   };
-  console.log(data, "data");
+
   const handleUpload = async (event) => {
     event.preventDefault();
     //setIsUploading(true);
@@ -186,8 +182,9 @@ const EditCLass = () => {
                       Vehicle Type <span className="text-red-500">*</span>
                     </FormLabel>
                     <Select
+                      value={datas.cab_type}
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      defaultValue={datas.cab_type}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -198,7 +195,7 @@ const EditCLass = () => {
                         {vehicleType?.map((vehicleModel) => (
                           <SelectItem
                             key={vehicleModel.id}
-                            value={vehicleModel.id.toString()}
+                            value={vehicleModel.id.toString() || datas.cab_type}
                           >
                             {vehicleModel.cab_type}
                           </SelectItem>
