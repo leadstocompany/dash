@@ -48,10 +48,10 @@ const EditCLass = () => {
     mode: "onSubmit",
     values: {
       vehicleClass: data.cab_class,
-      vehicleType:data.cab_type
+      vehicleType: data.cab_type,
     },
   });
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
   useEffect(() => {
     const fetchVehicleType = async () => {
@@ -76,6 +76,7 @@ const EditCLass = () => {
 
   useEffect(() => {
     for (const [key, value] of serchParams.entries()) {
+      console.log({ [key]: value });
       setData((prev) => ({ ...prev, [key]: value }));
       if (key === "vehicleClassIcon") {
         setFileUploads((prev) => ({ ...prev, [key]: value }));
@@ -85,7 +86,7 @@ const EditCLass = () => {
   }, []);
   console.log(data, "data");
 
-  const id = serchParams.get('id')
+  const id = serchParams.get("id");
 
   const onSubmit = async (data) => {
     // console.log(submit_data);
@@ -97,10 +98,10 @@ const EditCLass = () => {
       icon: fileUploads.vehicleClassIcon,
     };
     const formData = new FormData();
-      formData.append("icon", file);
-      formData.append("cab_class", data.vehicleClass);
-      formData.append("cab_type", data.vehicleType);
-      formData.append("is_active", true);
+    formData.append("icon", file);
+    formData.append("cab_class", data.vehicleClass);
+    formData.append("cab_type", data.vehicleType);
+    formData.append("is_active", true);
     try {
       setIsLoading(true);
       console.log(data.vehicleClassId, "data.vehicleClassId");
@@ -109,7 +110,7 @@ const EditCLass = () => {
         formData,
         {
           headers: {
-          "Content-Type": "multipart/form-data",
+            "Content-Type": "application/json",
             Authorization: `token ${token}`,
           },
         }
@@ -133,6 +134,7 @@ const EditCLass = () => {
   console.log(data, "data");
   const handleUpload = async (event) => {
     event.preventDefault();
+    //setIsUploading(true);
     const { name } = event.target;
     const formData = new FormData();
     formData.append("file", event.target.files[0]);
@@ -145,9 +147,9 @@ const EditCLass = () => {
         },
       });
       const resData = await res.data;
-      setFileUploads({ ...fileUploads, vehicleClassIcon: resData.url });
+      // setFiles({ ...files, [name]: resData.url });
       console.log(resData, "image url");
-      // setFiles({ ...files, [name]: resData.data.image_url });
+      setFile(resData.url);
       toast({
         title: "Image Uploaded",
         description: "Image Uploaded successfully",
@@ -159,94 +161,94 @@ const EditCLass = () => {
         description: "Failed to upload image",
       });
     } finally {
-      //   setIsUploading(false);
+      //setIsUploading(false);
     }
   };
   return (
     <Container>
-    <Heading>Update Vehicle Class</Heading>
-    <Container
-      className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
-    >
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="grid grid-cols-2 gap-2.5"
-        >
-          <FormField
-            control={form.control}
-            name="vehicleType"
-            render={({ field, fieldState }) => (
-              <FormItem>
-                <FormLabel>
-                  Vehicle Type <span className="text-red-500">*</span>
-                </FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select Vehicle Type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {vehicleType?.map((vehicleModel) => (
-                      <SelectItem
-                        key={vehicleModel.id}
-                        value={vehicleModel.id.toString()}
-                      >
-                        {vehicleModel.cab_type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="vehicleClass"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Vehicle Class <span className="text-red-500">*</span>
-                </FormLabel>
-                <FormControl>
-                  <Input {...field} type="text" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className="w-full flex flex-col gap-3">
-            <Label>
-              Vehicle Icon
-              {/* <span className="text-red-500">*</span> */}
-            </Label>
-            <Input
-              type="file"
-              name="vehicleIcon"
-              // onChange={handleUpload}
-              onChange={(e) => {
-                // console.log(e.target.files[0], "file");
-                setFile(e.target.files[0]);
-              }}
-            />
-          </div>
-          <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
-            <Button type="submit">
-              {isLoading ? "Creating Class..." : "Create Class"}
-              {isLoading && (
-                <Loader2 className="animate-spin ml-2" size={20} />
+      <Heading>Update Vehicle Class</Heading>
+      <Container
+        className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
+      >
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid grid-cols-2 gap-2.5"
+          >
+            <FormField
+              control={form.control}
+              name="vehicleType"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Vehicle Type <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Vehicle Type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehicleType?.map((vehicleModel) => (
+                        <SelectItem
+                          key={vehicleModel.id}
+                          value={vehicleModel.id.toString()}
+                        >
+                          {vehicleModel.cab_type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
               )}
-            </Button>
-          </div>
-        </form>
-      </Form>
+            />
+            <FormField
+              control={form.control}
+              name="vehicleClass"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Vehicle Class <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="w-full flex flex-col gap-3">
+              <Label>
+                Vehicle Icon
+                {/* <span className="text-red-500">*</span> */}
+              </Label>
+              <Input
+                type="file"
+                name="vehicleIcon"
+                onChange={handleUpload}
+                // onChange={(e) => {
+                //   // console.log(e.target.files[0], "file");
+                //   setFile(e.target.files[0]);
+                // }}
+              />
+            </div>
+            <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
+              <Button type="submit">
+                {isLoading ? "Creating Class..." : "Create Class"}
+                {isLoading && (
+                  <Loader2 className="animate-spin ml-2" size={20} />
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </Container>
     </Container>
-  </Container>
   );
 };
 
