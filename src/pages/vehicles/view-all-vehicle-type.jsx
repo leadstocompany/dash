@@ -3,6 +3,7 @@ import Container from "@/components/container";
 import Heading from "@/components/heading";
 import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Table,
   TableBody,
@@ -111,6 +112,7 @@ const ViewAllVehicletype = () => {
             <TableRow>
               <TableHead>S.No</TableHead>
               <TableHead>Id</TableHead>
+              <TableHead>Vehicle Image</TableHead>
               <TableHead>Vehicle Type</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -122,6 +124,17 @@ const ViewAllVehicletype = () => {
                   <TableRow key={i + "-all-fares"}>
                     <TableCell className="font-medium">{i + 1}</TableCell>
                     <TableCell className="font-medium">{_.id}</TableCell>
+                    <TableCell>
+                      <Avatar className="w-16 h-14 rounded-md">
+                        <AvatarImage
+                          src={`${_?.icon}`}
+                          className="object-contain"
+                        />
+                        <AvatarFallback className="text-xs font-semibold bg-gradient-to-l from-indigo-600 to-purple-600 text-white">
+                          {`${_?.icon}`}
+                        </AvatarFallback>
+                      </Avatar>
+                    </TableCell>
                     <TableCell>{_.cab_type}</TableCell>
                     <TableActionItem
                       data={_}

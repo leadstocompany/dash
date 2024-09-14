@@ -33,10 +33,8 @@ const schema = z.object({
   base_fare: z.string().nonempty({
     message: "Fare per km cannot be empty",
   }),
-  extra_km_fare: z
-    .string()
-    .nonempty({ message: "Platform charge cannot be empty" }),
-    waiting_fare: z
+
+  waiting_fare: z
     .string()
     .nonempty({ message: "Platform charge cannot be empty" }),
 });
@@ -48,16 +46,16 @@ const EditFare = () => {
   const [vehicleModels, setVehicleModels] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  
-  const id = searchParams.get('id')
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+
+  const id = searchParams.get("id");
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
     values: {
       cab_class: data.vehicleType,
-      base_fare:data.base_fare,
-      extra_km_fare:data.extra_km_fare,
+      base_fare: data.base_fare,
+
       waiting_fare: data.waiting_fare_per_minute,
     },
   });
@@ -102,8 +100,8 @@ const EditFare = () => {
         `${SERVER_URL}/admin-api/cabbookingprices/${id}/`,
         {
           cab_class: data.vehicleType,
-          base_fare:data.base_fare,
-          extra_km_fare:data.extra_km_fare,
+          base_fare: data.base_fare,
+          extra_km_fare: data.extra_km_fare,
           waiting_fare_per_minute: data.waiting_fare,
         },
         {
@@ -149,7 +147,7 @@ const EditFare = () => {
                   <FormLabel>
                     Vehicle Class <span className="text-red-500">*</span>
                   </FormLabel>
-                  <Select 
+                  <Select
                     value={data?.cab_class}
                     onValueChange={(v) =>
                       setData((prev) => ({ ...prev, cab_class_change: v }))
@@ -184,7 +182,7 @@ const EditFare = () => {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="base_fare"
@@ -200,7 +198,7 @@ const EditFare = () => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="extra_km_fare"
               render={({ field, fieldState }) => (
@@ -214,7 +212,7 @@ const EditFare = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="waiting_fare"

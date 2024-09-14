@@ -131,7 +131,7 @@ const ViewVehicleModel = () => {
                           className="object-contain"
                         />
                         <AvatarFallback className="text-xs font-semibold bg-gradient-to-l from-indigo-600 to-purple-600 text-white">
-                          {`{_?.model_image}`}
+                          {`${_?.model_image}`}
                         </AvatarFallback>
                       </Avatar>
                     </TableCell>

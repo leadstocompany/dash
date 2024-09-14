@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -32,8 +33,9 @@ const CreateVehicleType = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
   });
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
+  const [file, setFile] = useState("");
 
   const onSubmit = async (data) => {
     if (!user) {
@@ -46,7 +48,7 @@ const CreateVehicleType = () => {
       setIsLoading(true);
       const res = await axios.post(
         `${SERVER_URL}/admin-api/vehicle-type`,
-        { cab_type: data.vehicleType },
+        { cab_type: data.vehicleType, icon: file },
         {
           headers: {
             "Content-Type": "application/json",
@@ -56,15 +58,47 @@ const CreateVehicleType = () => {
       );
       const resData = await res.data;
       // if (resData.success === "true") {
-        toast({
-          title: resData.message || "Vehicle Type Created Successfully.",
-        });
-     // }
+      toast({
+        title: resData.message || "Vehicle Type Created Successfully.",
+      });
+      // }
       console.log(resData, "vehicle type");
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    //setIsUploading(true);
+    const { name } = event.target;
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    try {
+      console.log("uploading image");
+      const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `token ${token}`,
+        },
+      });
+      const resData = await res.data;
+      // setFiles({ ...files, [name]: resData.url });
+      console.log(resData, "image url");
+      setFile(resData.url);
+      toast({
+        title: "Image Uploaded",
+        description: "Image Uploaded successfully",
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Something went wrong",
+        description: "Failed to upload image",
+      });
+    } finally {
+      //setIsUploading(false);
     }
   };
   return (
@@ -93,6 +127,18 @@ const CreateVehicleType = () => {
                 </FormItem>
               )}
             />
+            <div className="grid gap-2">
+              <Label>Vehicle Image</Label>
+              <Input
+                type="file"
+                name="vehicle_image"
+                onChange={handleUpload}
+                // onChange={(e) => {
+                //   // console.log(e.target.files[0], "file");
+                //   setFile(e.target.files[0]);
+                // }}
+              />
+            </div>
             <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
               <Button type="submit">
                 {isLoading ? "Creating Type..." : "Create Type"}

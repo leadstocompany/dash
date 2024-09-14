@@ -72,19 +72,16 @@ const ViewAllFares = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { toast } = useToast();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const fetchAllFares = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get(
-        `${SERVER_URL}/admin-api/cabbookingprices/`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `token ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${SERVER_URL}/admin-api/cabbookingprices/`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `token ${token}`,
+        },
+      });
       const resData = await res.data;
       setFaresList(resData);
       console.log(resData);
@@ -156,7 +153,7 @@ const ViewAllFares = () => {
               <TableHead>No</TableHead>
               <TableHead>Vehicle Class</TableHead>
               <TableHead>Base Fare</TableHead>
-              <TableHead>Extra KM Fare</TableHead>
+              {/* <TableHead>Extra KM Fare</TableHead> */}
               <TableHead>Waiting Fare</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -169,7 +166,7 @@ const ViewAllFares = () => {
                     <TableCell className="font-medium">{i + 1}</TableCell>
                     <TableCell>{_.cab_class?.cab_class}</TableCell>
                     <TableCell>{_.base_fare}$</TableCell>
-                    <TableCell>{_.extra_km_fare}</TableCell>
+                    {/* <TableCell>{_.extra_km_fare}</TableCell> */}
                     <TableCell>{_.waiting_fare_per_minute}</TableCell>
                     <TableActionItem
                       data={_}

@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -31,6 +32,7 @@ const EditVehicleType = () => {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [file, setFile] = useState("");
 
   const [serchParams, setSearchParams] = useSearchParams();
 
@@ -52,7 +54,7 @@ const EditVehicleType = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
 
   const onSubmit = async (d) => {
     console.log(d);
@@ -60,7 +62,7 @@ const EditVehicleType = () => {
       setIsUpdating(true);
       const res = await axios.put(
         `${SERVER_URL}/admin-api/vehicle-type/${data.id}/`,
-        d,
+        { cab_type: d.cab_type, icon: file },
         {
           headers: {
             "Content-Type": "application/json",
@@ -83,6 +85,38 @@ const EditVehicleType = () => {
       });
     } finally {
       setIsUpdating(false);
+    }
+  };
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    //setIsUploading(true);
+    const { name } = event.target;
+    const formData = new FormData();
+    formData.append("file", event.target.files[0]);
+    try {
+      console.log("uploading image");
+      const res = await axios.post(`${SERVER_URL}/account/upload/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `token ${token}`,
+        },
+      });
+      const resData = await res.data;
+      // setFiles({ ...files, [name]: resData.url });
+      console.log(resData, "image url");
+      setFile(resData.url);
+      toast({
+        title: "Image Uploaded",
+        description: "Image Uploaded successfully",
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Something went wrong",
+        description: "Failed to upload image",
+      });
+    } finally {
+      //setIsUploading(false);
     }
   };
   return (
@@ -111,6 +145,18 @@ const EditVehicleType = () => {
                 </FormItem>
               )}
             />
+            <div className="grid gap-2">
+              <Label>Vehicle Image</Label>
+              <Input
+                type="file"
+                name="vehicle_image"
+                onChange={handleUpload}
+                // onChange={(e) => {
+                //   // console.log(e.target.files[0], "file");
+                //   setFile(e.target.files[0]);
+                // }}
+              />
+            </div>
             <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
               <Button isLoading={isUpdating} type="submit">
                 Update Vehicle Type
