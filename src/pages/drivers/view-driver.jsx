@@ -47,9 +47,9 @@ const ViewDriver = () => {
             },
           }
         );
-        const data = await res.data;
+        const data = await res?.data;
         setData(data);
-        console.log(data);
+        console.log("DATA", data);
       } catch (error) {
         console.log(error);
         toast({
@@ -60,12 +60,10 @@ const ViewDriver = () => {
         setIsLoading(false);
       }
     };
-    if (user) {
-      fetchDriver();
-    }
-  }, [id, user]);
-  if (isLoading) return <Loader />;
-  console.log(data);
+
+    fetchDriver();
+  }, []);
+
   return (
     <Container>
       <div className="flex items-center gap-2">
@@ -145,6 +143,14 @@ const ViewDriver = () => {
           </List.Item>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
+              Address -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.full_address}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
               State -{" "}
               <span style={{ fontWeight: "lighter" }}>{data?.state}</span>
             </p>
@@ -185,8 +191,25 @@ const ViewDriver = () => {
       <div className="border rounded-md">
         <List bordered>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Pan No - </p>
-            <p style={{ fontWeight: "bold" }}>Front Image - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Pan No -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.user_doc[1]?.PAN}
+              </span>
+            </p>
+            {/* <p style={{ fontWeight: "bold" }}>
+              Front Image -
+              <img
+                alt=""
+                style={{
+                  width: "50%",
+                  height: "20%",
+                  display: "flex",
+                  margin: 10,
+                }}
+                src={data.user_doc[1].PAN_front}
+              />
+            </p> */}
           </List.Item>
 
           <List.Item>
@@ -227,7 +250,7 @@ const ViewDriver = () => {
       <div className="mt-5">
         <h1>Vehicle Details</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
@@ -278,12 +301,12 @@ const ViewDriver = () => {
             </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-4">
         <h1>Vehicle Images</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p
@@ -331,12 +354,12 @@ const ViewDriver = () => {
             </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-4">
         <h1>Vehicle Documents</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p
@@ -384,12 +407,12 @@ const ViewDriver = () => {
             </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-5">
         <h1>Bank Account Details</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>Account Holder Name - </p>
@@ -404,12 +427,12 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>Bank Name - </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-5">
         <h1>Subscription Details</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
@@ -447,12 +470,12 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>History - </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-5">
         <h1>Ride History</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
@@ -503,12 +526,12 @@ const ViewDriver = () => {
             </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-5">
         <h1>Wallet Details</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
@@ -534,22 +557,22 @@ const ViewDriver = () => {
             </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
       <div className="mt-5">
         <h1>Chat History</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>Chats - </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-5">
         <h1>Active Ride Details</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
@@ -570,18 +593,18 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>Schedule Ride - </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       <div className="mt-5">
         <h1>Feedbacks</h1>
       </div>
-      <div className="border rounded-md">
+      {/* <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>Chats - </p>
           </List.Item>
         </List>
-      </div>
+      </div> */}
 
       {/* <div className="mt-4">
         <h1>Trip Details</h1>

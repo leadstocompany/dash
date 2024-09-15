@@ -27,6 +27,13 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { z } from "zod";
+import {
+  CitySelect,
+  CountrySelect,
+  StateSelect,
+  LanguageSelect,
+} from "react-country-state-city";
+import "react-country-state-city/dist/react-country-state-city.css";
 
 const schema = z.object({
   vehicleModel: z.string().min(1, { message: "Vehicle model cannot be empty" }),
@@ -45,6 +52,8 @@ const CreateCity = () => {
   const [file, setFile] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [vehicleType, setVehicleType] = useState([]);
+  const [stateName, setStateName] = useState("");
+  const [cityName, setCityName] = useState("");
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
@@ -111,35 +120,18 @@ const CreateCity = () => {
     }
   }, [user]);
   console.log(file, "file");
-  const onSubmit = async (data) => {
-    const cab_id = vehicleType.find(
-      (vehicleType) => vehicleType.cab_type === data.vehicleType
-    );
-
-    if (!user) {
-      toast({
-        title: "Please login to continue",
-      });
-      return;
-    }
+  const onSubmit = async () => {
     try {
       setIsLoading(true);
-      const formData = new FormData();
-      formData.append("model_image", file);
-      formData.append("model", data.vehicleModel);
-      formData.append("maker", data.vehicleManufacturer);
-      formData.append("cabclass", data.vehicleClass);
-      formData.append("cabtype", data.vehicleType);
-      const res = await axios.post(
-        `${SERVER_URL}/admin-api/vehicle-model`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `token ${token}`,
-          },
-        }
-      );
+      const params = {
+        city_name: cityName,
+      };
+      const res = await axios.post(`${SERVER_URL}/admin-api/city/`, params, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `token ${token}`,
+        },
+      });
       const resData = await res.data;
       // if (resData.success === "true") {
       //   toast({
@@ -147,18 +139,14 @@ const CreateCity = () => {
       //   });
       // }
       toast({
-        title: resData.message || "Vehicle modal added.",
+        title: resData.message || "City name added.",
       });
       console.log(resData, "vehicle type");
     } catch (error) {
       console.log(error);
       toast({
         title: "Something went wrong",
-        description:
-          error?.response?.data?.error ||
-          error?.response?.data?.model_image[0] ||
-          error?.message ||
-          "",
+        description: error?.message || "",
       });
     } finally {
       setIsLoading(false);
@@ -203,85 +191,37 @@ const CreateCity = () => {
       <Container
         className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
       >
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="grid grid-cols-2 gap-2.5"
-          >
-            <FormField
-              control={form.control}
-              name="vehicleClass"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>
-                    State <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select City" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleClass?.map((item) => {
-                        return (
-                          <SelectItem key={item.id} value={item.id.toString()}>
-                            {item.cab_class}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+        <div className="grid grid-cols-2 gap-2.5">
+          <div>
+            <Label>State</Label>
+            <StateSelect
+              countryid={101}
+              onChange={(e) => {
+                setStateName(e.id);
+                console.log(e);
+              }}
+              placeHolder="Select State"
             />
-            <FormField
-              control={form.control}
-              name="vehicleType"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>
-                    City <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select City" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleType?.map((vehicleModel) => (
-                        <SelectItem
-                          key={vehicleModel.id}
-                          value={vehicleModel.id.toString()}
-                        >
-                          {vehicleModel.cab_type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+          </div>
+          <div>
+            <Label>City</Label>
+            <CitySelect
+              countryid={101}
+              stateid={stateName}
+              onChange={(e) => {
+                setCityName(e.name);
+              }}
+              placeHolder="Select City"
             />
+          </div>
+        </div>
 
-            <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
-              <Button type="submit">
-                {isLoading ? "Creating Model..." : "Create City"}
-                {isLoading && (
-                  <Loader2 className="animate-spin ml-2" size={20} />
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
+        <div className="flex justify-end items-center w-full py-2.5 pr-2.5 col-span-2">
+          <Button type="submit" onClick={onSubmit}>
+            {isLoading ? "Creating Model..." : "Create City"}
+            {isLoading && <Loader2 className="animate-spin ml-2" size={20} />}
+          </Button>
+        </div>
       </Container>
     </Container>
   );

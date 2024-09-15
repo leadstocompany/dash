@@ -75,7 +75,7 @@ const CityList = () => {
           <TableHeader>
             <TableRow>
               <TableHead>S.No</TableHead>
-              <TableHead>State</TableHead>
+
               <TableHead>City</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -87,11 +87,10 @@ const CityList = () => {
                   <TableCell center className="font-medium">
                     {_.id}
                   </TableCell>
-                  <TableCell>{_?.title}</TableCell>
-                  <TableCell>{_?.sub_title}</TableCell>
+                  <TableCell>{_?.city_name}</TableCell>
                   <TableActionItem
                     data={_}
-                    edit={true}
+                    // edit={true}
                     fetchData={fetchCoupons}
                     deleteUrl="/admin-api/city/"
                     pathname={`${_?.id}`}
