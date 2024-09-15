@@ -136,9 +136,9 @@ const ViewVehicleModel = () => {
                       </Avatar>
                     </TableCell>
 
-                    <TableCell>{_.cabtype?.cab_type}</TableCell>
+                    <TableCell>{_.cabtype_name}</TableCell>
                     <TableCell>{_.model}</TableCell>
-                    <TableCell>{_.maker?.maker}</TableCell>
+                    <TableCell>{_.maker_name}</TableCell>
                     <TableCell>{_.is_active ? "Active" : "Inactive"}</TableCell>
                     <TableActionItem
                       data={_}

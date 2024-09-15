@@ -194,10 +194,10 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Pan No -
               <span style={{ fontWeight: "lighter" }}>
-                {data?.user_doc[1]?.PAN}
+                {data?.user_doc?.PAN}
               </span>
             </p>
-            {/* <p style={{ fontWeight: "bold" }}>
+            <p style={{ fontWeight: "bold" }}>
               Front Image -
               <img
                 alt=""
@@ -207,9 +207,44 @@ const ViewDriver = () => {
                   display: "flex",
                   margin: 10,
                 }}
-                src={data.user_doc[1].PAN_front}
+                src={data.user_doc?.PAN_front}
               />
-            </p> */}
+            </p>
+          </List.Item>
+
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Voter Card -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.user_doc?.Voter_card}
+              </span>
+            </p>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Front Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data.user_doc?.voter_front}
+              />
+            </p>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Back Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data.user_doc?.voter_back}
+              />
+            </p>
           </List.Item>
 
           <List.Item>
@@ -250,13 +285,13 @@ const ViewDriver = () => {
       <div className="mt-5">
         <h1>Vehicle Details</h1>
       </div>
-      {/* <div className="border rounded-md">
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
               Type -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_type}
+                {data?.vehicle?.cab_type?.cab_type}
               </span>
             </p>
           </List.Item>
@@ -264,7 +299,7 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Manufacturer -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.maker}
+                {data?.vehicle?.maker?.maker}
               </span>
             </p>
           </List.Item>
@@ -272,7 +307,7 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Model -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.model}
+                {data?.vehicle?.model?.model}
               </span>
             </p>
           </List.Item>
@@ -288,7 +323,7 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Vehicle Class -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_class}
+                {data?.vehicle?.cab_class?.cab_class}
               </span>
             </p>
           </List.Item>
@@ -301,12 +336,12 @@ const ViewDriver = () => {
             </p>
           </List.Item>
         </List>
-      </div> */}
+      </div>
 
       <div className="mt-4">
         <h1>Vehicle Images</h1>
       </div>
-      {/* <div className="border rounded-md">
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p
@@ -319,7 +354,7 @@ const ViewDriver = () => {
               Front Image -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_photo?.front}
               />
             </p>
           </List.Item>
@@ -334,7 +369,37 @@ const ViewDriver = () => {
               Back Image -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_photo?.back}
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Left Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.vehicle?.vehicle_photo?.left}
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Right Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.vehicle?.vehicle_photo?.right}
               />
             </p>
           </List.Item>
@@ -349,17 +414,17 @@ const ViewDriver = () => {
               Inside Image -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_photo?.inside_driver_seat}
               />
             </p>
           </List.Item>
         </List>
-      </div> */}
+      </div>
 
       <div className="mt-4">
         <h1>Vehicle Documents</h1>
       </div>
-      {/* <div className="border rounded-md">
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p
@@ -372,7 +437,7 @@ const ViewDriver = () => {
               Pollution Paper -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_certiifcate?.Pollution}
               />
             </p>
           </List.Item>
@@ -387,7 +452,7 @@ const ViewDriver = () => {
               Insurance Paper -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_certiifcate?.Insurance}
               />
             </p>
           </List.Item>
@@ -406,28 +471,63 @@ const ViewDriver = () => {
               />
             </p>
           </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Sound -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.vehicle?.vehicle_certiifcate?.Sound}
+              />
+            </p>
+          </List.Item>
         </List>
-      </div> */}
+      </div>
 
       <div className="mt-5">
         <h1>Bank Account Details</h1>
       </div>
-      {/* <div className="border rounded-md">
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Account Holder Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Account Holder Name -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.name}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Bank Account Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Bank Account Number -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.account_number}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>IFSC Code - </p>
+            <p style={{ fontWeight: "bold" }}>
+              IFSC Code -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.ifsc_code}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Bank Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Bank Name -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.bank_name}
+              </span>
+            </p>
           </List.Item>
         </List>
-      </div> */}
+      </div>
 
       <div className="mt-5">
         <h1>Subscription Details</h1>

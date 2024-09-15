@@ -52,9 +52,10 @@ const EditModel = () => {
     resolver: zodResolver(schema),
     mode: "onSubmit",
     values: {
-      cab_class: data?.cab_class,
+      cab_class: data?.cabclass,
       model: data.model,
       maker: data.maker,
+      type: data.cabtype,
     },
   });
 
@@ -156,11 +157,11 @@ const EditModel = () => {
 
     const formData = new FormData();
     // formData.append("model_image", file);
-    formData.append("model_image", file);
-    formData.append("cabtype", d.vehicleType);
-    formData.append("model", d.model);
-    formData.append("maker", d.maker);
-    formData.append("cabclass", d.cab_class);
+    formData.append("model_image", file || data.model_image);
+    formData.append("cabtype", d.vehicleType || data.cabtype);
+    formData.append("model", d.model || data.model);
+    formData.append("maker", d.maker || data.maker);
+    formData.append("cabclass", d.cab_class || data.cabclass);
     formData.append("is_active", true);
 
     try {
@@ -255,7 +256,7 @@ const EditModel = () => {
                     Vehicle Class <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
-                    value={data?.cab_class}
+                    value={data.cabclass}
                     onValueChange={(v) =>
                       setData((prev) => ({ ...prev, cab_class_change: v }))
                     }
@@ -352,6 +353,7 @@ const EditModel = () => {
                     Vehicle Type <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
+                    value={data.cabtype}
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
