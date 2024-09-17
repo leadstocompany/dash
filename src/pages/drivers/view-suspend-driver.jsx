@@ -132,16 +132,16 @@ const ViewSuspendDriver = () => {
         }}
       >
         <p>
-          Request Date & Time
+          Date and Time
           <br />
           <span>{dayjs(data?.date_joined).format("DD MMMM hh:mm a")}</span>
         </p>
-        {/* <p>
+        <p>
           Status <br />
           <span style={{ color: data?.driver_duty == true ? "green" : "red" }}>
             {data?.driver_duty == true ? "On-duty" : "Blocked"}
           </span>
-        </p> */}
+        </p>
       </div>
       <div
         style={{
@@ -196,6 +196,14 @@ const ViewSuspendDriver = () => {
           </List.Item>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
+              Address -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.full_address}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
               State -{" "}
               <span style={{ fontWeight: "lighter" }}>{data?.state}</span>
             </p>
@@ -236,8 +244,60 @@ const ViewSuspendDriver = () => {
       <div className="border rounded-md">
         <List bordered>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Pan No - </p>
-            <p style={{ fontWeight: "bold" }}>Front Image - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Pan No -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.user_doc?.PAN}
+              </span>
+            </p>
+            <p style={{ fontWeight: "bold" }}>
+              Front Image -
+              <img
+                alt=""
+                style={{
+                  width: "50%",
+                  height: "20%",
+                  display: "flex",
+                  margin: 10,
+                }}
+                src={data.user_doc?.PAN_front}
+              />
+            </p>
+          </List.Item>
+
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Voter Card -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.user_doc?.Voter_card}
+              </span>
+            </p>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Front Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data.user_doc?.voter_front}
+              />
+            </p>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Back Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data.user_doc?.voter_back}
+              />
+            </p>
           </List.Item>
 
           <List.Item>
@@ -284,7 +344,7 @@ const ViewSuspendDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Type -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_type}
+                {data?.vehicle?.cab_type?.cab_type}
               </span>
             </p>
           </List.Item>
@@ -292,7 +352,7 @@ const ViewSuspendDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Manufacturer -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.maker}
+                {data?.vehicle?.maker?.maker}
               </span>
             </p>
           </List.Item>
@@ -300,7 +360,7 @@ const ViewSuspendDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Model -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.model}
+                {data?.vehicle?.model?.model}
               </span>
             </p>
           </List.Item>
@@ -316,7 +376,7 @@ const ViewSuspendDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Vehicle Class -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_class}
+                {data?.vehicle?.cab_class?.cab_class}
               </span>
             </p>
           </List.Item>
@@ -347,7 +407,7 @@ const ViewSuspendDriver = () => {
               Front Image -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_photo?.front}
               />
             </p>
           </List.Item>
@@ -362,7 +422,37 @@ const ViewSuspendDriver = () => {
               Back Image -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_photo?.back}
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Left Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.vehicle?.vehicle_photo?.left}
+              />
+            </p>
+          </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Right Image -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.vehicle?.vehicle_photo?.right}
               />
             </p>
           </List.Item>
@@ -377,7 +467,7 @@ const ViewSuspendDriver = () => {
               Inside Image -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_photo?.inside_driver_seat}
               />
             </p>
           </List.Item>
@@ -400,7 +490,7 @@ const ViewSuspendDriver = () => {
               Pollution Paper -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_certiifcate?.Pollution}
               />
             </p>
           </List.Item>
@@ -415,7 +505,7 @@ const ViewSuspendDriver = () => {
               Insurance Paper -
               <img
                 style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
+                src={data?.vehicle?.vehicle_certiifcate?.Insurance}
               />
             </p>
           </List.Item>
@@ -434,6 +524,21 @@ const ViewSuspendDriver = () => {
               />
             </p>
           </List.Item>
+          <List.Item>
+            <p
+              style={{
+                fontWeight: "bold",
+                display: "flex",
+                gap: 50,
+              }}
+            >
+              Sound -
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.vehicle?.vehicle_certiifcate?.Sound}
+              />
+            </p>
+          </List.Item>
         </List>
       </div>
 
@@ -443,72 +548,273 @@ const ViewSuspendDriver = () => {
       <div className="border rounded-md">
         <List bordered>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Account Holder Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Account Holder Name -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.name}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Bank Account Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Bank Account Number -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.account_number}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>IFSC Code - </p>
+            <p style={{ fontWeight: "bold" }}>
+              IFSC Code -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.ifsc_code}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Bank Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Bank Name -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.bank_name}
+              </span>
+            </p>
           </List.Item>
         </List>
       </div>
 
-      {/* <div className="mt-4">
-        <h1>Trip Details</h1>
-      </div> */}
-      {/* <div className="border rounded-md">
+      <div className="mt-5">
+        <h1>Subscription Details</h1>
+      </div>
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
-            <div style={{ flexDirection: "row", display: "flex" }}>
-              <div>
-                <p style={{ fontWeight: "bold" }}>
-                  Pickup and Drop-up location -
-                </p>
-              </div>
-              <div className="ml-10">
-                <Timeline>
-                  <Timeline.Item>16:27:41 </Timeline.Item>
-                  <Timeline.Item>16:28:43 </Timeline.Item>
-                </Timeline>
-              </div>
-            </div>
-          </List.Item>
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>Distance - </p>
-          </List.Item>
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>Time - </p>
-          </List.Item>
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>Total Fare - </p>
-          </List.Item>
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>Trip Status - </p>
-          </List.Item>
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>Payment method - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Plan Name -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.subscription_details?.subscription_data?.plan?.plan_name}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
-              Track Ride -
-              <span>
-                <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
-                  <Link
-                    //to="/wallet/customer_wallet_detail"
-                    className="flex items-center justify-center active:scale-95 duration-100"
-                  >
-                    Click here
-                  </Link>
-                </Button>
+              Price -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.subscription_details?.subscription_data?.plan?.price}
               </span>
-            </p>{" "}
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Purchase Date and Time -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {dayjs(
+                  data?.subscription_details?.subscription_data?.subscribe_date
+                ).format("DD MMMM hh:mm a")}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Expire Date and Time -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {dayjs(
+                  data?.subscription_details?.subscription_data?.expire_date
+                ).format("DD MMMM hh:mm a")}
+              </span>
+            </p>
+          </List.Item>
+          {/* <List.Item>
+          <p style={{ fontWeight: "bold" }}>History - </p>
+        </List.Item> */}
+        </List>
+      </div>
+
+      <div className="mt-5">
+        <h1>Ride History</h1>
+      </div>
+      <div className="border rounded-md">
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Total Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.total_rides}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Total Km -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.total_km}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Current Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.current_rides}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Schedule Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.scheduled_rides}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Total Earnings -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.total_earning}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Completed Ride -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.ride_history?.completed_rides}
+              </span>
+            </p>
           </List.Item>
         </List>
-      </div> */}
+      </div>
+
+      <div className="mt-5">
+        <h1>Wallet Details</h1>
+      </div>
+      {/* <div className="border rounded-md">
+      <List bordered>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>
+            Wallet Balance -{" "}
+            <span style={{ fontWeight: "lighter" }}>
+              {data?.wallet?.balance}
+            </span>
+          </p>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>
+            More Details -
+            <span>
+              <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
+                <Link
+                  //to="/wallet/customer_wallet_detail"
+                  className="flex items-center justify-center active:scale-95 duration-100"
+                >
+                  Click here
+                </Link>
+              </Button>
+            </span>
+          </p>
+        </List.Item>
+      </List>
+    </div> */}
+      <div className="mt-5">
+        <h1>Chat History</h1>
+      </div>
+      {/* <div className="border rounded-md">
+      <List bordered>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Chats - </p>
+        </List.Item>
+      </List>
+    </div> */}
+
+      <div className="mt-5">
+        <h1>Active Ride Details</h1>
+      </div>
+      {/* <div className="border rounded-md">
+      <List bordered>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>
+            Current Ride -{" "}
+            <span>
+              <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
+                <Link
+                  //to="/wallet/customer_wallet_detail"
+                  className="flex items-center justify-center active:scale-95 duration-100"
+                >
+                  Click here
+                </Link>
+              </Button>
+            </span>
+          </p>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Schedule Ride - </p>
+        </List.Item>
+      </List>
+    </div> */}
+
+      <div className="mt-5">
+        <h1>Feedbacks</h1>
+      </div>
+      {/* <div className="border rounded-md">
+      <List bordered>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Chats - </p>
+        </List.Item>
+      </List>
+    </div> */}
+
+      {/* <div className="mt-4">
+      <h1>Trip Details</h1>
+    </div> */}
+      {/* <div className="border rounded-md">
+      <List bordered>
+        <List.Item>
+          <div style={{ flexDirection: "row", display: "flex" }}>
+            <div>
+              <p style={{ fontWeight: "bold" }}>
+                Pickup and Drop-up location -
+              </p>
+            </div>
+            <div className="ml-10">
+              <Timeline>
+                <Timeline.Item>16:27:41 </Timeline.Item>
+                <Timeline.Item>16:28:43 </Timeline.Item>
+              </Timeline>
+            </div>
+          </div>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Distance - </p>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Time - </p>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Total Fare - </p>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Trip Status - </p>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>Payment method - </p>
+        </List.Item>
+        <List.Item>
+          <p style={{ fontWeight: "bold" }}>
+            Track Ride -
+            <span>
+              <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
+                <Link
+                  //to="/wallet/customer_wallet_detail"
+                  className="flex items-center justify-center active:scale-95 duration-100"
+                >
+                  Click here
+                </Link>
+              </Button>
+            </span>
+          </p>{" "}
+        </List.Item>
+      </List>
+    </div> */}
       <div className="justify-center flex items-center">
         <p>For Unblock this profile click on the below button</p>
       </div>
@@ -526,17 +832,17 @@ const ViewSuspendDriver = () => {
           </Link>
         </Button>
         {/* <Button
-          onClick={reject}
-          className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
-          style={{ background: "red" }}
-        >
-          <Link
-            //to="/wallet/customer_wallet_detail"
-            className="flex items-center justify-center active:scale-95 duration-100"
-          >
-            Reject
-          </Link>
-        </Button> */}
+onClick={reject}
+className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+style={{ background: "red" }}
+>
+<Link
+//to="/wallet/customer_wallet_detail"
+className="flex items-center justify-center active:scale-95 duration-100"
+>
+Reject
+</Link>
+</Button> */}
       </div>
     </Container>
   );

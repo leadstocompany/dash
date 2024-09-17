@@ -190,6 +190,14 @@ const ViewNewDriver = () => {
           </List.Item>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
+              Address -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.full_address}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
               Country -{" "}
               <span style={{ fontWeight: "lighter" }}>{data?.country}</span>
             </p>
@@ -236,8 +244,26 @@ const ViewNewDriver = () => {
       <div className="border rounded-md">
         <List bordered>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Pan No - </p>
-            <p style={{ fontWeight: "bold" }}>Front Image - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Pan No -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.user_doc?.PAN}
+              </span>
+            </p>
+            <p style={{ fontWeight: "bold" }}>
+              Front Image -{" "}
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.user_doc?.PAN_front}
+              />
+            </p>
+            <p style={{ fontWeight: "bold" }}>
+              Back Image -{" "}
+              <img
+                style={{ width: "20%", display: "flex", margin: 10 }}
+                src={data?.user_doc?.PAN_back}
+              />
+            </p>
           </List.Item>
 
           <List.Item>

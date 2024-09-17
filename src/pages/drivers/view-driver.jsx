@@ -64,6 +64,32 @@ const ViewDriver = () => {
     fetchDriver();
   }, []);
 
+  const onBlock = async () => {
+    try {
+      // setIsLoading(true);
+      const res = await axios.post(
+        `${SERVER_URL}/admin-api/drivers/block/${id}/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        }
+      );
+      const data = await res.data;
+      // setData(data);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+      });
+    } finally {
+      //setIsLoading(false);
+    }
+  };
+
   return (
     <Container>
       <div className="flex items-center gap-2">
@@ -763,6 +789,7 @@ const ViewDriver = () => {
       </div>
       <div className="justify-center flex items-center">
         <Button
+          onClick={onBlock}
           className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
           style={{ background: "red" }}
         >
