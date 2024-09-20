@@ -71,7 +71,10 @@ const ViewSuspendDriver = () => {
     try {
       // setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/admin-api/drivers/unblock/${id}/`,
+        `${SERVER_URL}/admin-api/driver/unblock/`,
+        {
+          driver_id: id,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -80,6 +83,10 @@ const ViewSuspendDriver = () => {
         }
       );
       const data = await res.data;
+      toast({
+        title: "Success",
+        description: data.detail,
+      });
       // setData(data);
       console.log(data);
     } catch (error) {

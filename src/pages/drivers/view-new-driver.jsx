@@ -71,7 +71,10 @@ const ViewNewDriver = () => {
     try {
       // setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/admin-api/drivers/approve/${id}/`,
+        `${SERVER_URL}/admin-api/driver/approve/`,
+        {
+          driver_id: id,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -81,7 +84,11 @@ const ViewNewDriver = () => {
       );
       const data = await res.data;
       // setData(data);
-      console.log(data);
+      console.log(data.detail);
+      toast({
+        title: "Success",
+        description: data.detail,
+      });
     } catch (error) {
       console.log(error);
       toast({
@@ -96,7 +103,10 @@ const ViewNewDriver = () => {
     try {
       // setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/admin-api/drivers/reject/${id}/`,
+        `${SERVER_URL}/admin-api/driver/reject/`,
+        {
+          driver_id: id,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -106,6 +116,10 @@ const ViewNewDriver = () => {
       );
       const data = await res.data;
       // setData(data);
+      toast({
+        title: "Success",
+        description: data.detail,
+      });
       console.log(data);
     } catch (error) {
       console.log(error);

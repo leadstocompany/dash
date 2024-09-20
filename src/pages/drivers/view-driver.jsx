@@ -68,7 +68,10 @@ const ViewDriver = () => {
     try {
       // setIsLoading(true);
       const res = await axios.post(
-        `${SERVER_URL}/admin-api/drivers/block/${id}/`,
+        `${SERVER_URL}/admin-api/driver/block/`,
+        {
+          driver_id: id,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -77,6 +80,10 @@ const ViewDriver = () => {
         }
       );
       const data = await res.data;
+      toast({
+        title: "Success",
+        description: data.detail,
+      });
       // setData(data);
       console.log(data);
     } catch (error) {

@@ -210,31 +210,15 @@ const CreateVehicleModel = () => {
           >
             <FormField
               control={form.control}
-              name="vehicleClass"
-              render={({ field, fieldState }) => (
+              name="vehicleModel"
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Vehicle Class <span className="text-red-500">*</span>
+                    Vehicle Model <span className="text-red-500">*</span>
                   </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Vehicle Class" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleClass?.map((item) => {
-                        return (
-                          <SelectItem key={item.id} value={item.id.toString()}>
-                            {item.cab_class}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input {...field} type="text" />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -273,6 +257,38 @@ const CreateVehicleModel = () => {
             />
             <FormField
               control={form.control}
+              name="vehicleClass"
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <FormLabel>
+                    Vehicle Class <span className="text-red-500">*</span>
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Vehicle Class" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {vehicleClass?.map((item) => {
+                        return (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.cab_class}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="vehicleManufacturer"
               render={({ field }) => (
                 <FormItem>
@@ -300,21 +316,7 @@ const CreateVehicleModel = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="vehicleModel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Model <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <div className="grid gap-2">
               <Label>Vehicle Image</Label>
               <Input
