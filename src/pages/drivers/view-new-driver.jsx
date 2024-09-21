@@ -335,7 +335,7 @@ const ViewNewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Type -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_type}
+                {data?.vehicle?.cab_type?.cab_type}
               </span>
             </p>
           </List.Item>
@@ -343,7 +343,7 @@ const ViewNewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Manufacturer -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.maker}
+                {data?.vehicle?.maker?.maker}
               </span>
             </p>
           </List.Item>
@@ -351,7 +351,7 @@ const ViewNewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Model -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.model}
+                {data?.vehicle?.model?.model}
               </span>
             </p>
           </List.Item>
@@ -367,7 +367,7 @@ const ViewNewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Vehicle Class -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_class}
+                {data?.vehicle?.cab_class?.cab_class}
               </span>
             </p>
           </List.Item>

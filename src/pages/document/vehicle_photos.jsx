@@ -22,37 +22,32 @@ import { Link } from "react-router-dom";
 import { TableActionItem } from "@/components/TableAction";
 import PropTypes from "prop-types";
 
-
-
-const plan =[
-    {
-        id: 1,
-            planName: "Gold plan",
-            rideNumbers:100,
-            price:2500,
-            Discount:'25',
-          
-    }
-]
+const plan = [
+  {
+    id: 1,
+    planName: "Gold plan",
+    rideNumbers: 100,
+    price: 2500,
+    Discount: "25",
+  },
+];
 
 const VehiclePhoto = () => {
   const { user } = useSelector((state) => state.user);
-  
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refresh, setRefresh] = useState(false); // [1
   const [couponsData, setCouponsData] = useState([]);
-  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
 
   const fetchCoupons = async () => {
-
-    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
     try {
       setIsLoading(true);
       const resClass = await axios.get(
-        `${SERVER_URL}/subscriptions/admin/subscription-plans`,
-        { 
+        `${SERVER_URL}/admin-api/vehicle-photo-page/`,
+        {
           headers: {
             "Content-Type": "application/json",
             Authorization: `token ${token}`,
@@ -69,13 +64,11 @@ const VehiclePhoto = () => {
     }
   };
 
-  
-
-  // useEffect(() => {
-  //   if (user) {
-  //     fetchCoupons();
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user) {
+      fetchCoupons();
+    }
+  }, [user]);
   return (
     <Container>
       <div className="flex justify-between items-center">
@@ -95,7 +88,7 @@ const VehiclePhoto = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead >S.No</TableHead>
+              <TableHead>S.No</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Document Type</TableHead>
               <TableHead className="text-right">Action</TableHead>
@@ -106,22 +99,19 @@ const VehiclePhoto = () => {
               couponsData.map((_, i) => {
                 return (
                   <TableRow key={i}>
-                    <TableCell center className="font-medium">{_?.id}</TableCell>
-                    <TableCell>
-                    {_?.field_name}
+                    <TableCell center className="font-medium">
+                      {_?.id}
                     </TableCell>
-                    <TableCell >{_?.ride_numbers}</TableCell>
+                    <TableCell>{_?.field_name}</TableCell>
+                    <TableCell>{_?.active == true && "Upload Image"}</TableCell>
 
-                 
-                  <TableActionItem
+                    <TableActionItem
                       data={_}
                       edit={true}
                       fetchData={fetchCoupons}
-                      deleteUrl=""
+                      deleteUrl="/admin-api/vehicle-photo-page/"
                       pathname={``}
                     />
-                  
-                   
                   </TableRow>
                 );
               })}
