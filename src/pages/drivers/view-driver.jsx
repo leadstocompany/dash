@@ -23,7 +23,8 @@ import { handleCSVDownload, handlePDFDownload } from "@/lib/utils";
 import { setActiveTrips } from "@/store/slice/app";
 import { Loader2, MapPin } from "lucide-react";
 import { List, Rate, Avatar } from "rsuite";
-import { Timeline } from "rsuite";
+import { Timeline, Modal } from "rsuite";
+import "rsuite/dist/rsuite-no-reset.min.css";
 
 const ViewDriver = () => {
   const { user } = useSelector((state) => state.user);
@@ -33,6 +34,9 @@ const ViewDriver = () => {
   const { id } = useParams();
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -85,6 +89,7 @@ const ViewDriver = () => {
         description: data.detail,
       });
       // setData(data);
+      handleClose();
       console.log(data);
     } catch (error) {
       console.log(error);
@@ -791,12 +796,13 @@ const ViewDriver = () => {
           </List.Item>
         </List>
       </div> */}
+
       <div className="justify-center flex items-center">
         <p>For Block this profile click on the below button</p>
       </div>
       <div className="justify-center flex items-center">
         <Button
-          onClick={onBlock}
+          onClick={handleOpen}
           className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
           style={{ background: "red" }}
         >
@@ -808,6 +814,47 @@ const ViewDriver = () => {
           </Link>
         </Button>
       </div>
+      <Modal open={open} onClose={handleClose} size={"sm"}>
+        <Modal.Body>
+          <div className="justify-center flex items-center">
+            <p>
+              **Do you want to block this profile then click on the "Yes"
+              button?
+            </p>
+          </div>
+          <div className="justify-center flex items-center gap-3 mt-2">
+            <Button
+              onClick={onBlock}
+              className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+              style={{ background: "red" }}
+            >
+              <Link
+                //to="/wallet/customer_wallet_detail"
+                className="flex items-center justify-center active:scale-95 duration-100"
+              >
+                Yes
+              </Link>
+            </Button>
+            <Button
+              onClick={handleClose}
+              className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+              style={{
+                background: "#fff",
+                color: "#000",
+                borderColor: "#000",
+                borderWidth: 0.2,
+              }}
+            >
+              <Link
+                //to="/wallet/customer_wallet_detail"
+                className="flex items-center justify-center active:scale-95 duration-100"
+              >
+                No
+              </Link>
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };

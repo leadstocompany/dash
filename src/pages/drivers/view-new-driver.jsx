@@ -23,7 +23,8 @@ import { handleCSVDownload, handlePDFDownload } from "@/lib/utils";
 import { setActiveTrips } from "@/store/slice/app";
 import { Loader2, MapPin } from "lucide-react";
 import { List, Rate, Avatar } from "rsuite";
-import { Timeline } from "rsuite";
+import { Timeline, Modal } from "rsuite";
+import "rsuite/dist/rsuite-no-reset.min.css";
 
 const ViewNewDriver = () => {
   const { user } = useSelector((state) => state.user);
@@ -33,6 +34,14 @@ const ViewNewDriver = () => {
   const { id } = useParams();
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const { toast } = useToast();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -85,6 +94,7 @@ const ViewNewDriver = () => {
       const data = await res.data;
       // setData(data);
       console.log(data.detail);
+      handleClose();
       toast({
         title: "Success",
         description: data.detail,
@@ -116,6 +126,7 @@ const ViewNewDriver = () => {
       );
       const data = await res.data;
       // setData(data);
+      handleClose2();
       toast({
         title: "Success",
         description: data.detail,
@@ -552,7 +563,7 @@ const ViewNewDriver = () => {
 
       <div className="justify-center flex items-center gap-4">
         <Button
-          onClick={accept}
+          onClick={handleOpen}
           className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
           style={{ background: "green" }}
         >
@@ -564,7 +575,7 @@ const ViewNewDriver = () => {
           </Link>
         </Button>
         <Button
-          onClick={reject}
+          onClick={handleOpen2}
           className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
           style={{ background: "red" }}
         >
@@ -576,6 +587,88 @@ const ViewNewDriver = () => {
           </Link>
         </Button>
       </div>
+      <Modal open={open} onClose={handleClose} size={"sm"}>
+        <Modal.Body>
+          <div className="justify-center flex items-center">
+            <p>
+              **Do you want to approve this profile then click on the "Yes"
+              button?
+            </p>
+          </div>
+          <div className="justify-center flex items-center gap-3 mt-2">
+            <Button
+              onClick={accept}
+              className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+              style={{ background: "red" }}
+            >
+              <Link
+                //to="/wallet/customer_wallet_detail"
+                className="flex items-center justify-center active:scale-95 duration-100"
+              >
+                Yes
+              </Link>
+            </Button>
+            <Button
+              onClick={handleClose}
+              className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+              style={{
+                background: "#fff",
+                color: "#000",
+                borderColor: "#000",
+                borderWidth: 0.2,
+              }}
+            >
+              <Link
+                //to="/wallet/customer_wallet_detail"
+                className="flex items-center justify-center active:scale-95 duration-100"
+              >
+                No
+              </Link>
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal open={open2} onClose={handleClose2} size={"sm"}>
+        <Modal.Body>
+          <div className="justify-center flex items-center">
+            <p>
+              **Do you want to reject this profile then click on the "Yes"
+              button?
+            </p>
+          </div>
+          <div className="justify-center flex items-center gap-3 mt-2">
+            <Button
+              onClick={reject}
+              className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+              style={{ background: "red" }}
+            >
+              <Link
+                //to="/wallet/customer_wallet_detail"
+                className="flex items-center justify-center active:scale-95 duration-100"
+              >
+                Yes
+              </Link>
+            </Button>
+            <Button
+              onClick={handleClose2}
+              className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
+              style={{
+                background: "#fff",
+                color: "#000",
+                borderColor: "#000",
+                borderWidth: 0.2,
+              }}
+            >
+              <Link
+                //to="/wallet/customer_wallet_detail"
+                className="flex items-center justify-center active:scale-95 duration-100"
+              >
+                No
+              </Link>
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };

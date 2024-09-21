@@ -634,33 +634,6 @@ const ViewRejectDriver = () => {
           </List.Item>
         </List>
       </div> */}
-
-      <div className="justify-center flex items-center gap-4">
-        <Button
-          onClick={accept}
-          className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
-          style={{ background: "green" }}
-        >
-          <Link
-            //to="/wallet/customer_wallet_detail"
-            className="flex items-center justify-center active:scale-95 duration-100"
-          >
-            Accept
-          </Link>
-        </Button>
-        <Button
-          onClick={reject}
-          className="justify-center  rounded-2xl h-auto active:scale-95 duration-100 "
-          style={{ background: "red" }}
-        >
-          <Link
-            //to="/wallet/customer_wallet_detail"
-            className="flex items-center justify-center active:scale-95 duration-100"
-          >
-            Reject
-          </Link>
-        </Button>
-      </div>
     </Container>
   );
 };
