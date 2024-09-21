@@ -34,7 +34,7 @@ const BookedTrips = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const fetchCompletedTrips = async () => {
     setIsLoading(true);
     try {
@@ -125,7 +125,7 @@ const BookedTrips = () => {
                     <TableCell className="font-medium">{i + 1}</TableCell>
                     <TableCell>{_?.id}</TableCell>
                     <TableCell>
-                      {_.customer_first_name + " " + _.customer_last_name}
+                      {_.customer?.first_name + " " + _.customer?.last_name}
                     </TableCell>
                     <TableCell className="max-w-[200px] break-words">
                       {_.source}
@@ -133,7 +133,7 @@ const BookedTrips = () => {
                     <TableCell className="max-w-[200px] break-words">
                       {_.destination}
                     </TableCell>
-                    <TableCell>{_?.driver || "N/P"}</TableCell>
+                    <TableCell>{_?.driver?.first_name || "N/P"}</TableCell>
                     <TableCell>
                       {_.date}
                       <br />

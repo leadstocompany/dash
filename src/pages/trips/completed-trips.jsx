@@ -32,7 +32,7 @@ const CompletedTrips = () => {
   //initializers
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   const fetchCompletedTrips = async () => {
     setIsLoading(true);
     try {
@@ -122,10 +122,10 @@ const CompletedTrips = () => {
                     <TableCell className="font-medium">{i + 1}</TableCell>
                     <TableCell>{_?.id}</TableCell>
                     <TableCell>
-                      {_.driver_first_name + " " + _.driver_last_name}
+                      {_.driver?.first_name + " " + _.driver?.last_name}
                     </TableCell>
                     <TableCell>
-                      {_.customer_first_name + " " + _.customer_last_name}
+                      {_.customer?.first_name + " " + _.customer?.last_name}
                     </TableCell>
                     <TableCell className="max-w-[200px] break-words">
                       {_.source}

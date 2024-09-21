@@ -66,7 +66,7 @@ const datas = ["Front Image", "Back Image", "Normal Image"].map((item) => ({
   value: item,
 }));
 
-const UpdateVehicleDoc = () => {
+const UpdateVehiclePhoto = () => {
   const { user } = useSelector((state) => state.user);
 
   const [image, setImage] = useState("");
@@ -116,17 +116,13 @@ const UpdateVehicleDoc = () => {
 
     const submitData = {
       field_name: data.name,
-      textfield: a == "Text Field" ? true : false,
-      filefield: b == "Upload Images" ? true : false,
-      front: fi == "Front Image" ? true : false,
-      back: bi == "Back Image" ? true : false,
       active: true,
     };
 
     try {
       setIsLoading(true);
-      const res = await axios.patch(
-        `${SERVER_URL}/admin-api/vehiclecertificatefields/${id}/`,
+      const res = await axios.put(
+        `${SERVER_URL}/admin-api/vehicle-photo-page/${id}/`,
         submitData,
         {
           headers: {
@@ -179,7 +175,7 @@ const UpdateVehicleDoc = () => {
 
   return (
     <Container>
-      <Heading>Create Document For Driver</Heading>
+      <Heading>Update Vehicle Photo</Heading>
       <Container
         className={"rounded-md border border-gray-100 p-2.5 gap-1.5 bg-gray-50"}
       >
@@ -217,4 +213,4 @@ const UpdateVehicleDoc = () => {
   );
 };
 
-export default UpdateVehicleDoc;
+export default UpdateVehiclePhoto;

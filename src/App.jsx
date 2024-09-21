@@ -13,7 +13,7 @@ import ViewAllCoupons from "./pages/coupons/view-all-coupons";
 import Dashboard from "./pages/dashboard";
 import { AllDrivers, CreateDriver, DriverPayments } from "./pages/drivers";
 import EditDriver from "./pages/drivers/edit-driver";
-import ViewDriver from "./pages/drivers/view-driver";
+import ViewDriver from "./pages/drivers/view-driver.jsx";
 import CreateFare from "./pages/fares/create-fare";
 import EditFare from "./pages/fares/edit-fare";
 import ViewAllFares from "./pages/fares/view-all-fares";
@@ -80,6 +80,7 @@ import CreateCity from "./pages/city/create_city";
 import ViewNewDriver from "./pages/drivers/view-new-driver";
 import ViewRejectDriver from "./pages/drivers/view-reject-driver";
 import ViewSuspendDriver from "./pages/drivers/view-suspend-driver";
+import UpdateVehiclePhoto from "./pages/document/update_vehicle_photo";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -150,6 +151,10 @@ function Root() {
           <Route
             path="vehicle_document/update/:id"
             element={<UpdateVehicleDoc />}
+          ></Route>
+          <Route
+            path="vehicle_photos/update/:id"
+            element={<UpdateVehiclePhoto />}
           ></Route>
         </Route>
 

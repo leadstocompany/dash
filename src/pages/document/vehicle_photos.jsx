@@ -110,7 +110,7 @@ const VehiclePhoto = () => {
                       edit={true}
                       fetchData={fetchCoupons}
                       deleteUrl="/admin-api/vehicle-photo-page/"
-                      pathname={``}
+                      pathname={`update/${_?.id}`}
                     />
                   </TableRow>
                 );

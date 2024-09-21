@@ -35,7 +35,7 @@ const ActiveTrips = () => {
   //initializers
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
 
   useEffect(() => {
     const fetchDrivers = async () => {
@@ -131,10 +131,10 @@ const ActiveTrips = () => {
                       : "TRIPID:" + _.id}
                   </TableCell>
                   <TableCell className="max-w-[150px] break-words">
-                    {_.driver_first_name + " " + _.driver_last_name}
+                    {_.driver?.first_name + " " + _.driver?.last_name}
                   </TableCell>
                   <TableCell className="max-w-[150px] break-words">
-                    {_.customer_first_name + " " + _.customer_last_name}
+                    {_.customer?.first_name + " " + _.customer?.last_name}
                   </TableCell>
                   <TableCell className="max-w-[150px] break-words">
                     {_.source}
