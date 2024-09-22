@@ -110,7 +110,7 @@ const ScheduledTrips = () => {
               <TableHead>Passenger Name</TableHead>
               <TableHead>Trip From</TableHead>
               <TableHead>Trip To</TableHead>
-              <TableHead>End Time</TableHead>
+              <TableHead>Schedule Time</TableHead>
               <TableHead className="text-right">View Route</TableHead>
             </TableRow>
           </TableHeader>
@@ -133,7 +133,9 @@ const ScheduledTrips = () => {
                     <TableCell className="max-w-[200px] break-words">
                       {_.destination}
                     </TableCell>
-                    <TableCell>{dayjs(_.timing).format("DD/MM/YY")}</TableCell>
+                    <TableCell>
+                      {dayjs(_.scheduled_datetime).format("DD/MM/YY")}
+                    </TableCell>
                     <TableCell className="text-right space-x-2">
                       <Button
                         className="rounded-3xl h-auto"
