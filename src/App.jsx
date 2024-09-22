@@ -81,6 +81,7 @@ import ViewNewDriver from "./pages/drivers/view-new-driver";
 import ViewRejectDriver from "./pages/drivers/view-reject-driver";
 import ViewSuspendDriver from "./pages/drivers/view-suspend-driver";
 import UpdateVehiclePhoto from "./pages/document/update_vehicle_photo";
+import ScheduledTrips from "./pages/trips/scheduled-trips";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -105,6 +106,7 @@ function Root() {
           <Route path="booked" element={<BookedTrips />} />
           <Route path="completed" element={<CompletedTrips />} />
           <Route path="route-map" element={<RouteMap />} />
+          <Route path="scheduled" element={<ScheduledTrips />} />
         </Route>
         <Route path="subscription">
           <Route index path="plans" element={<Plans />}></Route>

@@ -154,6 +154,12 @@ const SideBar = () => {
           >
             Booked Trips
           </Link>
+          <Link
+            to="/trips/scheduled"
+            className="p-2 rounded-md text-black flex items-center gap-2"
+          >
+            Scheduled Trips
+          </Link>
         </CollapseableLink>
 
         <CollapseableLink
