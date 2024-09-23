@@ -552,7 +552,7 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               IFSC Code -
               <span style={{ fontWeight: "lighter" }}>
-                {data?.bank_account?.ifsc_code}
+                {data?.bank_account?.swift_code}
               </span>
             </p>
           </List.Item>
@@ -613,7 +613,7 @@ const ViewDriver = () => {
       <div className="mt-5">
         <h1>Ride History</h1>
       </div>
-      {/* <div className="border rounded-md">
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
@@ -664,12 +664,12 @@ const ViewDriver = () => {
             </p>
           </List.Item>
         </List>
-      </div> */}
+      </div>
 
       <div className="mt-5">
         <h1>Wallet Details</h1>
       </div>
-      {/* <div className="border rounded-md">
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
@@ -679,7 +679,7 @@ const ViewDriver = () => {
               </span>
             </p>
           </List.Item>
-          <List.Item>
+          {/* <List.Item>
             <p style={{ fontWeight: "bold" }}>
               More Details -
               <span>
@@ -693,9 +693,9 @@ const ViewDriver = () => {
                 </Button>
               </span>
             </p>
-          </List.Item>
+          </List.Item> */}
         </List>
-      </div> */}
+      </div>
       <div className="mt-5">
         <h1>Chat History</h1>
       </div>

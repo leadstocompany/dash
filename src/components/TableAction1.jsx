@@ -82,7 +82,7 @@ export const TableActionItem = ({
           <Edit className="w-3.5 h-3.5" />
         </Button>
       )}
-      <Button
+      {/* <Button
         id={data.id}
         isLoading={isDeleting}
         variant="outline"
@@ -90,7 +90,7 @@ export const TableActionItem = ({
         onClick={() => deleteTableItem(data.id)}
       >
         <Trash className="w-3.5 h-3.5" />
-      </Button>
+      </Button> */}
     </TableCell>
   );
 };

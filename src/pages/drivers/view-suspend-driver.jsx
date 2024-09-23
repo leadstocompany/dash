@@ -579,7 +579,7 @@ const ViewSuspendDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               IFSC Code -
               <span style={{ fontWeight: "lighter" }}>
-                {data?.bank_account?.ifsc_code}
+                {data?.bank_account?.swift_code}
               </span>
             </p>
           </List.Item>

@@ -335,7 +335,7 @@ const ViewNewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Type -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_type?.cab_type}
+                {data?.vehicle?.model?.cabtype?.cab_type}
               </span>
             </p>
           </List.Item>
@@ -343,7 +343,7 @@ const ViewNewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Manufacturer -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.maker?.maker}
+                {data?.vehicle?.model?.maker?.maker}
               </span>
             </p>
           </List.Item>
@@ -367,7 +367,7 @@ const ViewNewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Vehicle Class -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.vehicle?.cab_class?.cab_class}
+                {data?.vehicle?.model?.cabclass?.cab_class}
               </span>
             </p>
           </List.Item>
@@ -491,19 +491,40 @@ const ViewNewDriver = () => {
       <div className="mt-5">
         <h1>Bank Account Details</h1>
       </div>
+
       <div className="border rounded-md">
         <List bordered>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Account Holder Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Account Holder Name -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.name}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Bank Account Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Bank Account Number -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.account_number}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>IFSC Code - </p>
+            <p style={{ fontWeight: "bold" }}>
+              IFSC Code -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.swift_code}
+              </span>
+            </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>Bank Name - </p>
+            <p style={{ fontWeight: "bold" }}>
+              Bank Name -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.bank_name}
+              </span>
+            </p>
           </List.Item>
         </List>
       </div>

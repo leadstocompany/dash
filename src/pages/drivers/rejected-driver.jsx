@@ -1,4 +1,4 @@
-import { TableActionItem } from "@/components/TableAction";
+import { TableActionItem } from "@/components/TableAction1";
 import Container from "@/components/container";
 import Heading from "@/components/heading";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";

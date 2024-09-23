@@ -225,7 +225,7 @@ const AllDrivers = () => {
                         </TableCell>
                         <TableActionItem
                           data={_}
-                          deleteUrl={`/admin-api/driver/${_.id}/delete/`}
+                          //deleteUrl={`/admin-api/driver/${_.id}/delete/`}
                           edit={true}
                           fetchData={fetchAllDrivers}
                           pathname="/drivers/edit"
