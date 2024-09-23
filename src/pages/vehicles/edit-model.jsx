@@ -67,12 +67,15 @@ const EditModel = () => {
   useEffect(() => {
     const fetchVehicleModel = async () => {
       try {
-        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-maker`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `token ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `${SERVER_URL}/cab/${data.cabtype}/vehicle-maker`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `token ${token}`,
+            },
+          }
+        );
         const resData = await res.data;
         setVehicleManufacturer(resData);
         console.log("vehicle model");
@@ -81,14 +84,24 @@ const EditModel = () => {
         console.log(error);
       }
     };
+
+    if (user) {
+      fetchVehicleModel();
+    }
+  }, [v_type, data.cabtype]);
+
+  useEffect(() => {
     const fetchVehicleClass = async () => {
       try {
-        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-class`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `token ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `${SERVER_URL}/cab/${data.cabtype}/cab-class/`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `token ${token}`,
+            },
+          }
+        );
         const resData = await res.data;
         setVehicleClass(resData);
         console.log(resData, "vehicle class");
@@ -96,11 +109,8 @@ const EditModel = () => {
         console.log(error);
       }
     };
-    if (user) {
-      fetchVehicleModel();
-      fetchVehicleClass();
-    }
-  }, [user]);
+    fetchVehicleClass();
+  }, [v_type, data.cabtype]);
 
   useEffect(() => {
     const fetchVehicleType = async () => {
