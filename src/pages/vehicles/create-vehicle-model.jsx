@@ -57,7 +57,7 @@ const CreateVehicleModel = () => {
   useEffect(() => {
     const fetchVehicleClass = async () => {
       try {
-        const res = await axios.get(`${SERVER_URL}/cab/${v_maker}/cab-class/`, {
+        const res = await axios.get(`${SERVER_URL}/cab/${v_type}/cab-class/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `token ${token}`,
@@ -74,7 +74,7 @@ const CreateVehicleModel = () => {
       //fetchVehicleModel();
       fetchVehicleClass();
     }
-  }, [v_maker]);
+  }, [v_type]);
 
   useEffect(() => {
     const fetchVehicleModel = async () => {
