@@ -88,7 +88,33 @@ const EditModel = () => {
     if (user) {
       fetchVehicleModel();
     }
-  }, [v_type, data.cabtype]);
+  }, [data.cabtype]);
+
+  useEffect(() => {
+    const fetchVehicleModel = async () => {
+      try {
+        const res = await axios.get(
+          `${SERVER_URL}/cab/${v_type}/vehicle-maker`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `token ${token}`,
+            },
+          }
+        );
+        const resData = await res.data;
+        setVehicleManufacturer(resData);
+        console.log("vehicle model");
+        console.log(resData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (user) {
+      fetchVehicleModel();
+    }
+  }, [v_type]);
 
   useEffect(() => {
     const fetchVehicleClass = async () => {
@@ -110,7 +136,26 @@ const EditModel = () => {
       }
     };
     fetchVehicleClass();
-  }, [v_type, data.cabtype]);
+  }, [data.cabtype]);
+
+  useEffect(() => {
+    const fetchVehicleClass = async () => {
+      try {
+        const res = await axios.get(`${SERVER_URL}/cab/${v_type}/cab-class/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        });
+        const resData = await res.data;
+        setVehicleClass(resData);
+        console.log(resData, "vehicle class");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchVehicleClass();
+  }, [v_type]);
 
   useEffect(() => {
     const fetchVehicleType = async () => {
@@ -263,6 +308,8 @@ const EditModel = () => {
               control={form.control}
               name="vehicleType"
               render={({ field, fieldState }) => {
+                // console.log(field.value);
+
                 setV_type(field.value);
                 return (
                   <FormItem>
@@ -270,9 +317,9 @@ const EditModel = () => {
                       Vehicle Type <span className="text-red-500">*</span>
                     </FormLabel>
                     <Select
-                      value={data.cabtype}
+                      value={field.value || data.cabtype}
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      // defaultValue={data.cabtype}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -307,7 +354,8 @@ const EditModel = () => {
                       <span className="text-red-500">*</span>
                     </FormLabel>
                     <Select
-                      value={data.maker}
+                      value={field.value || data.maker}
+                      // value={data.maker}
                       onValueChange={(v) =>
                         setData((prev) => ({ ...prev, maker_change: v }))
                       }
@@ -348,7 +396,7 @@ const EditModel = () => {
                     Vehicle Class <span className="text-red-500">*</span>
                   </FormLabel>
                   <Select
-                    value={data.cabclass}
+                    value={field.value || data.cabclass}
                     onValueChange={(v) =>
                       setData((prev) => ({ ...prev, cab_class_change: v }))
                     }
