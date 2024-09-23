@@ -45,6 +45,8 @@ const CreateVehicleModel = () => {
   const [file, setFile] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [vehicleType, setVehicleType] = useState([]);
+  const [v_type, setV_type] = useState("");
+  const [v_maker, setV_maker] = useState("");
   const form = useForm({
     resolver: zodResolver(schema),
     mode: "onSubmit",
@@ -53,25 +55,9 @@ const CreateVehicleModel = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const fetchVehicleModel = async () => {
-      try {
-        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-maker`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `token ${token}`,
-          },
-        });
-        const resData = await res.data;
-        setVehicleManufacturer(resData);
-        console.log("vehicle model");
-        console.log(resData);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     const fetchVehicleClass = async () => {
       try {
-        const res = await axios.get(`${SERVER_URL}/admin-api/vehicle-class`, {
+        const res = await axios.get(`${SERVER_URL}/cab/${v_maker}/cab-class/`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `token ${token}`,
@@ -85,10 +71,33 @@ const CreateVehicleModel = () => {
       }
     };
     if (user) {
-      fetchVehicleModel();
+      //fetchVehicleModel();
       fetchVehicleClass();
     }
-  }, [user]);
+  }, [v_maker]);
+
+  useEffect(() => {
+    const fetchVehicleModel = async () => {
+      try {
+        const res = await axios.get(
+          `${SERVER_URL}/cab/${v_type}/vehicle-maker`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `token ${token}`,
+            },
+          }
+        );
+        const resData = await res.data;
+        setVehicleManufacturer(resData);
+        console.log("vehicle model");
+        console.log(resData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchVehicleModel();
+  }, [v_type]);
 
   useEffect(() => {
     const fetchVehicleType = async () => {
@@ -210,50 +219,72 @@ const CreateVehicleModel = () => {
           >
             <FormField
               control={form.control}
-              name="vehicleModel"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Model <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="vehicleType"
+              render={({ field, fieldState }) => {
+                //console.log(field.value);
+                setV_type(field.value);
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Vehicle Type <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Vehicle Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {vehicleType?.map((vehicleModel) => (
+                          <SelectItem
+                            key={vehicleModel.id}
+                            value={vehicleModel.id.toString()}
+                          >
+                            {vehicleModel.cab_type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               control={form.control}
-              name="vehicleType"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Type <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Vehicle Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleType?.map((vehicleModel) => (
-                        <SelectItem
-                          key={vehicleModel.id}
-                          value={vehicleModel.id.toString()}
-                        >
-                          {vehicleModel.cab_type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="vehicleManufacturer"
+              render={({ field }) => {
+                setV_maker(field.value);
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Vehicle Manufacturer{" "}
+                      <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Vehicle Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {vehicleManufacturer?.map((item) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.maker}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               control={form.control}
@@ -286,37 +317,21 @@ const CreateVehicleModel = () => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name="vehicleManufacturer"
+              name="vehicleModel"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Vehicle Manufacturer <span className="text-red-500">*</span>
+                    Vehicle Model <span className="text-red-500">*</span>
                   </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Vehicle Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleManufacturer?.map((item) => (
-                        <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.maker}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <FormControl>
+                    <Input {...field} type="text" />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <div className="grid gap-2">
               <Label>Vehicle Image</Label>
               <Input

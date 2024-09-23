@@ -45,6 +45,8 @@ const EditModel = () => {
   const [vehicleType, setVehicleType] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState("");
+  const [v_type, setV_type] = useState("");
+  const [v_maker, setV_maker] = useState("");
 
   const [searchParams, setSearchParams] = useSearchParams();
   const token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
@@ -249,6 +251,86 @@ const EditModel = () => {
           >
             <FormField
               control={form.control}
+              name="vehicleType"
+              render={({ field, fieldState }) => {
+                setV_type(field.value);
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Vehicle Type <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      value={data.cabtype}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Vehicle Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {vehicleType?.map((vehicleModel) => (
+                          <SelectItem
+                            key={vehicleModel.id}
+                            value={vehicleModel.id.toString()}
+                          >
+                            {vehicleModel.cab_type}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              control={form.control}
+              name="maker"
+              render={({ field }) => {
+                setV_maker(field.value);
+                return (
+                  <FormItem>
+                    <FormLabel>
+                      Vehicle Manufacturer{" "}
+                      <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      value={data.maker}
+                      onValueChange={(v) =>
+                        setData((prev) => ({ ...prev, maker_change: v }))
+                      }
+                      onOpenChange={(isOpen) => {
+                        if (!isOpen && data.maker_change) {
+                          setData((prev) => ({
+                            ...prev,
+                            maker: data.maker_change,
+                          }));
+                          form.setValue("maker", data.maker_change);
+                        }
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Vehicle Type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {vehicleManufacturer?.map((item) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.maker}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+            <FormField
+              control={form.control}
               name="cab_class"
               render={({ field, fieldState }) => (
                 <FormItem>
@@ -289,46 +371,7 @@ const EditModel = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="maker"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Manufacturer <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select
-                    value={data.maker}
-                    onValueChange={(v) =>
-                      setData((prev) => ({ ...prev, maker_change: v }))
-                    }
-                    onOpenChange={(isOpen) => {
-                      if (!isOpen && data.maker_change) {
-                        setData((prev) => ({
-                          ...prev,
-                          maker: data.maker_change,
-                        }));
-                        form.setValue("maker", data.maker_change);
-                      }
-                    }}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Vehicle Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleManufacturer?.map((item) => (
-                        <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.maker}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <FormField
               control={form.control}
               name="model"
@@ -344,39 +387,7 @@ const EditModel = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="vehicleType"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel>
-                    Vehicle Type <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <Select
-                    value={data.cabtype}
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Vehicle Type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {vehicleType?.map((vehicleModel) => (
-                        <SelectItem
-                          key={vehicleModel.id}
-                          value={vehicleModel.id.toString()}
-                        >
-                          {vehicleModel.cab_type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <div className="grid gap-2">
               <Label>Vehicle Image</Label>
               <Input
