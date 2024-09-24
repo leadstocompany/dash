@@ -10,6 +10,7 @@ import {
   Polyline,
 } from "@react-google-maps/api";
 
+const GOOGLE_API_URL = import.meta.env.VITE_GOOGLE_API_KEY;
 const RouteMap = () => {
   const [data, setData] = useState([]);
   const [center, setCenter] = useState(null);
@@ -410,7 +411,7 @@ const RouteMap = () => {
               center={center}
             />
           )} */}
-          <LoadScript googleMapsApiKey="AIzaSyDqhCNH8_WG5DODgEIcICL7Z-s6Ge9Vgfc">
+          <LoadScript googleMapsApiKey={GOOGLE_API_URL}>
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
               center={source}
