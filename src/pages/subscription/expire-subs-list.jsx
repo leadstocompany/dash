@@ -22,37 +22,32 @@ import { Link } from "react-router-dom";
 import { TableActionItem } from "@/components/TableAction";
 import PropTypes from "prop-types";
 
-
-
-const plan =[
-    {
-        id: 1,
-            planName: "Gold plan",
-            rideNumbers:100,
-            price:2500,
-            Discount:'25',
-          
-    }
-]
+const plan = [
+  {
+    id: 1,
+    planName: "Gold plan",
+    rideNumbers: 100,
+    price: 2500,
+    Discount: "25",
+  },
+];
 
 const ExpireSubsList = () => {
   const { user } = useSelector((state) => state.user);
-  
 
   const [isLoading, setIsLoading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [refresh, setRefresh] = useState(false); // [1
   const [couponsData, setCouponsData] = useState([]);
-  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
 
   const fetchCoupons = async () => {
-
-    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
     try {
       setIsLoading(true);
       const resClass = await axios.get(
         `${SERVER_URL}/subscriptions/admin/expire-subscriptions/`,
-        { 
+        {
           headers: {
             "Content-Type": "application/json",
             Authorization: `token ${token}`,
@@ -69,8 +64,6 @@ const ExpireSubsList = () => {
     }
   };
 
-  
-
   useEffect(() => {
     if (user) {
       fetchCoupons();
@@ -80,22 +73,20 @@ const ExpireSubsList = () => {
     <Container>
       <div className="flex justify-between items-center">
         <Heading>Expire Subscriptions list</Heading>
-       
       </div>
 
       <div className="border rounded-md">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead >S.No</TableHead>
-              <TableHead>Drive Name</TableHead>
+              <TableHead>S.No</TableHead>
+              <TableHead>Driver Name</TableHead>
               <TableHead>Mobile Number</TableHead>
               <TableHead>Cab Class</TableHead>
               <TableHead>Plan Name</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Time</TableHead>
-              
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -103,25 +94,30 @@ const ExpireSubsList = () => {
               couponsData.map((_, i) => {
                 return (
                   <TableRow key={i}>
-                    <TableCell center className="font-medium">{_?.id}</TableCell>
-                    <TableCell>
-                    {_?.plan_name}
+                    <TableCell center className="font-medium">
+                      {i + 1}
                     </TableCell>
-                    <TableCell >{_?.ride_numbers}</TableCell>
                     <TableCell>
-                      {_?.price}
+                      {_?.driver?.first_name + " " + _?.driver?.last_name}
                     </TableCell>
-                    <TableCell>{_?.discount}%</TableCell>
-                 
-                  <TableActionItem
+                    <TableCell>{_?.driver?.phone}</TableCell>
+                    <TableCell>{_?.plan?.vehicle_class?.cab_class}</TableCell>
+                    <TableCell>{_?.plan?.plan_name}</TableCell>
+                    <TableCell>{_?.plan?.price}</TableCell>
+                    <TableCell>
+                      {dayjs(_?.expire_date).format("DD MMM YYYY")}
+                    </TableCell>
+                    <TableCell>
+                      {dayjs(_?.expire_date).format("hh:mm a")}
+                    </TableCell>
+
+                    {/* <TableActionItem
                       data={_}
                       edit={true}
                       fetchData={fetchCoupons}
                       deleteUrl="/subscriptions/admin/subscription-plans/"
                       pathname={`update/${_?.id}`}
-                    />
-                  
-                   
+                    /> */}
                   </TableRow>
                 );
               })}

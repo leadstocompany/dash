@@ -25,7 +25,7 @@ const WalletCustomer = () => {
   const { user } = useSelector((state) => state.user);
   const { trips } = useSelector((state) => state.app);
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
   //set pagination
   const [pagination, setPagination] = useState({
     page: 1,
@@ -37,20 +37,17 @@ const WalletCustomer = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY")
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
 
   useEffect(() => {
     const fetchDrivers = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get(
-          `${SERVER_URL}/wallets/admin/wallets/`,
-          {
-            headers: {
-              Authorization: `token ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${SERVER_URL}/wallets/admin/wallets/`, {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        });
         const data = res.data;
         if (data.next === null) {
           setPagination({
@@ -58,7 +55,7 @@ const WalletCustomer = () => {
             next_null: true,
           });
         }
-        setData(data)
+        setData(data);
         // dispatch(setActiveTrips(data.results));
         console.log(data);
       } catch (error) {
@@ -97,13 +94,12 @@ const WalletCustomer = () => {
     navigate({
       pathname: "/wallet/customer_wallet_detail",
       search: createSearchParams({
-        id:data.user.id,
-        balance:data.balance,
-        first_name:data.user.first_name,
-        last_name:data.user.last_name, 
-        phone:data.user.phone,
-        expense:data.total_expenses== null? 0:data.total_expenses
-
+        id: data.user.id,
+        balance: data.balance,
+        first_name: data.user.first_name,
+        last_name: data.user.last_name,
+        phone: data.user.phone,
+        expense: data.total_expenses == null ? 0 : data.total_expenses,
       }).toString(),
     });
   };
@@ -118,53 +114,49 @@ const WalletCustomer = () => {
           <TableHeader>
             <TableRow>
               <TableHead>S.No</TableHead>
-              
+
               <TableHead>Name</TableHead>
-              <TableHead >
-                Mobile Number
-              </TableHead>
+              <TableHead>Mobile Number</TableHead>
               <TableHead>Wallet Balance</TableHead>
-              <TableHead >
-                More Information
-              </TableHead>
+              <TableHead>More Information</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {data.map((_, i) => {
               return (
-                <TableRow key={i }>
-                  <TableCell className="font-medium">{_.user?.id}</TableCell>
-                
+                <TableRow key={i}>
+                  <TableCell className="font-medium">{i + 1}</TableCell>
+
                   <TableCell className="max-w-[150px] break-words">
                     {_.user?.first_name}
                   </TableCell>
-                  
+
                   <TableCell className="max-w-[150px] break-words">
                     {_.user?.phone}
                   </TableCell>
                   <TableCell className="max-w-[150px] break-words">
                     {_.balance}
                   </TableCell>
-                 
-                  <TableCell >
-                   
-                  <Button onClick={()=>handleRouteOpen(_)} className="rounded-2xl h-auto active:scale-95 duration-100">
-          {/* <Link
+
+                  <TableCell>
+                    <Button
+                      onClick={() => handleRouteOpen(_)}
+                      className="rounded-2xl h-auto active:scale-95 duration-100"
+                    >
+                      {/* <Link
            to="/wallet/customer_wallet_detail"
             className="flex items-center justify-center active:scale-95 duration-100"
           > */}
-        
-            Click here
-          {/* </Link> */}
-        </Button>
-                   
+                      Click here
+                      {/* </Link> */}
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-       {/* < Button className="rounded-2xl h-auto active:scale-95 duration-100">
+        {/* < Button className="rounded-2xl h-auto active:scale-95 duration-100">
           <Link
              to="/wallet/customer_wallet_detail"
             className="flex items-center justify-center active:scale-95 duration-100"

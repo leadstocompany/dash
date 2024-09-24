@@ -3,6 +3,12 @@ import Heading from "@/components/heading";
 import MemoizedMapComponent from "@/components/map-component";
 import { useEffect, useState } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  Polyline,
+} from "@react-google-maps/api";
 
 const RouteMap = () => {
   const [data, setData] = useState([]);
@@ -39,6 +45,23 @@ const RouteMap = () => {
 
   console.log({ newData });
 
+  const mapContainerStyle = {
+    height: "400px",
+    width: "800px",
+  };
+
+  const source = {
+    lat: parseFloat(newData?.pickup_latitude),
+    lng: parseFloat(newData?.pickup_longitude),
+  };
+
+  const destination = {
+    lat: parseFloat(newData?.dropup_latitude),
+    lng: parseFloat(newData?.dropup_longitude),
+  };
+
+  console.log(destination);
+  const path = [source, destination];
   return (
     <Container>
       <Heading>Route Map</Heading>
@@ -381,12 +404,30 @@ const RouteMap = () => {
       <Container className="bg-white rounded-md border p-5 gap-1.5">
         <Heading className={"text-xl font-normal"}>Route Map</Heading>
         <div className={"h-96 bg-gray-100 rounded-md"}>
-          {center && (
+          {/* {center && (
             <MemoizedMapComponent
               className={"h-full w-full rounded-md border"}
               center={center}
             />
-          )}
+          )} */}
+          <LoadScript googleMapsApiKey="AIzaSyDqhCNH8_WG5DODgEIcICL7Z-s6Ge9Vgfc">
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={source}
+              zoom={6}
+            >
+              <Marker position={source} label="Source" />
+              <Marker position={destination} label="Destination" />
+              <Polyline
+                path={path}
+                options={{
+                  strokeColor: "#FF0000",
+                  strokeOpacity: 1,
+                  strokeWeight: 2,
+                }}
+              />
+            </GoogleMap>
+          </LoadScript>
         </div>
       </Container>
     </Container>
