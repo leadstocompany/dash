@@ -91,9 +91,13 @@ const ActiveTrips = () => {
   };
 
   const handleRouteOpen = (data) => {
+    const serializedData = JSON.stringify(data);
     navigate({
       pathname: "/trips/route-map",
-      search: createSearchParams(data).toString(),
+      //search: createSearchParams(data).toString(),
+      search: createSearchParams({
+        data: serializedData,
+      }).toString(),
     });
   };
   return (
