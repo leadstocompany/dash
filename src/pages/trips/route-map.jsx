@@ -48,17 +48,18 @@ const RouteMap = () => {
 
     // Parse the serialized data
     const data = JSON.parse(serializedData);
+    // console.log(data.pickup_latitude.replace(/["']/g, ""));
 
     const directionsService = new window.google.maps.DirectionsService();
     directionsService.route(
       {
         origin: new window.google.maps.LatLng(
-          data?.pickup_latitude,
-          data?.pickup_longitude
+          data?.pickup_latitude.replace(/["']/g, ""),
+          data?.pickup_longitude.replace(/["']/g, "")
         ),
         destination: new window.google.maps.LatLng(
-          data?.dropup_latitude,
-          data?.dropup_longitude
+          data?.dropup_latitude.replace(/["']/g, ""),
+          data?.dropup_longitude.replace(/["']/g, "")
         ),
         travelMode: window.google.maps.TravelMode.DRIVING,
       },
@@ -126,7 +127,6 @@ const RouteMap = () => {
   //   );
   // }, []);
 
-  console.log({ origin });
   // console.log(destination);
   // const path = [source, destination];
 
@@ -492,6 +492,8 @@ const RouteMap = () => {
             {directions !== null && (
               <DirectionsRenderer directions={directions} />
             )}
+            {/* <Marker position={origin} icon={customMarkerIcon} />
+             <Marker position={destination} icon={customMarkerIcon} /> */}
             {/* <Marker position={origin} label="Source" />
             <Marker position={destination} label="Destination" />
             <Polyline
