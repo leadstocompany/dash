@@ -17,27 +17,39 @@ import dayjs from "dayjs";
 import { Loader2, MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, createSearchParams, useNavigate } from "react-router-dom";
-import { List } from 'rsuite';
+import {
+  Link,
+  createSearchParams,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import { List } from "rsuite";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
-const datas =[
+const datas = [
+  { name: "alex" },
+  { name: "alex" },
+  { name: "alex" },
+  { name: "alex" },
 
-    {name:"alex"},
-    {name:"alex"},
-    {name:"alex"},
-    {name:"alex"},
-
-    {name:"alex"},
-    {name:"alex"},
-]
+  { name: "alex" },
+  { name: "alex" },
+];
 
 const DriverWalletDetails = () => {
   const { user } = useSelector((state) => state.user);
   const { trips } = useSelector((state) => state.app);
   const [isLoading, setIsLoading] = useState(false);
   //set pagination
+  const [searchParams, setSearchParams] = useSearchParams();
+  let id = searchParams.get("id");
+  let balance = searchParams.get("balance");
+  let first_name = searchParams.get("first_name");
+  let last_name = searchParams.get("last_name");
+  let phone = searchParams.get("phone");
+  let expense = searchParams.get("expense");
+
   const [pagination, setPagination] = useState({
     page: 1,
     page_size: 10,
@@ -67,7 +79,7 @@ const DriverWalletDetails = () => {
             next_null: true,
           });
         }
-        dispatch(setActiveTrips(data.results));
+        //dispatch(setActiveTrips(data.results));
         console.log(data);
       } catch (error) {
         console.log(error);
@@ -111,40 +123,68 @@ const DriverWalletDetails = () => {
     <Container>
       <div className="flex justify-between items-center gap-5">
         <Heading>Driver Wallet Details</Heading>
-        
       </div>
       <div className="border rounded-md">
-       
-      <List bordered>
-      <List.Item><p style={{fontWeight:"bold"}}>Name - </p></List.Item>
-      <List.Item><p style={{fontWeight:"bold"}}>Mobile Number - </p></List.Item>
-    <List.Item><p style={{fontWeight:"bold"}}>Wallet Balance - </p></List.Item>
-    <List.Item><p style={{fontWeight:"bold"}}>Total Expand From Wallet - </p></List.Item>
-    <List.Item><p style={{fontWeight:"bold"}}>Profile Details - <span>< Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
-          <Link
-             //to="/wallet/customer_wallet_detail"
-            className="flex items-center justify-center active:scale-95 duration-100"
-          >
-        
-            Click here
-          </Link>
-        </Button></span></p>  </List.Item>
-        
-        <List.Item  ><p style={{fontWeight:'bold'}}>Transaction History - </p>
-        
-{datas.map((item)=>(<List.Item style={{ borderColor:'yellow', borderWidth:0.2, padding:10, margin:15, borderRadius:5}}></List.Item>))}
+        <List bordered>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Name -{" "}
+              <span style={{ fontWeight: "lighter" }}>
+                {first_name + " " + last_name}
+              </span>{" "}
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Mobile Number -{" "}
+              <span style={{ fontWeight: "lighter" }}>{phone}</span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Wallet Balance -{" "}
+              <span style={{ fontWeight: "lighter" }}>{balance}</span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Total Expand From Wallet -{" "}
+              <span style={{ fontWeight: "lighter" }}>{expense}</span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Profile Details -{" "}
+              <span>
+                <Button className="ml-5 rounded-2xl h-auto active:scale-95 duration-100">
+                  <Link
+                    //to="/wallet/customer_wallet_detail"
+                    className="flex items-center justify-center active:scale-95 duration-100"
+                  >
+                    Click here
+                  </Link>
+                </Button>
+              </span>
+            </p>{" "}
+          </List.Item>
 
-       
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>Transaction History - </p>
 
-       
-        </List.Item>
-  </List>
- 
- 
-      
-     
-        
- 
+            {datas.map((item) => (
+              <List.Item
+                style={{
+                  borderColor: "yellow",
+                  borderWidth: 0.2,
+                  padding: 10,
+                  margin: 15,
+                  borderRadius: 5,
+                }}
+              ></List.Item>
+            ))}
+          </List.Item>
+        </List>
+
         {/* <div className="flex items-center justify-end space-x-2 py-4 pr-4">
           <Button
             variant="outline"

@@ -25,7 +25,7 @@ const WalletDriver = () => {
   const { user } = useSelector((state) => state.user);
   const { trips } = useSelector((state) => state.app);
   const [isLoading, setIsLoading] = useState(false);
-  //set pagination
+  const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
     page_size: 10,
@@ -35,16 +35,16 @@ const WalletDriver = () => {
   //initializers
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   useEffect(() => {
     const fetchDrivers = async () => {
       setIsLoading(true);
       try {
         const res = await axios.get(
-          `${SERVER_URL}/cab-booking-admin-api/active-trip/?page=${pagination.page}&page_size=${pagination.page_size}`,
+          `${SERVER_URL}/wallets/admin/driver/wallets/`,
           {
             headers: {
-              Authorization: `token ${user.token}`,
+              Authorization: `token ${token}`,
             },
           }
         );
@@ -55,7 +55,8 @@ const WalletDriver = () => {
             next_null: true,
           });
         }
-        dispatch(setActiveTrips(data.results));
+        setData(data);
+        // dispatch(setActiveTrips(data.results));
         console.log(data);
       } catch (error) {
         console.log(error);
@@ -63,11 +64,11 @@ const WalletDriver = () => {
         setIsLoading(false);
       }
     };
-    if (user?.token) {
-      fetchDrivers();
-    }
+    // if (user?.token) {
+    //   fetchDrivers();
+    // }
     fetchDrivers();
-  }, [pagination.page, pagination.page_size, user]);
+  }, [user]);
   //set next page
   const nextPage = (e) => {
     e.preventDefault();
@@ -91,8 +92,15 @@ const WalletDriver = () => {
 
   const handleRouteOpen = (data) => {
     navigate({
-      pathname: "/trips/route-map",
-      search: createSearchParams(data).toString(),
+      pathname: "/wallet/driver_wallet_detail",
+      search: createSearchParams({
+        id: data.user.id,
+        balance: data.balance,
+        first_name: data.user.first_name,
+        last_name: data.user.last_name,
+        phone: data.user.phone,
+        expense: data.total_expenses == null ? 0 : data.total_expenses,
+      }).toString(),
     });
   };
   return (
@@ -106,53 +114,49 @@ const WalletDriver = () => {
           <TableHeader>
             <TableRow>
               <TableHead>S.No</TableHead>
-              
+
               <TableHead>Name</TableHead>
-              <TableHead >
-                Mobile Number
-              </TableHead>
+              <TableHead>Mobile Number</TableHead>
               <TableHead>Wallet Balance</TableHead>
-              <TableHead >
-                More Information
-              </TableHead>
+              <TableHead>More Information</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {trips.active_trips.map((_, i) => {
+            {data.map((_, i) => {
               return (
-                <TableRow key={i + "-active-trips"}>
-                  <TableCell className="font-medium">{_.id}</TableCell>
-                
+                <TableRow key={i}>
+                  <TableCell className="font-medium">{i + 1}</TableCell>
+
                   <TableCell className="max-w-[150px] break-words">
-                    {_.driver_first_name + " " + _.driver_last_name}
+                    {_.user?.first_name}
                   </TableCell>
-                  
+
                   <TableCell className="max-w-[150px] break-words">
-                    {_.source}
+                    {_.user?.phone}
                   </TableCell>
                   <TableCell className="max-w-[150px] break-words">
-                    {_.destination}
+                    {_.balance}
                   </TableCell>
-                 
-                  <TableCell className="text-right space-x-2">
-                   
-                  <Button className="rounded-2xl h-auto active:scale-95 duration-100">
-          <Link
-            // to="/subscription/generate"
+
+                  <TableCell>
+                    <Button
+                      onClick={() => handleRouteOpen(_)}
+                      className="rounded-2xl h-auto active:scale-95 duration-100"
+                    >
+                      {/* <Link
+           to="/wallet/customer_wallet_detail"
             className="flex items-center justify-center active:scale-95 duration-100"
-          >
-        
-            Click here
-          </Link>
-        </Button>
-                   
+          > */}
+                      Click here
+                      {/* </Link> */}
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
             })}
           </TableBody>
         </Table>
-        
+
         {/* <div className="flex items-center justify-end space-x-2 py-4 pr-4">
           <Button
             variant="outline"

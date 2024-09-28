@@ -43,11 +43,14 @@ const WalletCustomer = () => {
     const fetchDrivers = async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get(`${SERVER_URL}/wallets/admin/wallets/`, {
-          headers: {
-            Authorization: `token ${token}`,
-          },
-        });
+        const res = await axios.get(
+          `${SERVER_URL}/wallets/admin/cutomer/wallets/`,
+          {
+            headers: {
+              Authorization: `token ${token}`,
+            },
+          }
+        );
         const data = res.data;
         if (data.next === null) {
           setPagination({
@@ -68,7 +71,7 @@ const WalletCustomer = () => {
       fetchDrivers();
     }
     fetchDrivers();
-  }, [pagination.page, pagination.page_size, user]);
+  }, [user]);
   //set next page
   const nextPage = (e) => {
     e.preventDefault();
