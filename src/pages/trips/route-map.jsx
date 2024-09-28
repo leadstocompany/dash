@@ -8,7 +8,12 @@ import {
   LoadScript,
   Marker,
   Polyline,
+  useJsApiLoader,
+  useLoadScript,
+  DirectionsService,
+  DirectionsRenderer,
 } from "@react-google-maps/api";
+import Map from "./map";
 
 const GOOGLE_API_URL = import.meta.env.VITE_GOOGLE_API_KEY;
 const RouteMap = () => {
@@ -17,23 +22,25 @@ const RouteMap = () => {
   const [newData, setNewData] = useState({});
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  useEffect(() => {
-    // Initialize an object to store the extracted data
-    const extractedData = {};
-    const queryParams = new URLSearchParams(location.search);
-    // Iterate through the query parameters and extract the data
-    queryParams.forEach((value, key) => {
-      if (key === "lat") return setCenter((prev) => ({ ...prev, lat: value }));
-      if (key === "lng") return setCenter((prev) => ({ ...prev, lng: value }));
-      if (value == undefined || value == "undefined") return;
-      if (value == null || value === "null" || value == "") return;
-      if (key === "otp") return;
+  // useEffect(() => {
+  //   // Initialize an object to store the extracted data
+  //   const extractedData = {};
+  //   const queryParams = new URLSearchParams(location.search);
+  //   // Iterate through the query parameters and extract the data
+  //   queryParams.forEach((value, key) => {
+  //     if (key === "lat") return setCenter((prev) => ({ ...prev, lat: value }));
+  //     if (key === "lng") return setCenter((prev) => ({ ...prev, lng: value }));
+  //     if (value == undefined || value == "undefined") return;
+  //     if (value == null || value === "null" || value == "") return;
+  //     if (key === "otp") return;
 
-      extractedData[key] = value;
-    });
-    setData(Object.entries(extractedData));
-    console.log("Extracted data:", extractedData);
-  }, [searchParams]);
+  //     extractedData[key] = value;
+  //   });
+  //   setData(Object.entries(extractedData));
+  //   console.log("Extracted data:", extractedData);
+  // }, [searchParams]);
+
+  const [directions, setDirections] = useState(null);
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -41,19 +48,56 @@ const RouteMap = () => {
 
     // Parse the serialized data
     const data = JSON.parse(serializedData);
+
+    const directionsService = new window.google.maps.DirectionsService();
+    directionsService.route(
+      {
+        origin: new window.google.maps.LatLng(
+          data?.pickup_latitude,
+          data?.pickup_longitude
+        ),
+        destination: new window.google.maps.LatLng(
+          data?.dropup_latitude,
+          data?.dropup_longitude
+        ),
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === window.google.maps.DirectionsStatus.OK) {
+          setDirections(result);
+        } else {
+          console.error(`Error fetching directions: ${result}`);
+        }
+      }
+    );
     setNewData(data);
   }, []);
 
   console.log({ newData });
 
+  // const { isLoaded, loadError } = useJsApiLoader({
+  //   id: "google-map-script",
+  //   googleMapsApiKey: GOOGLE_API_URL,
+  //   libraries: ["places"],
+  // });
+  // if (loadError) {
+  //   return <div>Error loading maps</div>;
+  // }
+
+  // if (!isLoaded) {
+  //   return <div>Loading maps</div>;
+  // }
   const mapContainerStyle = {
     height: "400px",
     width: "800px",
   };
 
-  const source = {
-    lat: parseFloat(newData?.pickup_latitude),
-    lng: parseFloat(newData?.pickup_longitude),
+  const org_lat = parseFloat(newData?.pickup_latitude);
+  const org_lng = parseFloat(newData?.pickup_longitude);
+
+  const origin = {
+    lat: org_lat,
+    lng: org_lng,
   };
 
   const destination = {
@@ -61,8 +105,31 @@ const RouteMap = () => {
     lng: parseFloat(newData?.dropup_longitude),
   };
 
-  console.log(destination);
-  const path = [source, destination];
+  // useEffect(() => {
+  //   const directionsService = new window.google.maps.DirectionsService();
+  //   directionsService.route(
+  //     {
+  //       origin: new window.google.maps.LatLng(origin.lat, origin.lng),
+  //       destination: new window.google.maps.LatLng(
+  //         destination.lat,
+  //         destination.lng
+  //       ),
+  //       travelMode: window.google.maps.TravelMode.DRIVING,
+  //     },
+  //     (result, status) => {
+  //       if (status === window.google.maps.DirectionsStatus.OK) {
+  //         setDirections(result);
+  //       } else {
+  //         console.error(`Error fetching directions: ${result}`);
+  //       }
+  //     }
+  //   );
+  // }, []);
+
+  console.log({ origin });
+  // console.log(destination);
+  // const path = [source, destination];
+
   return (
     <Container>
       <Heading>Route Map</Heading>
@@ -411,24 +478,32 @@ const RouteMap = () => {
               center={center}
             />
           )} */}
-          <LoadScript googleMapsApiKey={GOOGLE_API_URL}>
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={source}
-              zoom={6}
-            >
-              <Marker position={source} label="Source" />
-              <Marker position={destination} label="Destination" />
-              <Polyline
-                path={path}
-                options={{
-                  strokeColor: "#FF0000",
-                  strokeOpacity: 1,
-                  strokeWeight: 2,
-                }}
-              />
-            </GoogleMap>
-          </LoadScript>
+          {/* <LoadScript
+            googleMapsApiKey={`${GOOGLE_API_URL}&loading=async`}
+            onLoad={() => setIsLoaded(true)}
+          > */}
+
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={center}
+            zoom={6}
+          >
+            <Marker position={center} />
+            {directions !== null && (
+              <DirectionsRenderer directions={directions} />
+            )}
+            {/* <Marker position={origin} label="Source" />
+            <Marker position={destination} label="Destination" />
+            <Polyline
+              path={path}
+              options={{
+                strokeColor: "#FF0000",
+                strokeOpacity: 1,
+                strokeWeight: 2,
+              }}
+            /> */}
+          </GoogleMap>
+          {/* </LoadScript> */}
         </div>
       </Container>
     </Container>

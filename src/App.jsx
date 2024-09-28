@@ -28,6 +28,7 @@ import {
   CompletedTrips,
   RouteMap,
 } from "./pages/trips";
+import { LoadScript } from "@react-google-maps/api";
 import { WalletCustomer, WalletUser } from "./pages/wallet";
 import { Active, Completed } from "./pages/sos";
 import { Plans, DriverSubscriptionList } from "./pages/subscription";
@@ -88,190 +89,201 @@ const router = createBrowserRouter([{ path: "*", Component: Root }]);
 export default function App() {
   return <RouterProvider router={router} j />;
 }
-
+const lib = ["places"];
 function Root() {
   return (
-    <Routes>
-      <Route path="auth">
-        <Route path="signin" element={<SignIn />} />
-      </Route>
-      <Route element={<Layout />}>
-        <Route path="update-profile" element={<UpdateProfile />} />
-        <Route index element={<Dashboard />} />
-        <Route path="about" element={<h1>About</h1>} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="*" element={<h1>Not Found</h1>} />
-        <Route path="trips">
-          <Route index path="active" element={<ActiveTrips />} />
-          <Route path="booked" element={<BookedTrips />} />
-          <Route path="completed" element={<CompletedTrips />} />
-          <Route path="route-map" element={<RouteMap />} />
-          <Route path="scheduled" element={<ScheduledTrips />} />
+    <LoadScript
+      googleMapsApiKey={"AIzaSyDqhCNH8_WG5DODgEIcICL7Z-s6Ge9Vgfc"}
+      libraries={lib}
+    >
+      <Routes>
+        <Route path="auth">
+          <Route path="signin" element={<SignIn />} />
         </Route>
-        <Route path="subscription">
-          <Route index path="plans" element={<Plans />}></Route>
-          <Route
-            path="driver_subscription_list"
-            element={<DriverSubscriptionList />}
-          ></Route>
-          <Route path="generate" element={<GeneratePlans />}></Route>
-          <Route
-            path="active_subscription_list"
-            element={<ActiveSubsList />}
-          ></Route>
-          <Route
-            path="expire_subscription_list"
-            element={<ExpireSubsList />}
-          ></Route>
-          <Route path="plans/update/:id" element={<UpdatePlans />}></Route>
-        </Route>
-
-        <Route path="document">
-          <Route
-            index
-            path="personal_document"
-            element={<PersonalDocument />}
-          ></Route>
-          <Route path="vehicle_photos" element={<VehiclePhoto />}></Route>
-          <Route path="vehicle_document" element={<VehicleDocument />}></Route>
-          <Route
-            path="create_driver_document"
-            element={<CreateDriverDoc />}
-          ></Route>
-          <Route
-            path="create_vehicle_document"
-            element={<CreateVehicleDoc />}
-          ></Route>
-          <Route
-            path="create_vehicle_image"
-            element={<CreateVehicleImage />}
-          ></Route>
-          <Route
-            path="personal_document/update/:id"
-            element={<UpdateDoc />}
-          ></Route>
-          <Route
-            path="vehicle_document/update/:id"
-            element={<UpdateVehicleDoc />}
-          ></Route>
-          <Route
-            path="vehicle_photos/update/:id"
-            element={<UpdateVehiclePhoto />}
-          ></Route>
-        </Route>
-
-        <Route path="wallet">
-          <Route
-            index
-            path="customer_wallet"
-            element={<WalletCustomer />}
-          ></Route>
-          <Route path="driver_wallet" element={<WalletDriver />}></Route>
-          <Route
-            path="customer_wallet_detail"
-            element={<CustomerWalletDetails />}
-          ></Route>
-          <Route
-            path="driver_wallet_detail"
-            element={<DriverWalletDetails />}
-          ></Route>
-        </Route>
-        <Route path="sos">
-          <Route index path="active" element={<Active />}></Route>
-          <Route path="completed" element={<Completed />}></Route>
-          <Route path="active_sos_detail" element={<ActiveSosList />}></Route>
-          <Route
-            path="completed_sos_detail"
-            element={<DriverWalletDetails />}
-          ></Route>
-        </Route>
-        <Route path="feedback">
-          <Route index path="user" element={<UserFeedback />}></Route>
-          <Route path="driver" element={<DriverFeedback />}></Route>
-          <Route
-            path="generate_user_feedback"
-            element={<GenerateFeedback />}
-          ></Route>
-          <Route
-            path="generate_driver_feedback"
-            element={<GenerateFeedbackDriver />}
-          ></Route>
-          <Route path="user/:id" element={<UpdateFeedbackUser />}></Route>
-          <Route path="driver/:id" element={<UpdateFeedbackDriver />}></Route>
-        </Route>
-
-        <Route path="drivers">
-          <Route path="all" element={<AllDrivers />} />
-          <Route path="view">
-            <Route path=":id" element={<ViewDriver />} />
+        <Route element={<Layout />}>
+          <Route path="update-profile" element={<UpdateProfile />} />
+          <Route index element={<Dashboard />} />
+          <Route path="about" element={<h1>About</h1>} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="*" element={<h1>Not Found</h1>} />
+          <Route path="trips">
+            <Route index path="active" element={<ActiveTrips />} />
+            <Route path="booked" element={<BookedTrips />} />
+            <Route path="completed" element={<CompletedTrips />} />
+            <Route path="route-map" element={<RouteMap />} />
+            <Route path="scheduled" element={<ScheduledTrips />} />
           </Route>
-          <Route path="edit" element={<EditDriver />} />
-          <Route path="create" element={<CreateDriver />} />
-          <Route path="new_request_driver" element={<NewDrivers />} />
-          <Route path="reject_driver" element={<RejectDrivers />} />
-          <Route path="suspend_driver" element={<SuspendDrivers />} />
-          <Route path="view-new-driver">
-            <Route path=":id" element={<ViewNewDriver />} />
-          </Route>
-          <Route path="view-reject-driver">
-            <Route path=":id" element={<ViewRejectDriver />} />
-          </Route>
-          <Route path="view-suspend-driver">
-            <Route path=":id" element={<ViewSuspendDriver />} />
-          </Route>
-          <Route path="payments" element={<DriverPayments />} />
-        </Route>
-
-        <Route path="passengers">
-          <Route index path="all" element={<AllPassengers />} />
-          <Route path="edit" element={<EditPassenger />} />
-        </Route>
-        <Route path="city">
-          <Route index path="list" element={<CityList />} />
-          <Route path="create_city" element={<CreateCity />} />
-        </Route>
-        <Route path="vehicles">
-          <Route path="edit">
-            <Route path="vehicle" element={<EditVehicle />} />
-            <Route path="class" element={<EditCLass />} />
-            <Route path="type" element={<EditVehicleType />} />
-            <Route path="manufacturer" element={<EditManufacturer />} />
-            <Route path="model" element={<EditModel />} />
-          </Route>
-          <Route path="view">
-            <Route path="type" element={<ViewAllVehicletype />} />
-            <Route path="class" element={<ViewVehicleClass />} />
-            <Route path="manufacturer" element={<ViewVehicleManufacturer />} />
-            <Route path="model" element={<ViewVehicleModel />} />
-            <Route path="all" element={<ViewVehicles />} />
-            <Route path=":id" element={<ViewVehicleById />} />
-          </Route>
-          <Route path="create">
-            <Route index element={<CreateVehicle />} />
-            <Route path="type" element={<CreateVehicleType />} />
-            <Route path="class" element={<CreateVehicleClass />} />
+          <Route path="subscription">
+            <Route index path="plans" element={<Plans />}></Route>
             <Route
-              path="manufacturer"
-              element={<CreateVehicleManufacturer />}
-            />
-            <Route path="model" element={<CreateVehicleModel />} />
+              path="driver_subscription_list"
+              element={<DriverSubscriptionList />}
+            ></Route>
+            <Route path="generate" element={<GeneratePlans />}></Route>
+            <Route
+              path="active_subscription_list"
+              element={<ActiveSubsList />}
+            ></Route>
+            <Route
+              path="expire_subscription_list"
+              element={<ExpireSubsList />}
+            ></Route>
+            <Route path="plans/update/:id" element={<UpdatePlans />}></Route>
+          </Route>
+
+          <Route path="document">
+            <Route
+              index
+              path="personal_document"
+              element={<PersonalDocument />}
+            ></Route>
+            <Route path="vehicle_photos" element={<VehiclePhoto />}></Route>
+            <Route
+              path="vehicle_document"
+              element={<VehicleDocument />}
+            ></Route>
+            <Route
+              path="create_driver_document"
+              element={<CreateDriverDoc />}
+            ></Route>
+            <Route
+              path="create_vehicle_document"
+              element={<CreateVehicleDoc />}
+            ></Route>
+            <Route
+              path="create_vehicle_image"
+              element={<CreateVehicleImage />}
+            ></Route>
+            <Route
+              path="personal_document/update/:id"
+              element={<UpdateDoc />}
+            ></Route>
+            <Route
+              path="vehicle_document/update/:id"
+              element={<UpdateVehicleDoc />}
+            ></Route>
+            <Route
+              path="vehicle_photos/update/:id"
+              element={<UpdateVehiclePhoto />}
+            ></Route>
+          </Route>
+
+          <Route path="wallet">
+            <Route
+              index
+              path="customer_wallet"
+              element={<WalletCustomer />}
+            ></Route>
+            <Route path="driver_wallet" element={<WalletDriver />}></Route>
+            <Route
+              path="customer_wallet_detail"
+              element={<CustomerWalletDetails />}
+            ></Route>
+            <Route
+              path="driver_wallet_detail"
+              element={<DriverWalletDetails />}
+            ></Route>
+          </Route>
+          <Route path="sos">
+            <Route index path="active" element={<Active />}></Route>
+            <Route path="completed" element={<Completed />}></Route>
+            <Route path="active_sos_detail" element={<ActiveSosList />}></Route>
+            <Route
+              path="completed_sos_detail"
+              element={<DriverWalletDetails />}
+            ></Route>
+          </Route>
+          <Route path="feedback">
+            <Route index path="user" element={<UserFeedback />}></Route>
+            <Route path="driver" element={<DriverFeedback />}></Route>
+            <Route
+              path="generate_user_feedback"
+              element={<GenerateFeedback />}
+            ></Route>
+            <Route
+              path="generate_driver_feedback"
+              element={<GenerateFeedbackDriver />}
+            ></Route>
+            <Route path="user/:id" element={<UpdateFeedbackUser />}></Route>
+            <Route path="driver/:id" element={<UpdateFeedbackDriver />}></Route>
+          </Route>
+
+          <Route path="drivers">
+            <Route path="all" element={<AllDrivers />} />
+            <Route path="view">
+              <Route path=":id" element={<ViewDriver />} />
+            </Route>
+            <Route path="edit" element={<EditDriver />} />
+            <Route path="create" element={<CreateDriver />} />
+            <Route path="new_request_driver" element={<NewDrivers />} />
+            <Route path="reject_driver" element={<RejectDrivers />} />
+            <Route path="suspend_driver" element={<SuspendDrivers />} />
+            <Route path="view-new-driver">
+              <Route path=":id" element={<ViewNewDriver />} />
+            </Route>
+            <Route path="view-reject-driver">
+              <Route path=":id" element={<ViewRejectDriver />} />
+            </Route>
+            <Route path="view-suspend-driver">
+              <Route path=":id" element={<ViewSuspendDriver />} />
+            </Route>
+            <Route path="payments" element={<DriverPayments />} />
+          </Route>
+
+          <Route path="passengers">
+            <Route index path="all" element={<AllPassengers />} />
+            <Route path="edit" element={<EditPassenger />} />
+          </Route>
+          <Route path="city">
+            <Route index path="list" element={<CityList />} />
+            <Route path="create_city" element={<CreateCity />} />
+          </Route>
+          <Route path="vehicles">
+            <Route path="edit">
+              <Route path="vehicle" element={<EditVehicle />} />
+              <Route path="class" element={<EditCLass />} />
+              <Route path="type" element={<EditVehicleType />} />
+              <Route path="manufacturer" element={<EditManufacturer />} />
+              <Route path="model" element={<EditModel />} />
+            </Route>
+            <Route path="view">
+              <Route path="type" element={<ViewAllVehicletype />} />
+              <Route path="class" element={<ViewVehicleClass />} />
+              <Route
+                path="manufacturer"
+                element={<ViewVehicleManufacturer />}
+              />
+              <Route path="model" element={<ViewVehicleModel />} />
+              <Route path="all" element={<ViewVehicles />} />
+              <Route path=":id" element={<ViewVehicleById />} />
+            </Route>
+            <Route path="create">
+              <Route index element={<CreateVehicle />} />
+              <Route path="type" element={<CreateVehicleType />} />
+              <Route path="class" element={<CreateVehicleClass />} />
+              <Route
+                path="manufacturer"
+                element={<CreateVehicleManufacturer />}
+              />
+              <Route path="model" element={<CreateVehicleModel />} />
+            </Route>
+          </Route>
+          <Route path="coupons">
+            <Route index path="generate" element={<GenerateCoupons />} />
+            <Route path="all" element={<ViewAllCoupons />} />
+          </Route>
+          <Route path="fares">
+            <Route index path="create" element={<CreateFare />} />
+            <Route path="all" element={<ViewAllFares />} />
+            <Route path="edit" element={<EditFare />} />
+          </Route>
+          <Route path="*" element={<h1>Not Found</h1>} />
+          <Route path="support">
+            <Route path="driver" element={<DriverSupportMessages />} />
+            <Route path="customer" element={<CustomerSupportMessages />} />
           </Route>
         </Route>
-        <Route path="coupons">
-          <Route index path="generate" element={<GenerateCoupons />} />
-          <Route path="all" element={<ViewAllCoupons />} />
-        </Route>
-        <Route path="fares">
-          <Route index path="create" element={<CreateFare />} />
-          <Route path="all" element={<ViewAllFares />} />
-          <Route path="edit" element={<EditFare />} />
-        </Route>
-        <Route path="*" element={<h1>Not Found</h1>} />
-        <Route path="support">
-          <Route path="driver" element={<DriverSupportMessages />} />
-          <Route path="customer" element={<CustomerSupportMessages />} />
-        </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </LoadScript>
   );
 }
