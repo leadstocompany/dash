@@ -690,7 +690,7 @@ const ViewDriver = () => {
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
-              Account Holder Name -
+              Bank Holder Name -
               <span style={{ fontWeight: "lighter" }}>
                 {data?.bank_account?.name}
               </span>
@@ -698,7 +698,7 @@ const ViewDriver = () => {
           </List.Item>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
-              Bank Account Number -
+              Account Number -
               <span style={{ fontWeight: "lighter" }}>
                 {data?.bank_account?.account_number}
               </span>
@@ -706,7 +706,7 @@ const ViewDriver = () => {
           </List.Item>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
-              IFSC Code -
+              Swift Code -
               <span style={{ fontWeight: "lighter" }}>
                 {data?.bank_account?.swift_code}
               </span>
@@ -717,6 +717,14 @@ const ViewDriver = () => {
               Bank Name -
               <span style={{ fontWeight: "lighter" }}>
                 {data?.bank_account?.bank_name}
+              </span>
+            </p>
+          </List.Item>
+          <List.Item>
+            <p style={{ fontWeight: "bold" }}>
+              Routing Number -
+              <span style={{ fontWeight: "lighter" }}>
+                {data?.bank_account?.routing_number}
               </span>
             </p>
           </List.Item>
