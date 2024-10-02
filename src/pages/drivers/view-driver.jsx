@@ -726,13 +726,13 @@ const ViewDriver = () => {
       <div className="mt-5">
         <h1>Subscription Details</h1>
       </div>
-      {/* <div className="border rounded-md">
+      <div className="border rounded-md">
         <List bordered>
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
               Plan Name -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.subscription_details?.subscription_data?.plan}
+                {data?.subscription_details?.subscription_data?.plan?.plan_name}
               </span>
             </p>
           </List.Item>
@@ -748,7 +748,9 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Purchase Date and Time -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.subscription_details?.subscription_data?.subscribe_date}
+                {dayjs(
+                  data?.subscription_details?.subscription_data?.subcribe_date
+                ).format("DD MMMM hh:mm a")}
               </span>
             </p>
           </List.Item>
@@ -756,15 +758,49 @@ const ViewDriver = () => {
             <p style={{ fontWeight: "bold" }}>
               Expire Date and Time -{" "}
               <span style={{ fontWeight: "lighter" }}>
-                {data?.subscription_details?.subscription_data?.expire_date}
+                {dayjs(
+                  data?.subscription_details?.subscription_data?.expire_date
+                ).format("DD MMMM hh:mm a")}
               </span>
             </p>
           </List.Item>
           <List.Item>
-            <p style={{ fontWeight: "bold" }}>History - </p>
+            <p style={{ fontWeight: "bold" }}>
+              History -
+              {data?.subscription_details?.subscription_log_data?.map(
+                (item) => (
+                  <List.Item
+                    style={{
+                      borderColor: "yellow",
+                      borderWidth: 0.2,
+                      padding: 10,
+                      margin: 15,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <p
+                      style={{
+                        display: "flex",
+                        position: "absolute",
+                        right: "10px",
+                      }}
+                    >
+                      {`$ ${item?.pay_amount}`}
+                    </p>
+                    <p>
+                      {item?.plan?.plan_name}
+                      <br />
+                      <span>
+                        {dayjs(item?.subcribe_date).format("DD MMMM hh:mm a")}
+                      </span>
+                    </p>
+                  </List.Item>
+                )
+              )}
+            </p>
           </List.Item>
         </List>
-      </div> */}
+      </div>
 
       <div className="mt-5">
         <h1>Ride History</h1>
@@ -814,9 +850,114 @@ const ViewDriver = () => {
           <List.Item>
             <p style={{ fontWeight: "bold" }}>
               Completed Ride -{" "}
-              <span style={{ fontWeight: "lighter" }}>
-                {data?.ride_history?.completed_rides}
-              </span>
+              {data?.ride_history?.trips?.map((item) => (
+                <List.Item
+                  style={{
+                    borderColor: "yellow",
+                    borderWidth: 0.2,
+                    padding: 10,
+                    margin: 15,
+                    borderRadius: 5,
+                  }}
+                >
+                  <p
+                    style={{
+                      display: "flex",
+                      position: "absolute",
+                      left: "11%",
+                    }}
+                  >
+                    {dayjs(item?.created_at).format("DD MMMM YYYY hh:mm a")}
+                  </p>
+                  <Avatar
+                    style={{
+                      marginLeft: "2%",
+                    }}
+                    size="lg"
+                    circle
+                    src={data?.ride_type?.cab_type?.icon}
+                  />
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      display: "flex",
+                      position: "absolute",
+                      left: "11%",
+                      top: "25%",
+                    }}
+                  >
+                    Distance -
+                    <span
+                      style={{ fontSize: "12px" }}
+                    >{`${item?.distance} km`}</span>
+                  </p>
+
+                  <p
+                    style={{
+                      fontSize: "12px",
+                      display: "flex",
+                      position: "absolute",
+                      left: "22%",
+                      top: "25%",
+                    }}
+                  >
+                    Ride Type -
+                    <span style={{ fontSize: "12px" }}>{`current`}</span>
+                  </p>
+                  <Timeline
+                    align="left"
+                    style={{
+                      //display: "flex",
+                      // position: "absolute",
+                      marginLeft: "10%",
+                      // top: "25%",
+                    }}
+                  >
+                    <Timeline.Item style={{ fontSize: "12px" }}>
+                      {item?.source}
+                    </Timeline.Item>
+                    <Timeline.Item style={{ fontSize: "12px" }}>
+                      {item?.destination}
+                    </Timeline.Item>
+                  </Timeline>
+                  <p
+                    style={{
+                      display: "flex",
+                      position: "absolute",
+                      right: "10px",
+                      top: "20%",
+                    }}
+                  >
+                    {`$ ${item?.total_fare}`}
+                  </p>
+                  <p
+                    style={{
+                      display: "flex",
+                      position: "absolute",
+                      right: "15px",
+                      top: "40%",
+                    }}
+                  >
+                    {item?.payment_type}
+                  </p>
+                  {/* <p
+                      style={{
+                        display: "flex",
+                        position: "absolute",
+                        right: "10px",
+                      }}
+                    >
+                      {item?.pay_amount}
+                    </p>
+                    <p>
+                      {item?.plan?.plan_name}
+                      <br />
+                      <span>
+                        {dayjs(item?.subcribe_date).format("DD MMMM hh:mm a")}
+                      </span>
+                    </p> */}
+                </List.Item>
+              ))}
             </p>
           </List.Item>
         </List>

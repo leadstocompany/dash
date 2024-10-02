@@ -38,10 +38,85 @@ const ViewNewDriver = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [personalDocument, setPersonalDocument] = useState([]);
+  const [vehicleDoc, setVehicleDoc] = useState([]);
+  const [vehicleImg, setVehicleImg] = useState([]);
   const [open2, setOpen2] = useState(false);
   const handleOpen2 = () => setOpen2(true);
   const handleClose2 = () => setOpen2(false);
+
+  const fetchVehicleImg = async () => {
+    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
+    try {
+      setIsLoading(true);
+      const resClass = await axios.get(
+        `${SERVER_URL}/admin-api/vehicle-photo-page/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        }
+      );
+      const resClassData = await resClass.data;
+      setVehicleImg(resClassData);
+      console.log(resClassData, "vehicleImg");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchVehicleDoc = async () => {
+    let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
+    try {
+      setIsLoading(true);
+      const resClass = await axios.get(
+        `${SERVER_URL}/admin-api/vehiclecertificatefields/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        }
+      );
+      const resClassData = await resClass.data;
+      setVehicleDoc(resClassData);
+      console.log(resClassData, "vehicleDoc");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchPersonalDocument = async () => {
+    try {
+      setIsLoading(true);
+      const resClass = await axios.get(
+        `${SERVER_URL}/admin-api/userdocumentfields/`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `token ${token}`,
+          },
+        }
+      );
+      const resClassData = await resClass.data;
+      setPersonalDocument(resClassData);
+      console.log(resClassData, "personalDoc");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchPersonalDocument();
+    fetchVehicleDoc();
+    fetchVehicleImg();
+  }, []);
 
   useEffect(() => {
     const fetchDriver = async () => {
@@ -266,65 +341,148 @@ const ViewNewDriver = () => {
       <div className="mt-4">
         <h1>Personal Documents</h1>
       </div>
-      <div className="border rounded-md">
-        <List bordered>
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>
-              Pan No -{" "}
-              <span style={{ fontWeight: "lighter" }}>
-                {data?.user_doc?.PAN}
-              </span>
-            </p>
-            <p style={{ fontWeight: "bold" }}>
-              Front Image -{" "}
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src={data?.user_doc?.PAN_front}
-              />
-            </p>
-            <p style={{ fontWeight: "bold" }}>
-              Back Image -{" "}
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src={data?.user_doc?.PAN_back}
-              />
-            </p>
-          </List.Item>
-
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>Aadhar No - </p>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              Front Image -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              Back Image -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-          </List.Item>
-          <List.Item>
-            <p style={{ fontWeight: "bold" }}>Driving License No - </p>
-          </List.Item>
-        </List>
-      </div>
+      {personalDocument.map((item, index) => {
+        return (
+          <>
+            <div className="border rounded-md">
+              {item.field_name == "PAN" && (
+                <List bordered>
+                  <List.Item>
+                    <p style={{ fontWeight: "bold" }}>
+                      Pan No -
+                      <span style={{ fontWeight: "lighter" }}>
+                        {data?.user_doc?.PAN}
+                      </span>
+                    </p>
+                    {item.front == true && (
+                      <p style={{ fontWeight: "bold" }}>
+                        Front Image -
+                        <img
+                          alt=""
+                          style={{
+                            width: "50%",
+                            height: "20%",
+                            display: "flex",
+                            margin: 10,
+                          }}
+                          src={data.user_doc?.PAN_front}
+                        />
+                      </p>
+                    )}
+                    {item.back == true && (
+                      <p style={{ fontWeight: "bold" }}>
+                        Back Image -
+                        <img
+                          alt=""
+                          style={{
+                            width: "50%",
+                            height: "20%",
+                            display: "flex",
+                            margin: 10,
+                          }}
+                          src={data.user_doc?.PAN_back}
+                        />
+                      </p>
+                    )}
+                  </List.Item>
+                </List>
+              )}
+              {item.field_name == "Voter" && (
+                <List.Item>
+                  <p style={{ fontWeight: "bold" }}>
+                    Voter Card -{" "}
+                    <span style={{ fontWeight: "lighter" }}>
+                      {data?.user_doc?.Voter_card}
+                    </span>
+                  </p>
+                  {item.front == true && (
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Front Image -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data.user_doc?.voter_front}
+                      />
+                    </p>
+                  )}
+                  {item.back == true && (
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Back Image -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data.user_doc?.voter_back}
+                      />
+                    </p>
+                  )}
+                </List.Item>
+              )}
+              {item.field_name == "Adhar" && (
+                <List.Item>
+                  <p style={{ fontWeight: "bold" }}>
+                    Aadhar No -{" "}
+                    <span style={{ fontWeight: "lighter" }}>
+                      {data?.user_doc?.Adhar}
+                    </span>
+                  </p>
+                  {item.front == true && (
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Front Image -
+                      <img
+                        alt=""
+                        style={{
+                          width: "50%",
+                          height: "20%",
+                          display: "flex",
+                          margin: 10,
+                        }}
+                        src={data.user_doc?.Adhar_front}
+                      />
+                    </p>
+                  )}
+                  {item.back == true && (
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Back Image -
+                      <img
+                        alt=""
+                        style={{
+                          width: "50%",
+                          height: "20%",
+                          display: "flex",
+                          margin: 10,
+                        }}
+                        src={data.user_doc?.Adhar_back}
+                      />
+                    </p>
+                  )}
+                </List.Item>
+              )}
+            </div>
+          </>
+        );
+      })}
 
       <div className="mt-5">
         <h1>Vehicle Details</h1>
@@ -385,108 +543,183 @@ const ViewNewDriver = () => {
       <div className="mt-4">
         <h1>Vehicle Images</h1>
       </div>
-      <div className="border rounded-md">
-        <List bordered>
-          <List.Item>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              Front Image -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-          </List.Item>
-          <List.Item>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              Back Image -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-          </List.Item>
-          <List.Item>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              Inside Image -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-          </List.Item>
-        </List>
-      </div>
+      {vehicleImg.map((item, index) => {
+        return (
+          <>
+            <div className="border rounded-md">
+              <List bordered>
+                {item.field_name == "front" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Front Image -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_photo?.front}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+                {item.field_name == "back" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Back Image -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_photo?.back}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+                {item.field_name == "left" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Left Image -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_photo?.left}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+                {item.field_name == "right" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Right Image -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_photo?.right}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+                {item.field_name == "inside" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Inside Image -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_photo?.inside_driver_seat}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+              </List>
+            </div>
+          </>
+        );
+      })}
 
       <div className="mt-4">
         <h1>Vehicle Documents</h1>
       </div>
-      <div className="border rounded-md">
-        <List bordered>
-          <List.Item>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              Pollution Paper -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-          </List.Item>
-          <List.Item>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              Insurance Paper -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-          </List.Item>
-          <List.Item>
-            <p
-              style={{
-                fontWeight: "bold",
-                display: "flex",
-                gap: 50,
-              }}
-            >
-              RC Paper -
-              <img
-                style={{ width: "20%", display: "flex", margin: 10 }}
-                src=""
-              />
-            </p>
-          </List.Item>
-        </List>
-      </div>
+      {vehicleDoc.map((item, index) => {
+        return (
+          <>
+            <div className="border rounded-md">
+              <List bordered>
+                {item.field_name == "Insurance" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Insurance Paper -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_certiifcate?.Insurance}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+                {item.field_name == "Sound" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Sound -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_certiifcate?.Sound}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+                {item.field_name == "Pollution" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      Pollution Paper -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src={data?.vehicle?.vehicle_certiifcate?.Pollution}
+                      />
+                    </p>
+                  </List.Item>
+                )}
+                {item.field_name == "RC" && (
+                  <List.Item>
+                    <p
+                      style={{
+                        fontWeight: "bold",
+                        display: "flex",
+                        gap: 50,
+                      }}
+                    >
+                      RC Paper -
+                      <img
+                        style={{ width: "20%", display: "flex", margin: 10 }}
+                        src=""
+                      />
+                    </p>
+                  </List.Item>
+                )}
+              </List>
+            </div>
+          </>
+        );
+      })}
 
       <div className="mt-5">
         <h1>Bank Account Details</h1>
