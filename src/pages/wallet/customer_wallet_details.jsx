@@ -41,6 +41,7 @@ const CustomerWalletDetails = () => {
   let last_name = searchParams.get("last_name");
   let phone = searchParams.get("phone");
   let expense = searchParams.get("expense");
+  let [datas, setDatas] = useState([]);
 
   //set pagination
   const [pagination, setPagination] = useState({
@@ -52,7 +53,7 @@ const CustomerWalletDetails = () => {
   //initializers
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   useEffect(() => {
     const fetchDrivers = async () => {
       setIsLoading(true);
@@ -61,13 +62,14 @@ const CustomerWalletDetails = () => {
           `${SERVER_URL}/wallets/admin/users/${id}/transactions/`,
           {
             headers: {
-              Authorization: `token ${user.token}`,
+              Authorization: `token ${token}`,
             },
           }
         );
         const data = res.data;
 
-        console.log(data);
+        console.log(data?.withdraw);
+        setDatas(data?.withdraw);
       } catch (error) {
         console.log(error);
       } finally {
@@ -158,7 +160,7 @@ const CustomerWalletDetails = () => {
           <List.Item>
             <p style={{ fontWeight: "bold" }}>Transaction History - </p>
 
-            {datas.map((item) => (
+            {datas?.map((item) => (
               <List.Item
                 style={{
                   borderColor: "yellow",
@@ -167,7 +169,33 @@ const CustomerWalletDetails = () => {
                   margin: 15,
                   borderRadius: 5,
                 }}
-              ></List.Item>
+              >
+                <p
+                  style={{
+                    display: "flex",
+                    position: "absolute",
+                    right: "10px",
+                  }}
+                >
+                  {`$ ${item?.amount}`}
+                </p>
+                <p
+                  style={{
+                    display: "flex",
+                    position: "absolute",
+                    right: "15px",
+                    top: "55%",
+                    fontSize: "70%",
+                  }}
+                >
+                  {item?.transaction_mode}
+                </p>
+                <p>
+                  {item?.transaction_type}
+                  <br />
+                  <span>{dayjs(item?.date).format("DD MMMM hh:mm a")}</span>
+                </p>
+              </List.Item>
             ))}
           </List.Item>
         </List>

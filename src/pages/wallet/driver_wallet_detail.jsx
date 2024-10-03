@@ -49,7 +49,7 @@ const DriverWalletDetails = () => {
   let last_name = searchParams.get("last_name");
   let phone = searchParams.get("phone");
   let expense = searchParams.get("expense");
-
+  let [datas, setDatas] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
     page_size: 10,
@@ -60,27 +60,23 @@ const DriverWalletDetails = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  let token = localStorage.getItem("LOCAL_STORAGE_TOKEN_KEY");
   useEffect(() => {
     const fetchDrivers = async () => {
       setIsLoading(true);
       try {
         const res = await axios.get(
-          `${SERVER_URL}/cab-booking-admin-api/active-trip/?page=${pagination.page}&page_size=${pagination.page_size}`,
+          `${SERVER_URL}/wallets/admin/users/${id}/transactions/`,
           {
             headers: {
-              Authorization: `token ${user.token}`,
+              Authorization: `token ${token}`,
             },
           }
         );
         const data = res.data;
-        if (data.next === null) {
-          setPagination({
-            ...pagination,
-            next_null: true,
-          });
-        }
-        //dispatch(setActiveTrips(data.results));
-        console.log(data);
+
+        console.log(data?.withdraw);
+        setDatas(data?.withdraw);
       } catch (error) {
         console.log(error);
       } finally {
@@ -91,7 +87,7 @@ const DriverWalletDetails = () => {
       fetchDrivers();
     }
     fetchDrivers();
-  }, [pagination.page, pagination.page_size, user]);
+  }, []);
   //set next page
   const nextPage = (e) => {
     e.preventDefault();
@@ -170,8 +166,7 @@ const DriverWalletDetails = () => {
 
           <List.Item>
             <p style={{ fontWeight: "bold" }}>Transaction History - </p>
-
-            {datas.map((item) => (
+            {datas?.map((item) => (
               <List.Item
                 style={{
                   borderColor: "yellow",
@@ -180,7 +175,33 @@ const DriverWalletDetails = () => {
                   margin: 15,
                   borderRadius: 5,
                 }}
-              ></List.Item>
+              >
+                <p
+                  style={{
+                    display: "flex",
+                    position: "absolute",
+                    right: "10px",
+                  }}
+                >
+                  {`$ ${item?.amount}`}
+                </p>
+                <p
+                  style={{
+                    display: "flex",
+                    position: "absolute",
+                    right: "15px",
+                    top: "55%",
+                    fontSize: "70%",
+                  }}
+                >
+                  {item?.transaction_mode}
+                </p>
+                <p>
+                  {item?.transaction_type}
+                  <br />
+                  <span>{dayjs(item?.date).format("DD MMMM hh:mm a")}</span>
+                </p>
+              </List.Item>
             ))}
           </List.Item>
         </List>
